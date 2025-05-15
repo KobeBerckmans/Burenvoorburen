@@ -6,6 +6,7 @@ import communityImg from '../assets/images/community.jpg';
 import NewsFeed from './NewsFeed';
 import VideoSection from './VideoSection';
 import Footer from './Footer';
+import FadeInOnScroll from './FadeInOnScroll';
 
 function HomeSlider() {
     const points = [
@@ -173,83 +174,88 @@ export default function HomeSection() {
     const imageBoxHeight = 260; // hoogte van de image-container blijft 280px
     const greenWidth = 800;
     const greenLeft = -120;
+    // Richtingen voor animatie per onderdeel
+    const fadeDirections = ['right', 'left', 'up', 'right', 'left', 'up'];
     return (
         <div style={{ maxWidth: 1440, margin: '0 auto', position: 'relative', overflowX: 'hidden', width: '100%' }}>
-            <section style={{
-                background: 'white', padding: '0', position: 'relative', width: '100%', minHeight: greenHeight + 80, display: 'flex', justifyContent: 'center', alignItems: 'center'
-            }}>
-                {/* SVG-krul veel groter maken */}
-                <svg xmlns="http://www.w3.org/2000/svg" width="2200" height="200" viewBox="0 0 613.218 279.661" style={{
-                    position: 'absolute', top: '-35px', left: '-900px', zIndex: 20, pointerEvents: 'none'
+            <FadeInOnScroll delay={0} direction={fadeDirections[0]}>
+                <section style={{
+                    background: 'white', padding: '0', position: 'relative', width: '100%', minHeight: greenHeight + 80, display: 'flex', justifyContent: 'center', alignItems: 'center'
                 }}>
-                    <path d="M3117,1370.862s275.759-124.079,345.419,0,87.076,209.163,169.8,163.076,113.2-113.444,39.184-127.625-113.2,14.18-65.306,88.628S3714.938,1583.57,3728,1590.66" transform="translate(-3115.975 -1313.196)" fill="none" stroke="#e2725b" strokeWidth="5" />
-                </svg >
-                {/* Groene vlak links breder en hoogte groter dan images */}
-                <div style={{
-                    position: 'absolute',
-                    left: greenLeft,
-                    top: 40,
-                    width: greenWidth,
-                    height: greenHeight,
-                    background: '#eaffea',
-                    zIndex: 1,
-                    boxShadow: '0 4px 24px 0 rgba(44, 62, 80, 0.07)',
-                    display: 'flex',
-                    alignItems: 'center',
-                }} />
-                {/* Foto's in het groene vlak */}
-                <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', minHeight: imageBoxHeight, minWidth: '340px', marginRight: '3.5rem', zIndex: 2 }}>
-                    <div style={{ position: 'relative', width: '340px', height: imageBoxHeight, display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-end' }}>
-                        {/* Puzzel achter de mensenfoto */}
-                        <img src={puzzelImg} alt="Puzzel" style={{ position: 'absolute', top: '0', right: '0', width: '180px', height: '260px', objectFit: 'cover', background: 'white', zIndex: 2, border: 'none', borderRadius: 0, boxShadow: '0 2px 12px #0002' }} />
-                        <img src={mensenImg} alt="Groep mensen" style={{ position: 'absolute', bottom: '0', left: '-100px', right: '0', width: '320px', height: '180px', objectFit: 'cover', border: '4px solid #e2725b', background: 'white', zIndex: 3, borderRadius: 0 }} />
+                    {/* SVG-krul veel groter maken */}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="2200" height="200" viewBox="0 0 613.218 279.661" style={{
+                        position: 'absolute', top: '-35px', left: '-900px', zIndex: 20, pointerEvents: 'none'
+                    }}>
+                        <path d="M3117,1370.862s275.759-124.079,345.419,0,87.076,209.163,169.8,163.076,113.2-113.444,39.184-127.625-113.2,14.18-65.306,88.628S3714.938,1583.57,3728,1590.66" transform="translate(-3115.975 -1313.196)" fill="none" stroke="#e2725b" strokeWidth="5" />
+                    </svg >
+                    {/* Groene vlak links breder en hoogte groter dan images */}
+                    <div style={{
+                        position: 'absolute',
+                        left: greenLeft,
+                        top: 40,
+                        width: greenWidth,
+                        height: greenHeight,
+                        background: '#eaffea',
+                        zIndex: 1,
+                        boxShadow: '0 4px 24px 0 rgba(44, 62, 80, 0.07)',
+                        display: 'flex',
+                        alignItems: 'center',
+                    }} />
+                    {/* Foto's in het groene vlak */}
+                    <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', minHeight: imageBoxHeight, minWidth: '340px', marginRight: '3.5rem', zIndex: 2 }}>
+                        <div style={{ position: 'relative', width: '340px', height: imageBoxHeight, display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-end' }}>
+                            {/* Puzzel achter de mensenfoto */}
+                            <img src={puzzelImg} alt="Puzzel" style={{ position: 'absolute', top: '0', right: '0', width: '180px', height: '260px', objectFit: 'cover', background: 'white', zIndex: 2, border: 'none', borderRadius: 0, boxShadow: '0 2px 12px #0002' }} />
+                            <img src={mensenImg} alt="Groep mensen" style={{ position: 'absolute', bottom: '0', left: '-100px', right: '0', width: '320px', height: '180px', objectFit: 'cover', border: '4px solid #e2725b', background: 'white', zIndex: 3, borderRadius: 0 }} />
+                        </div>
                     </div>
-                </div>
-                {/* Tekst rechts van de foto's */}
-                <div style={{ marginLeft: '0', color: '#222', maxWidth: '420px', zIndex: 2 }}>
-                    <h2 style={{ color: '#26913a', fontWeight: 700, fontSize: '2.2rem', marginBottom: '0.7rem', marginTop: 0, fontFamily: 'CocogooseProTrial' }}>Wat doen we?</h2>
-                    <div style={{ height: '4px', width: '60px', background: '#26913a', marginBottom: '1.2rem', borderRadius: '2px' }} />
-                    <p style={{
-                        fontFamily: 'Poppins', fontSize: '12px', lineHeight: 1.6, color: '#222', margin: 0
-                    }}>
-                        Buren voor Buren Tienen is een burgerinitiatief dat streeft naar zorgzamer buurten.
-                        We zijn vrijwilligers die zich in de eerste plaats belangeloos inzetten
-                        voor de burenhulp.
-                        Daarmee doen we eigenlijk wat buren in onze ogen horen te doen: elkaar helpen als
-                        het niet anders kan, als er geen familieleden of vrienden zijn die kunnen helpen
-                        voor eenvoudige dingen. Veel mensen zijn of hebben al goede buren,
-                        wij zijn er voor wie op een bepaald moment niemand heeft.
-                        Zie 'Burenhulp' voor meer info.
-                        Naast burenhulp kan elke buurt bijkomende initiatieven nemen,
-                        bijvoorbeeld huiswerkbegeleiding, buurtfeesten, samentuin, buurtrestaurant…
-                        Elke buurt is anders en heeft andere mogelijkheden en andere vrijwilligers
-                        met andere wensen en vaardigheden.
-                        Onder <a href="/buurten" style={{ color: '#e2725b', fontWeight: 700, cursor: 'pointer' }}>‘Buurten’</a> stelt  elke buurt zich voor.
-                    </p>
-                </div>
-            </section >
-            {/* Nieuwe sectie onder het huidige deel */}
-            <section style={{ width: '100%', display: 'flex', flexDirection: 'row', maxHeight: '300px', marginTop: '2.5rem' }}>
-                {/* Linkerhelft: lichtgroen vlak met logo */}
-                <div style={{ flex: 1, background: '#eaffea', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100px', boxShadow: '0 4px 18px 0 rgba(44, 62, 80, 0.10)' }}>
-                    <img src={logoImg} alt="Buren voor Buren logo" style={{ maxWidth: '200px', maxHeight: '180px', objectFit: 'contain', filter: 'drop-shadow(0 2px 8px rgba(44,62,80,0.13))' }} />
-                </div>
-                {/* Rechterhelft: community.jpg */}
-                <div style={{ flex: 1, minHeight: '100px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', position: 'relative', overflow: 'visible', boxShadow: '0 4px 18px 0 rgba(44, 62, 80, 0.10)' }}>
-                    <img src={communityImg} alt="Community" style={{ width: '200%', height: '100%', objectFit: 'cover', borderRadius: 0, boxShadow: '0 2px 12px 0 rgba(44,62,80,0.13)' }} />
-                    {/* Oranje krul SVG overlay */}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="1273.983" height="998.424" viewBox="0 0 1273.983 998.424" style={{
-                        position: 'absolute', top: '-100px', right: '-800px', zIndex: 2, pointerEvents: 'none'
-                    }}>
-                        <path id="Path_38" data-name="Path 38" d="M4323.278,1406.079s-544.422-203.317-681.951,0S3469.417,1748.813,3306.1,1673.3s-223.483-185.89-77.358-209.126,223.483,23.236,128.933,145.226S3142.787,1754.622,3117,1766.24" transform="translate(-1814.252 -2695.235) rotate(30)" fill="none" stroke="#e2725b" strokeWidth="5" />
-                    </svg>
-                </div>
-            </section >
-            <HomeSlider />
-            <AnimatedQuote />
-            <NewsFeed />
-            <VideoSection />
-            <Footer />
+                    {/* Tekst rechts van de foto's */}
+                    <div style={{ marginLeft: '0', color: '#222', maxWidth: '420px', zIndex: 2 }}>
+                        <h2 style={{ color: '#26913a', fontWeight: 700, fontSize: '2.2rem', marginBottom: '0.7rem', marginTop: 0, fontFamily: 'CocogooseProTrial' }}>Wat doen we?</h2>
+                        <div style={{ height: '4px', width: '60px', background: '#26913a', marginBottom: '1.2rem', borderRadius: '2px' }} />
+                        <p style={{
+                            fontFamily: 'Poppins', fontSize: '12px', lineHeight: 1.6, color: '#222', margin: 0
+                        }}>
+                            Buren voor Buren Tienen is een burgerinitiatief dat streeft naar zorgzamer buurten.
+                            We zijn vrijwilligers die zich in de eerste plaats belangeloos inzetten
+                            voor de burenhulp.
+                            Daarmee doen we eigenlijk wat buren in onze ogen horen te doen: elkaar helpen als
+                            het niet anders kan, als er geen familieleden of vrienden zijn die kunnen helpen
+                            voor eenvoudige dingen. Veel mensen zijn of hebben al goede buren,
+                            wij zijn er voor wie op een bepaald moment niemand heeft.
+                            Zie 'Burenhulp' voor meer info.
+                            Naast burenhulp kan elke buurt bijkomende initiatieven nemen,
+                            bijvoorbeeld huiswerkbegeleiding, buurtfeesten, samentuin, buurtrestaurant…
+                            Elke buurt is anders en heeft andere mogelijkheden en andere vrijwilligers
+                            met andere wensen en vaardigheden.
+                            Onder <a href="/buurten" style={{ color: '#e2725b', fontWeight: 700, cursor: 'pointer' }}>‘Buurten’</a> stelt  elke buurt zich voor.
+                        </p>
+                    </div>
+                </section >
+            </FadeInOnScroll>
+            <FadeInOnScroll delay={150} direction={fadeDirections[1]}>
+                <section style={{ width: '100%', display: 'flex', flexDirection: 'row', maxHeight: '300px', marginTop: '2.5rem' }}>
+                    {/* Linkerhelft: lichtgroen vlak met logo */}
+                    <div style={{ flex: 1, background: '#eaffea', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100px', boxShadow: '0 4px 18px 0 rgba(44, 62, 80, 0.10)' }}>
+                        <img src={logoImg} alt="Buren voor Buren logo" style={{ maxWidth: '200px', maxHeight: '180px', objectFit: 'contain', filter: 'drop-shadow(0 2px 8px rgba(44,62,80,0.13))' }} />
+                    </div>
+                    {/* Rechterhelft: community.jpg */}
+                    <div style={{ flex: 1, minHeight: '100px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', position: 'relative', overflow: 'visible', boxShadow: '0 4px 18px 0 rgba(44, 62, 80, 0.10)' }}>
+                        <img src={communityImg} alt="Community" style={{ width: '200%', height: '100%', objectFit: 'cover', borderRadius: 0, boxShadow: '0 2px 12px 0 rgba(44,62,80,0.13)' }} />
+                        {/* Oranje krul SVG overlay */}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1273.983" height="998.424" viewBox="0 0 1273.983 998.424" style={{
+                            position: 'absolute', top: '-100px', right: '-800px', zIndex: 2, pointerEvents: 'none'
+                        }}>
+                            <path id="Path_38" data-name="Path 38" d="M4323.278,1406.079s-544.422-203.317-681.951,0S3469.417,1748.813,3306.1,1673.3s-223.483-185.89-77.358-209.126,223.483,23.236,128.933,145.226S3142.787,1754.622,3117,1766.24" transform="translate(-1814.252 -2695.235) rotate(30)" fill="none" stroke="#e2725b" strokeWidth="5" />
+                        </svg>
+                    </div>
+                </section >
+            </FadeInOnScroll>
+            <FadeInOnScroll delay={300} direction={fadeDirections[2]}><HomeSlider /></FadeInOnScroll>
+            <FadeInOnScroll delay={450} direction={fadeDirections[3]}><AnimatedQuote /></FadeInOnScroll>
+            <FadeInOnScroll delay={600} direction={fadeDirections[4]}><NewsFeed /></FadeInOnScroll>
+            <FadeInOnScroll delay={750} direction={fadeDirections[5]}><VideoSection /></FadeInOnScroll>
+            <FadeInOnScroll delay={900} direction={fadeDirections[0]}><Footer /></FadeInOnScroll>
         </div>
     );
 } 
