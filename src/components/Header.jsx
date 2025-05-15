@@ -6,7 +6,6 @@ const menuItems = [
     'Home',
     'Buurten',
     'Doe je mee?',
-    'Burenhulp',
     'Over ons',
     'Contact',
     'Meer',

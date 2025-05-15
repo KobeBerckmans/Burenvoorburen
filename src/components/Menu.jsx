@@ -11,7 +11,6 @@ const MENU_ITEMS = [
     'HULP NODIG?',
     'BUURTEN',
     'DOE JE MEE?',
-    'BURENHULP',
     'OVER ONS',
     'CONTACT',
     'MEER',

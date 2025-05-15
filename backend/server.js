@@ -1,0 +1,96 @@
+import express from 'express';
+import { MongoClient, ServerApiVersion } from 'mongodb';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+// Load environment variables
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+dotenv.config({ path: join(__dirname, '.env') });
+
+const app = express();
+const port = 3001;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Get the absolute path to the images directory
+const imagesPath = '/Users/kobeberckmans/Desktop/BVB/Burenvoorburen/src/assets/images';
+console.log('Images directory path:', imagesPath);
+
+// Serve static files from the images directory
+app.use('/assets/images', express.static(imagesPath));
+
+// MongoDB connection
+const password = process.env.MONGODB_PASSWORD;
+if (!password) {
+    console.error('MONGODB_PASSWORD is not set in .env file');
+    process.exit(1);
+}
+
+const uri = `mongodb+srv://kobeberckmans:${password}@cluster1.tpiy3cp.mongodb.net/?retryWrites=true&w=majority&appName=FinalWork`;
+const client = new MongoClient(uri, {
+    serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+    }
+});
+
+// Connect to MongoDB
+async function connectToMongo() {
+    try {
+        await client.connect();
+        console.log("Connected to MongoDB!");
+    } catch (error) {
+        console.error("Error connecting to MongoDB:", error);
+        process.exit(1);
+    }
+}
+
+connectToMongo();
+
+// Helper function to get the correct image path
+function getImagePath(imgName) {
+    if (!imgName) return null;
+    // If it's already a full URL, return it as is
+    if (imgName.startsWith('http')) {
+        return imgName;
+    }
+    // Otherwise, just use the filename with the assets path
+    const filename = imgName.split('/').pop().toLowerCase();
+    return `/assets/images/${filename}`;
+}
+
+// News endpoint
+app.get('/api/news', async (req, res) => {
+    try {
+        const database = client.db("FinalWork");
+        const collection = database.collection("Historiek");
+        
+        const newsItems = await collection.find({}).sort({ Datum: -1 }).toArray();
+        
+        // Transform the data
+        const transformedItems = newsItems.map(item => ({
+            _id: item._id,
+            datum: item.Datum,
+            titel: item.Titel,
+            beschrijving: item.Berschrijving,
+            img: getImagePath(item.img)
+        }));
+        
+        res.json(transformedItems);
+    } catch (error) {
+        console.error("Error fetching news:", error);
+        res.status(500).json({ error: "Failed to fetch news" });
+    }
+});
+
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+    console.log(`Serving images from: ${imagesPath}`);
+    console.log(`Images available at: http://localhost:${port}/assets/images/`);
+}); 
