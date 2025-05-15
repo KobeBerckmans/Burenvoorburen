@@ -174,7 +174,7 @@ export default function HomeSection() {
     const greenWidth = 800;
     const greenLeft = -120;
     return (
-        <>
+        <div style={{ maxWidth: 1440, margin: '0 auto', position: 'relative', overflowX: 'hidden', width: '100%' }}>
             <section style={{
                 background: 'white', padding: '0', position: 'relative', width: '100%', minHeight: greenHeight + 80, display: 'flex', justifyContent: 'center', alignItems: 'center'
             }}>
@@ -250,6 +250,6 @@ export default function HomeSection() {
             <NewsFeed />
             <VideoSection />
             <Footer />
-        </>
+        </div>
     );
 } 
