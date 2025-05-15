@@ -1,7 +1,15 @@
 import React from 'react';
+import { HomeIcon } from '@heroicons/react/24/outline';
 
 const houseIcon = (
-    <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M3 11.5L12 4l9 7.5" stroke="#26913a" strokeWidth="2.5" fill="none" /><rect x="7" y="14" width="10" height="6" rx="2" fill="#eaffea" stroke="#26913a" strokeWidth="2" /></svg>
+    <HomeIcon
+        style={{
+            width: 36,
+            height: 36,
+            color: '#26913a',
+            strokeWidth: 2
+        }}
+    />
 );
 
 const groups = [
@@ -70,7 +78,7 @@ const styles = {
 export default function BuurtenGroups() {
     return (
         <div style={styles.wrapper}>
-            {groups.map((group, idx) => (
+            {groups.map((group) => (
                 <div key={group.title} style={styles.col}>
                     {houseIcon}
                     <div style={styles.title}>{group.title}</div>
