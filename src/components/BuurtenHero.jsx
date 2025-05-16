@@ -21,7 +21,7 @@ const styles = {
         zIndex: 1,
     },
     title: {
-        color: '#fff',
+        color: '#d0f7d2',
         fontSize: '3.2rem',
         fontWeight: 700,
         fontFamily: 'CocogooseProTrial',

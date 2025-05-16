@@ -223,12 +223,12 @@ export default function HomeSection() {
                             het niet anders kan, als er geen familieleden of vrienden zijn die kunnen helpen
                             voor eenvoudige dingen. Veel mensen zijn of hebben al goede buren,
                             wij zijn er voor wie op een bepaald moment niemand heeft.
-                            Zie 'Burenhulp' voor meer info.
+                            Zie `Burenhulp`` voor meer info.
                             Naast burenhulp kan elke buurt bijkomende initiatieven nemen,
                             bijvoorbeeld huiswerkbegeleiding, buurtfeesten, samentuin, buurtrestaurant…
                             Elke buurt is anders en heeft andere mogelijkheden en andere vrijwilligers
                             met andere wensen en vaardigheden.
-                            Onder <a href="/buurten" style={{ color: '#e2725b', fontWeight: 700, cursor: 'pointer' }}>‘Buurten’</a> stelt  elke buurt zich voor.
+                            Onder <a href="/buurten" style={{ color: '#e2725b', fontWeight: 700, cursor: 'pointer' }}>&apos;Buurten&apos;</a> stelt  elke buurt zich voor.
                         </p>
                     </div>
                 </section >

@@ -4,6 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import streetsRouter from './routes/streets.js';
 
 // Load environment variables
 const __filename = fileURLToPath(import.meta.url);
@@ -11,7 +12,7 @@ const __dirname = dirname(__filename);
 dotenv.config({ path: join(__dirname, '.env') });
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors());
@@ -89,6 +90,10 @@ app.get('/api/news', async (req, res) => {
     }
 });
 
+// Routes
+app.use('/api/streets', streetsRouter);
+
+// Start server
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
     console.log(`Serving images from: ${imagesPath}`);

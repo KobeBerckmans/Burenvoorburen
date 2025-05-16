@@ -1,5 +1,6 @@
 import React from 'react';
 import { HomeIcon } from '@heroicons/react/24/outline';
+import StreetSearch from './StreetSearch';
 
 const houseIcon = (
     <HomeIcon
@@ -39,11 +40,25 @@ const groups = [
 const styles = {
     wrapper: {
         display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '100%',
+        padding: '0 1rem',
+    },
+    groupsWrapper: {
+        display: 'flex',
         justifyContent: 'center',
         alignItems: 'flex-start',
         gap: '3vw',
-        margin: '2.5rem 0 2.5rem 0',
+        margin: '2.5rem 0 4rem 0',
         flexWrap: 'wrap',
+    },
+    searchWrapper: {
+        width: '100%',
+        maxWidth: 800,
+        margin: '0 auto',
+        padding: '2rem 0',
+        borderTop: '1px solid #e0e0e0',
     },
     col: {
         minWidth: 220,
@@ -78,17 +93,22 @@ const styles = {
 export default function BuurtenGroups() {
     return (
         <div style={styles.wrapper}>
-            {groups.map((group) => (
-                <div key={group.title} style={styles.col}>
-                    {houseIcon}
-                    <div style={styles.title}>{group.title}</div>
-                    <div>
-                        {group.items.map((item, i) => (
-                            <div key={i} style={item.bold ? { ...styles.item, ...styles.itemBold } : styles.item}>{item.name}</div>
-                        ))}
+            <div style={styles.groupsWrapper}>
+                {groups.map((group) => (
+                    <div key={group.title} style={styles.col}>
+                        {houseIcon}
+                        <div style={styles.title}>{group.title}</div>
+                        <div>
+                            {group.items.map((item, i) => (
+                                <div key={i} style={item.bold ? { ...styles.item, ...styles.itemBold } : styles.item}>{item.name}</div>
+                            ))}
+                        </div>
                     </div>
-                </div>
-            ))}
+                ))}
+            </div>
+            <div style={styles.searchWrapper}>
+                <StreetSearch />
+            </div>
         </div>
     );
 } 
