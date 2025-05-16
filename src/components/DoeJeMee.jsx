@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Footer from './Footer';
 import heroImg from '../assets/images/3mensen.jpg';
 import { UserGroupIcon, GiftIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
@@ -32,7 +32,7 @@ const heroStyles = {
         maxWidth: 800,
     },
     title: {
-        color: '#d0f7d2',
+        color: '#fff',
         fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
         fontWeight: 700,
         fontFamily: 'CocogooseProTrial',
@@ -40,6 +40,15 @@ const heroStyles = {
         textShadow: '0 4px 24px rgba(0,0,0,0.3)',
         margin: 0,
         lineHeight: 1.2,
+    },
+    subtitle: {
+        color: '#b6eec0',
+        fontSize: 'clamp(1.1rem, 2vw, 1.4rem)',
+        fontWeight: 500,
+        fontFamily: 'Montserrat, sans-serif',
+        marginTop: '1rem',
+        opacity: 0.95,
+        textShadow: '0 2px 12px rgba(0,0,0,0.08)',
     }
 };
 
@@ -82,26 +91,57 @@ function Slider() {
 }
 
 function VrijwilligersForm() {
+    const [form, setForm] = useState({ naam: '', voornaam: '', adres: '', tel: '', mail: '', motivatie: '' });
+    const [status, setStatus] = useState(null);
+    const [loading, setLoading] = useState(false);
+
+    const handleChange = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setStatus(null);
+        try {
+            const res = await fetch('http://localhost:3001/api/volunteers', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(form)
+            });
+            if (res.ok) {
+                setStatus('success');
+                setForm({ naam: '', voornaam: '', adres: '', tel: '', mail: '', motivatie: '' });
+            } else {
+                setStatus('error');
+            }
+        } catch {
+            setStatus('error');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <section style={{ background: '#fff7f4', padding: '3rem 0 2rem 0', margin: '3rem 0 0 0', borderRadius: 18, maxWidth: 1100, marginLeft: 'auto', marginRight: 'auto', boxShadow: '0 4px 18px 0 rgba(44,62,80,0.10)' }}>
-
-            < h2 style={{ color: '#e2725b', fontWeight: 800, fontSize: '2.2rem', textAlign: 'center', fontFamily: 'CocogooseProTrial', marginBottom: '0.5rem', letterSpacing: 1 }
-            }> WORD VRIJWILLIGER</h2 >
+            <h2 style={{ color: '#e2725b', fontWeight: 800, fontSize: '2.2rem', textAlign: 'center', fontFamily: 'CocogooseProTrial', marginBottom: '0.5rem', letterSpacing: 1 }}>WORD VRIJWILLIGER</h2>
             <div style={{ color: '#e2725b', textAlign: 'center', marginBottom: '2.5rem', fontSize: '1.1rem' }}>Geïnteresseerd? Laat het ons vlug weten:</div>
-            <form style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', maxWidth: 700, margin: '0 auto' }}>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', maxWidth: 700, margin: '0 auto' }}>
                 <div style={{ display: 'flex', gap: '1.2rem' }}>
-                    <input type="text" placeholder="Naam" style={{ flex: 1, padding: '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a' }} />
-                    <input type="text" placeholder="Voornaam" style={{ flex: 1, padding: '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a' }} />
+                    <input name="naam" type="text" placeholder="Naam" value={form.naam} onChange={handleChange} style={{ flex: 1, padding: '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a' }} />
+                    <input name="voornaam" type="text" placeholder="Voornaam" value={form.voornaam} onChange={handleChange} style={{ flex: 1, padding: '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a' }} />
                 </div>
                 <div style={{ display: 'flex', gap: '1.2rem' }}>
-                    <input type="text" placeholder="Adres" style={{ flex: 2, padding: '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a' }} />
-                    <input type="text" placeholder="Tel" style={{ flex: 1, padding: '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a' }} />
+                    <input name="adres" type="text" placeholder="Adres" value={form.adres} onChange={handleChange} style={{ flex: 2, padding: '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a' }} />
+                    <input name="tel" type="text" placeholder="Tel" value={form.tel} onChange={handleChange} style={{ flex: 1, padding: '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a' }} />
                 </div>
-                <input type="email" placeholder="Mail" style={{ padding: '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a' }} />
-                <textarea placeholder="Motivatie..." rows={4} style={{ padding: '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: '1.1rem', fontFamily: 'Montserrat, sans-serif', resize: 'vertical', background: '#fff', color: '#137c3a' }} />
-                <button type="submit" style={{ background: '#4b8e5b', color: '#fff', fontWeight: 700, fontSize: '1.15rem', border: 'none', borderRadius: 6, padding: '1rem 0', marginTop: '0.5rem', cursor: 'pointer', fontFamily: 'CocogooseProTrial', letterSpacing: 1 }}>VERZEND</button>
+                <input name="mail" type="email" placeholder="Mail" value={form.mail} onChange={handleChange} style={{ padding: '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a' }} />
+                <textarea name="motivatie" placeholder="Motivatie..." value={form.motivatie} onChange={handleChange} rows={4} style={{ padding: '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: '1.1rem', fontFamily: 'Montserrat, sans-serif', resize: 'vertical', background: '#fff', color: '#137c3a' }} />
+                <button type="submit" disabled={loading} style={{ background: '#4b8e5b', color: '#fff', fontWeight: 700, fontSize: '1.15rem', border: 'none', borderRadius: 6, padding: '1rem 0', marginTop: '0.5rem', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'CocogooseProTrial', letterSpacing: 1 }}>{loading ? 'Verzenden...' : 'VERZEND'}</button>
+                {status === 'success' && <div style={{ color: '#26913a', textAlign: 'center', marginTop: 12 }}>Bedankt voor je aanmelding!</div>}
+                {status === 'error' && <div style={{ color: '#e2725b', textAlign: 'center', marginTop: 12 }}>Er is iets misgegaan. Probeer opnieuw.</div>}
             </form>
-        </section >
+        </section>
     );
 }
 
@@ -112,6 +152,7 @@ export default function DoeJeMee() {
                 <div style={heroStyles.overlay} />
                 <div style={heroStyles.content}>
                     <h1 style={heroStyles.title}>DOE JE MEE?</h1>
+                    <p style={heroStyles.subtitle}>Samen maken we het verschil in jouw buurt – word vrijwilliger!</p>
                 </div>
             </div>
             <Slider />

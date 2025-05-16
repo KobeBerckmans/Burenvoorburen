@@ -90,6 +90,23 @@ app.get('/api/news', async (req, res) => {
     }
 });
 
+// Volunteers endpoint
+app.post('/api/volunteers', async (req, res) => {
+    try {
+        const database = client.db("FinalWork");
+        const collection = database.collection("volunteers");
+        const { naam, voornaam, adres, tel, mail, motivatie } = req.body;
+        if (!naam || !voornaam || !mail) {
+            return res.status(400).json({ error: 'Naam, voornaam en mail zijn verplicht.' });
+        }
+        const result = await collection.insertOne({ naam, voornaam, adres, tel, mail, motivatie, createdAt: new Date() });
+        res.status(201).json({ success: true, id: result.insertedId });
+    } catch (error) {
+        console.error("Error saving volunteer:", error);
+        res.status(500).json({ error: "Failed to save volunteer" });
+    }
+});
+
 // Routes
 app.use('/api/streets', streetsRouter);
 
