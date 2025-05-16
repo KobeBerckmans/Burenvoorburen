@@ -1,17 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { HomeIcon } from '@heroicons/react/24/outline';
 import StreetSearch from './StreetSearch';
-
-const houseIcon = (
-    <HomeIcon
-        style={{
-            width: 36,
-            height: 36,
-            color: '#26913a',
-            strokeWidth: 2
-        }}
-    />
-);
 
 const groups = [
     {
@@ -59,6 +48,7 @@ const styles = {
         margin: '0 auto',
         padding: '2rem 0',
         borderTop: '1px solid #e0e0e0',
+        transition: 'all 0.6s ease',
     },
     col: {
         minWidth: 220,
@@ -69,6 +59,21 @@ const styles = {
         alignItems: 'center',
         textAlign: 'center',
         gap: '0.7rem',
+        transition: 'all 0.6s ease',
+    },
+    iconContainer: {
+        width: 36,
+        height: 36,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        transition: 'all 0.5s ease',
+    },
+    icon: {
+        width: '100%',
+        height: '100%',
+        color: '#26913a',
+        strokeWidth: 2,
     },
     title: {
         color: '#26913a',
@@ -76,6 +81,13 @@ const styles = {
         fontSize: '1.1rem',
         margin: '0.7rem 0 0.5rem 0',
         fontFamily: 'CocogooseProTrial',
+        transition: 'all 0.5s ease',
+    },
+    itemsContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '0.5rem',
+        width: '100%',
     },
     item: {
         color: '#222',
@@ -83,30 +95,96 @@ const styles = {
         fontFamily: 'Montserrat, sans-serif',
         fontWeight: 400,
         margin: 0,
+        transition: 'all 0.4s ease',
     },
     itemBold: {
         fontWeight: 700,
         color: '#26913a',
+    },
+    visible: {
+        opacity: 1,
+        transform: 'translateY(0)',
+    },
+    hidden: {
+        opacity: 0,
+        transform: 'translateY(20px)',
     }
 };
 
 export default function BuurtenGroups() {
+    const [visibleElements, setVisibleElements] = useState({});
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    const id = entry.target.getAttribute('data-id');
+                    if (entry.isIntersecting) {
+                        setVisibleElements(prev => ({
+                            ...prev,
+                            [id]: true
+                        }));
+                    }
+                });
+            },
+            {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            }
+        );
+
+        document.querySelectorAll('[data-id]').forEach(el => observer.observe(el));
+
+        return () => observer.disconnect();
+    }, []);
+
+    const getAnimationStyle = (id, baseStyle) => ({
+        ...baseStyle,
+        ...(visibleElements[id] ? styles.visible : styles.hidden)
+    });
+
     return (
         <div style={styles.wrapper}>
             <div style={styles.groupsWrapper}>
-                {groups.map((group) => (
-                    <div key={group.title} style={styles.col}>
-                        {houseIcon}
-                        <div style={styles.title}>{group.title}</div>
-                        <div>
+                {groups.map((group, groupIndex) => (
+                    <div
+                        key={group.title}
+                        style={getAnimationStyle(`col-${groupIndex}`, styles.col)}
+                        data-id={`col-${groupIndex}`}
+                    >
+                        <div
+                            style={getAnimationStyle(`icon-${groupIndex}`, styles.iconContainer)}
+                            data-id={`icon-${groupIndex}`}
+                        >
+                            <HomeIcon style={styles.icon} />
+                        </div>
+                        <div
+                            style={getAnimationStyle(`title-${groupIndex}`, styles.title)}
+                            data-id={`title-${groupIndex}`}
+                        >
+                            {group.title}
+                        </div>
+                        <div style={styles.itemsContainer}>
                             {group.items.map((item, i) => (
-                                <div key={i} style={item.bold ? { ...styles.item, ...styles.itemBold } : styles.item}>{item.name}</div>
+                                <div
+                                    key={i}
+                                    style={{
+                                        ...getAnimationStyle(`item-${groupIndex}-${i}`, item.bold ? { ...styles.item, ...styles.itemBold } : styles.item),
+                                        transitionDelay: `${0.1 * (i + 1)}s`
+                                    }}
+                                    data-id={`item-${groupIndex}-${i}`}
+                                >
+                                    {item.name}
+                                </div>
                             ))}
                         </div>
                     </div>
                 ))}
             </div>
-            <div style={styles.searchWrapper}>
+            <div
+                style={getAnimationStyle('search', styles.searchWrapper)}
+                data-id="search"
+            >
                 <StreetSearch />
             </div>
         </div>
