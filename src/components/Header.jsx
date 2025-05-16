@@ -6,7 +6,7 @@ import '../styles/Header.css';
 const menuItems = [
     { label: 'Home', to: '/' },
     { label: 'Buurten', to: '/buurten' },
-    { label: 'Doe je mee?', to: '#' },
+    { label: 'Doe je mee?', to: '/doe-je-mee' },
     { label: 'Over ons', to: '#' },
     { label: 'Contact', to: '#' },
     { label: 'Meer', to: '#' },
