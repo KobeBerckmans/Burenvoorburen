@@ -6,6 +6,10 @@ import HomeSection from './HomeSection';
 import Buurten from './Buurten';
 import DoeJeMee from './DoeJeMee';
 import Help from './Help';
+import Partners from './Partners';
+import Contact from './Contact';
+import Concept from './Concept';
+import Werkvormen from './Werkvormen';
 
 function App() {
   return (
@@ -21,6 +25,10 @@ function App() {
         <Route path="/buurten" element={<Buurten />} />
         <Route path="/doe-je-mee" element={<DoeJeMee />} />
         <Route path="/hulp" element={<Help />} />
+        <Route path="/partners" element={<Partners />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/concept" element={<Concept />} />
+        <Route path="/werkvormen" element={<Werkvormen />} />
       </Routes>
     </Router>
   );
