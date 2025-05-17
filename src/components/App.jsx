@@ -5,6 +5,7 @@ import Header from './Header';
 import HomeSection from './HomeSection';
 import Buurten from './Buurten';
 import DoeJeMee from './DoeJeMee';
+import Help from './Help';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         } />
         <Route path="/buurten" element={<Buurten />} />
         <Route path="/doe-je-mee" element={<DoeJeMee />} />
+        <Route path="/hulp" element={<Help />} />
       </Routes>
     </Router>
   );

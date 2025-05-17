@@ -107,6 +107,23 @@ app.post('/api/volunteers', async (req, res) => {
     }
 });
 
+// Help requests endpoint
+app.post('/api/help-requests', async (req, res) => {
+    try {
+        const database = client.db("FinalWork");
+        const collection = database.collection("helpRequests");
+        const { naam, soort, bericht, datum, adres, uur } = req.body;
+        if (!naam || !soort || !bericht || !datum || !adres || !uur) {
+            return res.status(400).json({ error: 'Alle velden zijn verplicht.' });
+        }
+        const result = await collection.insertOne({ naam, soort, bericht, datum, adres, uur, createdAt: new Date() });
+        res.status(201).json({ success: true, id: result.insertedId });
+    } catch (error) {
+        console.error("Error saving help request:", error);
+        res.status(500).json({ error: "Failed to save help request" });
+    }
+});
+
 // Routes
 app.use('/api/streets', streetsRouter);
 

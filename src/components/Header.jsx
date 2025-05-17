@@ -25,7 +25,7 @@ export default function Header() {
                     ))}
                 </nav>
                 <div className="header-actions">
-                    <button className="header-help">HULP?</button>
+                    <Link to="/hulp" className="header-help">HULP?</Link>
                     <div className="header-lang">
                         <span role="img" aria-label="Frans" className="header-flag">🇫🇷</span>
                         <span role="img" aria-label="Engels" className="header-flag">🇬🇧</span>
