@@ -10,6 +10,7 @@ import Partners from './Partners';
 import Contact from './Contact';
 import Concept from './Concept';
 import Werkvormen from './Werkvormen';
+import Werkingsprincipes from './Werkingsprincipes';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/concept" element={<Concept />} />
         <Route path="/werkvormen" element={<Werkvormen />} />
+        <Route path="/werkingsprincipes" element={<Werkingsprincipes />} />
       </Routes>
     </Router>
   );

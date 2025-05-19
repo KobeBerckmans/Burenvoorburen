@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../assets/images/BVB-Transparant.png';
 import '../styles/Header.css';
+import Werkingsprincipes from './Werkingsprincipes';
 
 const menuItems = [
     { label: 'Home', to: '/' },
