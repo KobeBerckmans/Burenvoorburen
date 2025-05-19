@@ -87,6 +87,7 @@ const styles = {
 
 export default function Header() {
     const [activeDropdown, setActiveDropdown] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const dropdownRef = useRef(null);
 
     useEffect(() => {
@@ -95,15 +96,27 @@ export default function Header() {
                 setActiveDropdown(false);
             }
         }
-
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
+
+    // Sluit mobiel menu bij navigatie
+    function handleNavClick() {
+        setMobileMenuOpen(false);
+        setActiveDropdown(false);
+    }
 
     return (
         <header className="header">
             <div className="header-inner">
                 <img src={logo} alt="Buren voor Buren logo" className="header-logo" />
+                {/* Hamburger icon alleen op mobiel */}
+                <button className="hamburger" aria-label="Menu" onClick={() => setMobileMenuOpen(v => !v)}>
+                    <span className="hamburger-bar" />
+                    <span className="hamburger-bar" />
+                    <span className="hamburger-bar" />
+                </button>
+                {/* Gewone menu, verborgen op mobiel */}
                 <nav className="header-nav">
                     {menuItems.map(item => (
                         item.hasDropdown ? (
@@ -155,6 +168,36 @@ export default function Header() {
                     <button className="header-plus">+</button>
                 </div>
             </div>
+            {/* Mobiel overlay menu */}
+            <div className={`mobile-menu-overlay${mobileMenuOpen ? ' open' : ''}`} onClick={() => setMobileMenuOpen(false)} />
+            <nav className={`mobile-menu${mobileMenuOpen ? ' open' : ''}`} aria-label="Mobiel menu">
+                <button className="mobile-menu-close" aria-label="Sluit menu" onClick={() => setMobileMenuOpen(false)}>&times;</button>
+                <ul>
+                    {menuItems.map(item => (
+                        <li key={item.label}>
+                            {item.hasDropdown ? (
+                                <details>
+                                    <summary>{item.label}</summary>
+                                    <ul>
+                                        {dropdownItems.map(drop => (
+                                            <li key={drop.label}>
+                                                <Link to={drop.to} onClick={handleNavClick}>{drop.label}</Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </details>
+                            ) : (
+                                item.to.startsWith('/') ?
+                                    <Link to={item.to} onClick={handleNavClick}>{item.label}</Link>
+                                    : <a href={item.to} onClick={handleNavClick}>{item.label}</a>
+                            )}
+                        </li>
+                    ))}
+                </ul>
+                <div className="mobile-menu-actions">
+                    <Link to="/hulp" className="header-help" onClick={handleNavClick}>HULP?</Link>
+                </div>
+            </nav>
         </header>
     );
 }
