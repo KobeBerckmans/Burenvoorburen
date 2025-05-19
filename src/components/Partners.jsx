@@ -63,7 +63,7 @@ const heroStyles = {
         maxWidth: 800,
     },
     title: {
-        color: '#d0f7d2',
+        color: '#FFF',
         fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
         fontWeight: 700,
         fontFamily: 'CocogooseProTrial',

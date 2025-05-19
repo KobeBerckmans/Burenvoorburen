@@ -110,17 +110,6 @@ export default function Header() {
         <header className="header">
             <div className="header-inner">
                 <img src={logo} alt="Buren voor Buren logo" className="header-logo" />
-                {/* Hamburger icon alleen op mobiel */}
-                <button
-                    className={`hamburger${mobileMenuOpen ? ' open' : ''}`}
-                    aria-label="Menu"
-                    onClick={() => setMobileMenuOpen(v => !v)}
-                    style={{ position: 'relative', zIndex: 1300, background: 'none', border: 'none', borderRadius: 0, boxShadow: 'none', padding: 0 }}
-                >
-                    <span className="hamburger-bar" />
-                    <span className="hamburger-bar" />
-                    <span className="hamburger-bar" />
-                </button>
                 {/* Gewone menu, verborgen op mobiel */}
                 <nav className="header-nav">
                     {menuItems.map(item => (
@@ -172,6 +161,17 @@ export default function Header() {
                     </div>
                     <button className="header-plus">+</button>
                 </div>
+                {/* Hamburger icon alleen op mobiel, nu helemaal rechts */}
+                <button
+                    className={`hamburger${mobileMenuOpen ? ' open' : ''}`}
+                    aria-label="Menu"
+                    onClick={() => setMobileMenuOpen(v => !v)}
+                    style={{ position: 'relative', zIndex: 1300, background: 'none', border: 'none', borderRadius: 0, boxShadow: 'none', padding: 0 }}
+                >
+                    <span className="hamburger-bar" />
+                    <span className="hamburger-bar" />
+                    <span className="hamburger-bar" />
+                </button>
             </div>
             {/* Mobiel overlay menu */}
             <div className={`mobile-menu-overlay${mobileMenuOpen ? ' open' : ''}`} onClick={() => setMobileMenuOpen(false)} />

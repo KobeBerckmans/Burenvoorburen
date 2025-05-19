@@ -2,27 +2,31 @@ import React from 'react';
 import videoFile from '../assets/video/SAMANA_S02_E07_VERHAAL MET EEN LIED (1).mp4';
 
 function VideoSection() {
+    const isMobile = window.innerWidth <= 600;
+    const isTablet = window.innerWidth > 600 && window.innerWidth <= 1024;
     const styles = {
         section: {
             width: '100%',
-            maxWidth: '1200px',
-            margin: '4rem auto',
-            padding: '0 1.5rem',
+            maxWidth: isMobile ? 340 : isTablet ? 540 : '1200px',
+            margin: isMobile ? '2.5rem auto' : isTablet ? '2.5rem auto' : '4rem auto',
+            padding: isMobile ? '0 0.5rem' : isTablet ? '0 0.5rem' : '0 1.5rem',
             position: 'relative'
         },
         title: {
             color: '#e2725b',
             fontWeight: 700,
-            fontSize: '1.8rem',
-            marginBottom: '2rem',
+            fontSize: isMobile ? '1.1rem' : isTablet ? '1rem' : '1.8rem',
+            marginBottom: isMobile ? '0.7rem' : isTablet ? '1.1rem' : '2rem',
             fontFamily: 'CocogooseProTrial',
             textAlign: 'center',
-            padding: '0 1rem',
-            maxWidth: '100%'
+            padding: isMobile ? '0 0.2rem' : isTablet ? '0 0.2rem' : '0 1rem',
+            maxWidth: isMobile ? 320 : isTablet ? 1200 : '100%',
+            marginLeft: isTablet ? 'auto' : undefined,
+            marginRight: isTablet ? 'auto' : undefined,
         },
         videoContainer: {
             width: '100%',
-            maxWidth: '900px',
+            maxWidth: isMobile ? 320 : isTablet ? 480 : '900px',
             margin: '0 auto',
             borderRadius: '14px',
             overflow: 'hidden',

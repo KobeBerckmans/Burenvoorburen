@@ -11,6 +11,7 @@ import Contact from './Contact';
 import Concept from './Concept';
 import Werkvormen from './Werkvormen';
 import Werkingsprincipes from './Werkingsprincipes';
+import LinksLiteratuur from './LinksLiteratuur';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/concept" element={<Concept />} />
         <Route path="/werkvormen" element={<Werkvormen />} />
         <Route path="/werkingsprincipes" element={<Werkingsprincipes />} />
+        <Route path="/links-literatuur" element={<LinksLiteratuur />} />
       </Routes>
     </Router>
   );

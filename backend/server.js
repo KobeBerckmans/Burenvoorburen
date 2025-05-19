@@ -124,6 +124,23 @@ app.post('/api/help-requests', async (req, res) => {
     }
 });
 
+// Contact endpoint
+app.post('/api/contact', async (req, res) => {
+    try {
+        const database = client.db("FinalWork");
+        const collection = database.collection("contacts");
+        const { email, subject, message } = req.body;
+        if (!email || !subject || !message) {
+            return res.status(400).json({ error: 'Alle velden zijn verplicht.' });
+        }
+        const result = await collection.insertOne({ email, subject, message, createdAt: new Date() });
+        res.status(201).json({ success: true, id: result.insertedId });
+    } catch (error) {
+        console.error("Error saving contact message:", error);
+        res.status(500).json({ error: "Failed to save contact message" });
+    }
+});
+
 // Routes
 app.use('/api/streets', streetsRouter);
 

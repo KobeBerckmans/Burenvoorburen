@@ -1,18 +1,19 @@
 import React from 'react';
 
 function Footer() {
+    const isMobile = window.innerWidth <= 600;
     const styles = {
         footer: {
             background: '#181c24',
             color: '#000',
-            padding: '2rem 0 1rem 0',
+            padding: isMobile ? '1rem 0 0.5rem 0' : '2rem 0 1rem 0',
             width: '100%',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             fontFamily: 'Montserrat, sans-serif',
             fontWeight: 400,
-            fontSize: '1.08rem',
+            fontSize: isMobile ? '0.85rem' : '1.08rem',
             position: 'relative',
         },
         content: {
@@ -23,27 +24,27 @@ function Footer() {
         logo: {
             fontFamily: 'CocogooseProTrial',
             fontWeight: 800,
-            fontSize: '1.7rem',
+            fontSize: isMobile ? '1.1rem' : '1.7rem',
             color: '#b6eec0',
             marginBottom: '0.7rem',
             letterSpacing: 1,
         },
         desc: {
             color: '#f8f8f8',
-            fontSize: '1.02rem',
+            fontSize: isMobile ? '0.85rem' : '1.02rem',
             marginBottom: '1rem',
             lineHeight: 1.45,
         },
         contact: {
             color: '#b6eec0',
             fontWeight: 600,
-            fontSize: '1.02rem',
+            fontSize: isMobile ? '0.85rem' : '1.02rem',
             marginBottom: '0.1rem',
         },
         phone: {
             color: '#f8f8f8',
             fontWeight: 500,
-            fontSize: '1.02rem',
+            fontSize: isMobile ? '0.85rem' : '1.02rem',
             marginBottom: '1.1rem',
         },
         fbFloating: {
@@ -69,7 +70,7 @@ function Footer() {
         },
         copyright: {
             color: '#b6eec0',
-            fontSize: '0.95rem',
+            fontSize: isMobile ? '0.7rem' : '0.95rem',
             textAlign: 'center',
             marginTop: '1.1rem',
             opacity: 0.7,

@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function NewsFeed() {
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentSlide, setCurrentSlide] = useState(0);
-    const visible = 3;
+    const isMobile = window.innerWidth <= 600;
+    const isTablet = window.innerWidth > 600 && window.innerWidth <= 1024;
+    const visible = isMobile ? 1 : isTablet ? 2 : 3;
 
     // Helper function to parse Dutch date string
     const parseDutchDate = (dateStr) => {
@@ -96,17 +98,18 @@ function NewsFeed() {
     const styles = {
         section: {
             width: '100%',
-            maxWidth: '1200px',
-            margin: '4rem auto',
-            padding: '0 1.5rem',
+            maxWidth: isMobile ? 340 : isTablet ? 700 : '1200px',
+            margin: isMobile ? '2.5rem auto' : isTablet ? '3rem auto' : '4rem auto',
+            padding: isMobile ? '0 0.5rem' : isTablet ? '0 1rem' : '0 1.5rem',
             position: 'relative'
         },
         title: {
             color: '#26913a',
             fontWeight: 700,
-            fontSize: '2.2rem',
-            marginBottom: '1.5rem',
-            fontFamily: 'CocogooseProTrial'
+            fontSize: isMobile ? '1.3rem' : isTablet ? '1.7rem' : '2.2rem',
+            marginBottom: isMobile ? '0.7rem' : isTablet ? '1rem' : '1.5rem',
+            fontFamily: 'CocogooseProTrial',
+            textAlign: 'center',
         },
         sliderContainer: {
             position: 'relative',
@@ -114,18 +117,18 @@ function NewsFeed() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            gap: '32px'
+            gap: isMobile ? 0 : isTablet ? '18px' : '32px',
         },
         newsGrid: {
             display: 'flex',
-            gap: '32px',
+            gap: isMobile ? 0 : isTablet ? '18px' : '32px',
             justifyContent: 'center',
             alignItems: 'flex-start',
-            width: '100%',
-            maxWidth: '1100px'
+            width: isMobile ? '98vw' : isTablet ? '95vw' : '100%',
+            maxWidth: isMobile ? 280 : isTablet ? 650 : '1100px',
         },
         article: {
-            width: '320px',
+            width: isMobile ? 260 : isTablet ? 300 : '320px',
             minWidth: 0,
             background: 'white',
             borderRadius: '14px',
@@ -137,11 +140,11 @@ function NewsFeed() {
             flexDirection: 'column',
             alignItems: 'center',
             textAlign: 'center',
-            height: '400px'
+            height: isMobile ? 260 : isTablet ? 320 : '400px',
         },
         imageContainer: {
             width: '100%',
-            height: '200px',
+            height: isMobile ? 100 : isTablet ? 140 : '200px',
             overflow: 'hidden',
             flexShrink: 0
         },
@@ -151,7 +154,7 @@ function NewsFeed() {
             objectFit: 'cover'
         },
         content: {
-            padding: '1.2rem 1rem',
+            padding: isMobile ? '0.7rem 0.5rem' : isTablet ? '1rem 0.7rem' : '1.2rem 1rem',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -161,31 +164,31 @@ function NewsFeed() {
         },
         date: {
             color: '#e2725b',
-            fontSize: '0.9rem',
-            marginBottom: '0.5rem',
+            fontSize: isMobile ? '0.8rem' : isTablet ? '0.85rem' : '0.9rem',
+            marginBottom: isMobile ? '0.3rem' : isTablet ? '0.4rem' : '0.5rem',
             fontFamily: 'Montserrat, sans-serif',
             flexShrink: 0
         },
         heading: {
             color: '#222',
-            fontSize: '1.1rem',
+            fontSize: isMobile ? '0.98rem' : isTablet ? '1.05rem' : '1.1rem',
             fontWeight: 600,
-            marginBottom: '0.75rem',
+            marginBottom: isMobile ? '0.4rem' : isTablet ? '0.6rem' : '0.75rem',
             fontFamily: 'CocogooseProTrial',
             textAlign: 'center',
             flexShrink: 0
         },
         description: {
             color: '#444',
-            fontSize: '0.95rem',
+            fontSize: isMobile ? '0.85rem' : isTablet ? '0.9rem' : '0.95rem',
             lineHeight: 1.5,
             fontFamily: 'Montserrat, sans-serif',
             textAlign: 'center',
-            maxWidth: '260px',
+            maxWidth: isMobile ? 220 : isTablet ? 240 : '260px',
             overflowY: 'auto',
             margin: '0 auto',
             flex: 1,
-            paddingRight: '8px',
+            paddingRight: isMobile ? 0 : isTablet ? '4px' : '8px',
             scrollbarWidth: 'thin',
             scrollbarColor: '#e2725b #f5f5f5',
             '&::-webkit-scrollbar': {
@@ -201,9 +204,9 @@ function NewsFeed() {
             }
         },
         navButton: {
-            position: 'absolute',
-            top: '50%',
-            transform: 'translateY(-50%)',
+            position: isMobile ? 'static' : 'absolute',
+            top: isMobile ? undefined : '50%',
+            transform: isMobile ? undefined : 'translateY(-50%)',
             background: 'none',
             border: 'none',
             width: '38px',
@@ -216,10 +219,12 @@ function NewsFeed() {
             zIndex: 2
         },
         prevButton: {
-            left: '-56px'
+            left: isMobile ? undefined : isTablet ? '-36px' : '-56px',
+            marginRight: isMobile ? 8 : isTablet ? 4 : 0,
         },
         nextButton: {
-            right: '-56px'
+            right: isMobile ? undefined : isTablet ? '-36px' : '-56px',
+            marginLeft: isMobile ? 8 : isTablet ? 4 : 0,
         }
     };
 

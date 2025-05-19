@@ -204,7 +204,6 @@
     cursor: pointer;
     z-index: 1201;
     padding: 0;
-    margin-left: 8px;
 }
 
 .hamburger-bar {
@@ -278,11 +277,17 @@
     align-items: center;
     border-top-left-radius: 32px;
     border-bottom-left-radius: 32px;
-    transition: right 0.32s cubic-bezier(.4, 1.7, .7, 1.01);
+    transition: right 0.32s cubic-bezier(.4, 1.7, .7, 1.01), opacity 0.2s, visibility 0.2s;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
 }
 
 .mobile-menu.open {
     right: 0;
+    pointer-events: auto;
+    opacity: 1;
+    visibility: visible;
 }
 
 .mobile-menu-close {
