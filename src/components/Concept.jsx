@@ -34,10 +34,10 @@ const heroStyles = {
         maxWidth: 800,
     },
     title: {
-        color: '#FFF',
+        color: '#fff',
         fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
         fontWeight: 700,
-        fontFamily: 'Montserrat, sans-serif',
+        fontFamily: 'CocogooseProTrial',
         letterSpacing: 2,
         textShadow: '0 4px 24px rgba(0,0,0,0.3)',
         margin: 0,
