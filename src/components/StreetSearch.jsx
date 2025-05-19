@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
 const styles = {
@@ -103,47 +103,34 @@ const styles = {
     }
 };
 
-export default function StreetSearch() {
-    const [searchTerm, setSearchTerm] = useState('');
-    const [results, setResults] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+const isTablet = typeof window !== 'undefined' && window.innerWidth > 600 && window.innerWidth <= 1024;
+const isMobile = typeof window !== 'undefined' && window.innerWidth <= 600;
 
-    useEffect(() => {
-        const searchStreets = async () => {
-            if (!searchTerm.trim()) {
-                setResults([]);
-                return;
-            }
+const wrapperResponsive = {
+    ...styles.wrapper,
+    ...(isTablet ? { maxWidth: 400, width: '100%', margin: 0 } : {}),
+    ...(isMobile ? { maxWidth: 425, width: '100%', margin: 0 } : {})
+};
 
-            setLoading(true);
-            try {
-                const response = await fetch(`http://localhost:3001/api/streets/search?q=${encodeURIComponent(searchTerm.trim())}`);
-                if (!response.ok) throw new Error('Zoeken mislukt');
-                const data = await response.json();
-                setResults(data);
-                setError(null);
-            } catch (err) {
-                console.error('Search error:', err);
-                setError('Er is een fout opgetreden bij het zoeken');
-                setResults([]);
-            } finally {
-                setLoading(false);
-            }
-        };
+const searchTitleResponsive = {
+    ...styles.searchTitle,
+    ...(isMobile ? { marginLeft: 20, textAlign: 'left' } : {})
+};
 
-        // Reduced debounce time for more immediate feedback
-        const debounceTimer = setTimeout(searchStreets, 150);
-        return () => clearTimeout(debounceTimer);
-    }, [searchTerm]);
+const searchContainerResponsive = {
+    ...styles.searchContainer,
+    ...(isMobile ? { width: '100%', margin: 0, padding: 0 } : {})
+};
 
+const inputResponsive = {
+    ...styles.input,
+    ...(isTablet ? { maxWidth: 320 } : {}),
+    ...(isMobile ? { width: '70%', maxWidth: 260, margin: 0 } : {})
+};
+
+export default function StreetSearch({ searchTerm, setSearchTerm, results, loading, error }) {
     const handleInputChange = (e) => {
-        const value = e.target.value;
-        setSearchTerm(value);
-        // Show loading state immediately
-        if (value.trim()) {
-            setLoading(true);
-        }
+        setSearchTerm(e.target.value);
     };
 
     const highlightMatch = (text, query) => {
@@ -157,43 +144,19 @@ export default function StreetSearch() {
     };
 
     return (
-        <div style={styles.wrapper}>
-            <div style={styles.searchTitle}>Zoek je straat</div>
-            <div style={styles.searchContainer}>
+        <div style={wrapperResponsive}>
+            <div style={searchTitleResponsive}>Zoek je straat</div>
+            <div style={searchContainerResponsive}>
                 <input
                     type="text"
                     placeholder="Typ de naam van je straat..."
                     value={searchTerm}
                     onChange={handleInputChange}
-                    style={styles.input}
+                    style={inputResponsive}
                 />
                 <MagnifyingGlassIcon style={styles.searchIcon} />
             </div>
-
-            {(searchTerm.trim() || loading) && (
-                <div style={styles.resultsContainer}>
-                    {loading ? (
-                        <div style={styles.noResults}>Zoeken...</div>
-                    ) : error ? (
-                        <div style={styles.noResults}>{error}</div>
-                    ) : results.length === 0 ? (
-                        <div style={styles.noResults}>
-                            {searchTerm.trim().length > 0 ? 'Geen straten gevonden' : 'Begin met typen...'}
-                        </div>
-                    ) : (
-                        results.map((result) => (
-                            <div key={result._id} style={styles.resultItem}>
-                                <div style={styles.streetName}>
-                                    {highlightMatch(result.street, searchTerm)}
-                                </div>
-                                <div style={styles.contreiName}>
-                                    {result.contrei} ({result.type})
-                                </div>
-                            </div>
-                        ))
-                    )}
-                </div>
-            )}
+            {/* Zoekresultaten worden nu buiten deze component gerenderd */}
         </div>
     );
 } 

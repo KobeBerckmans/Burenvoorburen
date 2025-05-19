@@ -35,7 +35,7 @@ const styles = {
     },
     list: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(3, minmax(280px, 1fr))',
+        gridTemplateColumns: 'repeat(3, minmax(220px, 1fr))',
         gap: '1.2rem',
         maxWidth: 1000,
         margin: '0 auto',
@@ -73,15 +73,78 @@ const styles = {
     }
 };
 
+const isMobile = typeof window !== 'undefined' && window.innerWidth <= 600;
+const isTablet = typeof window !== 'undefined' && window.innerWidth > 600 && window.innerWidth <= 1024;
+
+const wrapperResponsive = {
+    ...styles.wrapper,
+    ...(isTablet ? { maxWidth: 768, margin: '2.5rem auto', padding: '2rem 0.5rem' } : {}),
+    ...(isMobile ? { maxWidth: 425, margin: '2rem auto', padding: '1.2rem 0.2rem' } : {})
+};
+
+const listResponsive = {
+    ...styles.list,
+    ...(isTablet ? {
+        maxWidth: 768,
+        gridTemplateColumns: 'repeat(2, minmax(140px, 1fr))',
+        gap: '0.7rem',
+        padding: '0 0.5rem',
+    } : {}),
+    ...(isMobile ? {
+        maxWidth: 425,
+        gridTemplateColumns: 'repeat(2, minmax(90px, 1fr))',
+        gap: '0.4rem',
+        padding: '0 0.2rem',
+    } : {})
+};
+
+const itemResponsive = {
+    ...styles.item,
+    ...(isTablet ? {
+        padding: '0.7rem 0.7rem',
+        fontSize: '0.95rem',
+        gap: '0.6rem',
+    } : {}),
+    ...(isMobile ? {
+        padding: '0.5rem 0.4rem',
+        fontSize: '0.85rem',
+        gap: '0.3rem',
+    } : {})
+};
+
+const numberResponsive = {
+    ...styles.number,
+    ...(isTablet ? {
+        width: 24,
+        height: 24,
+        fontSize: '0.85rem',
+    } : {}),
+    ...(isMobile ? {
+        width: 18,
+        height: 18,
+        fontSize: '0.7rem',
+    } : {})
+};
+
+const nameResponsive = {
+    ...styles.name,
+    ...(isTablet ? {
+        fontSize: '0.95rem',
+    } : {}),
+    ...(isMobile ? {
+        fontSize: '0.85rem',
+    } : {})
+};
+
 export default function ContreienList() {
     return (
-        <div style={styles.wrapper}>
+        <div style={wrapperResponsive}>
             <h2 style={styles.title}>CONTREIEN</h2>
-            <div style={styles.list}>
+            <div className="contreien-list" style={listResponsive}>
                 {contreien.map((name, i) => (
-                    <div key={i} style={styles.item}>
-                        <div style={styles.number}>{i + 1}</div>
-                        <div style={styles.name}>{name}</div>
+                    <div key={i} style={itemResponsive}>
+                        <div style={numberResponsive}>{i + 1}</div>
+                        <div style={nameResponsive}>{name}</div>
                     </div>
                 ))}
             </div>
