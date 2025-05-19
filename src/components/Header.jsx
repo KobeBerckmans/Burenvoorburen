@@ -111,12 +111,15 @@ export default function Header() {
             <div className="header-inner">
                 <img src={logo} alt="Buren voor Buren logo" className="header-logo" />
                 {/* Hamburger icon alleen op mobiel */}
-                <button className="hamburger" aria-label="Menu" onClick={() => setMobileMenuOpen(v => !v)} style={{ position: 'relative', zIndex: 1300, background: 'none', border: 'none', borderRadius: 0, boxShadow: 'none', padding: 0 }}>
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect y="7" width="32" height="3.5" rx="1.5" fill="#e2725b" />
-                        <rect y="14" width="32" height="3.5" rx="1.5" fill="#e2725b" />
-                        <rect y="21" width="32" height="3.5" rx="1.5" fill="#e2725b" />
-                    </svg>
+                <button
+                    className={`hamburger${mobileMenuOpen ? ' open' : ''}`}
+                    aria-label="Menu"
+                    onClick={() => setMobileMenuOpen(v => !v)}
+                    style={{ position: 'relative', zIndex: 1300, background: 'none', border: 'none', borderRadius: 0, boxShadow: 'none', padding: 0 }}
+                >
+                    <span className="hamburger-bar" />
+                    <span className="hamburger-bar" />
+                    <span className="hamburger-bar" />
                 </button>
                 {/* Gewone menu, verborgen op mobiel */}
                 <nav className="header-nav">
@@ -173,7 +176,6 @@ export default function Header() {
             {/* Mobiel overlay menu */}
             <div className={`mobile-menu-overlay${mobileMenuOpen ? ' open' : ''}`} onClick={() => setMobileMenuOpen(false)} />
             <nav className={`mobile-menu${mobileMenuOpen ? ' open' : ''}`} aria-label="Mobiel menu">
-                <button className="mobile-menu-close" aria-label="Sluit menu" onClick={() => setMobileMenuOpen(false)}>&times;</button>
                 <ul>
                     {menuItems.map(item => (
                         <li key={item.label}>
