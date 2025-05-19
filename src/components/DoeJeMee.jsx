@@ -77,20 +77,88 @@ const sliderPoints = [
 ];
 
 function Slider() {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 600;
+    const isTablet = typeof window !== 'undefined' && window.innerWidth > 600 && window.innerWidth <= 1024;
+    const [index, setIndex] = useState(0);
+    const visible = isMobile ? 1 : isTablet ? 2 : sliderPoints.length;
+
+    const prev = () => setIndex(i => (i === 0 ? sliderPoints.length - visible : i - 1));
+    const next = () => setIndex(i => (i === sliderPoints.length - visible ? 0 : i + 1));
+
+    const getVisiblePoints = () => {
+        let arr = [];
+        for (let i = 0; i < visible; i++) {
+            arr.push(sliderPoints[(index + i) % sliderPoints.length]);
+        }
+        return arr;
+    };
+    const visiblePoints = getVisiblePoints();
+
     return (
-        <div style={{ width: '100%', maxWidth: 1100, margin: '2.5rem auto 0 auto', background: 'rgba(234,255,234,0.15)', borderRadius: 18, boxShadow: '0 4px 18px 0 rgba(44,62,80,0.10)', padding: '2.5rem 1.5rem', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', gap: 32, minHeight: 340 }}>
-            {sliderPoints.map((point) => (
-                <div key={point.title} style={{ width: 320, minWidth: 0, background: 'none', borderRadius: 14, boxShadow: 'none', padding: '1.2rem 1rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', height: 260, justifyContent: 'flex-start' }}>
+        <div style={{
+            width: '100%',
+            maxWidth: isMobile ? 425 : isTablet ? 650 : 1100,
+            margin: isMobile ? '1.2rem auto 0 auto' : '2.5rem auto 0 auto',
+            background: 'rgba(234,255,234,0.15)',
+            borderRadius: 18,
+            boxShadow: '0 4px 18px 0 rgba(44,62,80,0.10)',
+            padding: isMobile ? '1.2rem 0.5rem' : isTablet ? '2rem 1rem' : '2.5rem 1.5rem',
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'center',
+            gap: isMobile ? 0 : 32,
+            minHeight: isMobile ? 0 : 340,
+            position: 'relative',
+            overflowX: isMobile ? 'auto' : 'visible',
+            scrollSnapType: isMobile ? 'x mandatory' : undefined
+        }}>
+            {(isMobile || isTablet) && (
+                <button onClick={prev} aria-label="Vorige" style={{ position: 'absolute', left: isTablet ? 0 : 8, top: isTablet ? '60%' : '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', fontSize: 28, color: '#e2725b', cursor: 'pointer', zIndex: 2 }}>&lt;</button>
+            )}
+            {visiblePoints.map((point, idx) => (
+                <div key={point.title} style={{
+                    width: isMobile ? 200 : isTablet ? 280 : 320,
+                    minWidth: isMobile ? 200 : 0,
+                    background: 'none',
+                    borderRadius: 14,
+                    boxShadow: 'none',
+                    padding: isMobile ? '0.5rem 0.3rem' : '1.2rem 1rem',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    height: isMobile ? 'auto' : 260,
+                    justifyContent: 'flex-start',
+                    margin: isMobile && idx > 0 ? '0 0 0 8px' : 0,
+                    scrollSnapAlign: isMobile ? 'start' : undefined
+                }}>
                     <div style={{ marginBottom: 12 }}>{point.icon}</div>
                     <div style={{ color: '#e2725b', fontWeight: 700, fontSize: '1.1rem', marginBottom: 8, fontFamily: 'CocogooseProTrial', textAlign: 'center' }}>{point.title}</div>
-                    <div style={{ color: '#222', fontSize: '0.98rem', whiteSpace: 'pre-line', textAlign: 'center', maxWidth: 260, lineHeight: 1.35, height: 140, overflow: 'auto', margin: '0 auto', fontFamily: 'Montserrat, sans-serif', fontWeight: 400 }}>{point.text}</div>
+                    <div style={{
+                        color: '#222',
+                        fontSize: '0.98rem',
+                        whiteSpace: 'pre-line',
+                        textAlign: 'center',
+                        maxWidth: 180,
+                        lineHeight: 1.35,
+                        height: isMobile ? 90 : 140,
+                        overflowY: isMobile ? 'auto' : 'auto',
+                        margin: '0 auto',
+                        fontFamily: 'Montserrat, sans-serif',
+                        fontWeight: 400
+                    }}>{point.text}</div>
                 </div>
             ))}
+            {(isMobile || isTablet) && (
+                <button onClick={next} aria-label="Volgende" style={{ position: 'absolute', right: isTablet ? 0 : 8, top: isTablet ? '60%' : '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', fontSize: 28, color: '#e2725b', cursor: 'pointer', zIndex: 2 }}>&gt;</button>
+            )}
         </div>
     );
 }
 
 function VrijwilligersForm() {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 600;
+    const isTablet = typeof window !== 'undefined' && window.innerWidth > 600 && window.innerWidth <= 1024;
     const [form, setForm] = useState({ naam: '', voornaam: '', adres: '', tel: '', mail: '', motivatie: '' });
     const [status, setStatus] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -123,21 +191,21 @@ function VrijwilligersForm() {
     };
 
     return (
-        <section style={{ background: '#fff7f4', padding: '3rem 0 2rem 0', margin: '3rem 0 0 0', borderRadius: 18, maxWidth: 1100, marginLeft: 'auto', marginRight: 'auto', boxShadow: '0 4px 18px 0 rgba(44,62,80,0.10)' }}>
-            <h2 style={{ color: '#e2725b', fontWeight: 800, fontSize: '2.2rem', textAlign: 'center', fontFamily: 'CocogooseProTrial', marginBottom: '0.5rem', letterSpacing: 1 }}>WORD VRIJWILLIGER</h2>
-            <div style={{ color: '#e2725b', textAlign: 'center', marginBottom: '2.5rem', fontSize: '1.1rem' }}>Geïnteresseerd? Laat het ons vlug weten:</div>
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', maxWidth: 700, margin: '0 auto' }}>
-                <div style={{ display: 'flex', gap: '1.2rem' }}>
-                    <input name="naam" type="text" placeholder="Naam" value={form.naam} onChange={handleChange} style={{ flex: 1, padding: '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a' }} />
-                    <input name="voornaam" type="text" placeholder="Voornaam" value={form.voornaam} onChange={handleChange} style={{ flex: 1, padding: '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a' }} />
+        <section style={{ background: '#fff7f4', padding: isMobile ? '1.5rem 0 1.2rem 0' : isTablet ? '2rem 0 1.5rem 0' : '3rem 0 2rem 0', margin: isMobile ? '1.5rem 0 0 0' : isTablet ? '2.5rem 0 0 0' : '3rem 0 0 0', borderRadius: 18, maxWidth: isMobile ? 425 : isTablet ? 768 : 1100, marginLeft: 'auto', marginRight: 'auto', boxShadow: '0 4px 18px 0 rgba(44,62,80,0.10)' }}>
+            <h2 style={{ color: '#e2725b', fontWeight: 800, fontSize: isMobile ? '1.1rem' : isTablet ? '1.7rem' : '2.2rem', textAlign: 'center', fontFamily: 'CocogooseProTrial', marginBottom: '0.5rem', letterSpacing: 1 }}>WORD VRIJWILLIGER</h2>
+            <div style={{ color: '#e2725b', textAlign: 'center', marginBottom: isMobile ? '1.2rem' : '2.5rem', fontSize: isMobile ? '0.92rem' : '1.1rem' }}>Geïnteresseerd? Laat het ons vlug weten:</div>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? '0.5rem' : '1.2rem', maxWidth: isMobile ? 220 : isTablet ? 420 : 700, margin: '0 auto' }}>
+                <div style={{ display: 'flex', gap: isMobile ? '0.3rem' : '1.2rem', flexDirection: isMobile ? 'column' : 'row' }}>
+                    <input name="naam" type="text" placeholder="Naam" value={form.naam} onChange={handleChange} style={{ flex: 1, padding: isMobile ? '0.5rem' : '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: isMobile ? '0.95rem' : '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a', width: isMobile ? '100%' : undefined, minWidth: isMobile ? 0 : undefined }} />
+                    <input name="voornaam" type="text" placeholder="Voornaam" value={form.voornaam} onChange={handleChange} style={{ flex: 1, padding: isMobile ? '0.5rem' : '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: isMobile ? '0.95rem' : '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a', width: isMobile ? '100%' : undefined, minWidth: isMobile ? 0 : undefined }} />
                 </div>
-                <div style={{ display: 'flex', gap: '1.2rem' }}>
-                    <input name="adres" type="text" placeholder="Adres" value={form.adres} onChange={handleChange} style={{ flex: 2, padding: '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a' }} />
-                    <input name="tel" type="text" placeholder="Tel" value={form.tel} onChange={handleChange} style={{ flex: 1, padding: '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a' }} />
+                <div style={{ display: 'flex', gap: isMobile ? '0.3rem' : '1.2rem', flexDirection: isMobile ? 'column' : 'row' }}>
+                    <input name="adres" type="text" placeholder="Adres" value={form.adres} onChange={handleChange} style={{ flex: 2, padding: isMobile ? '0.5rem' : '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: isMobile ? '0.95rem' : '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a', width: isMobile ? '100%' : undefined, minWidth: isMobile ? 0 : undefined }} />
+                    <input name="tel" type="text" placeholder="Tel" value={form.tel} onChange={handleChange} style={{ flex: 1, padding: isMobile ? '0.5rem' : '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: isMobile ? '0.95rem' : '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a', width: isMobile ? '100%' : undefined, minWidth: isMobile ? 0 : undefined }} />
                 </div>
-                <input name="mail" type="email" placeholder="Mail" value={form.mail} onChange={handleChange} style={{ padding: '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a' }} />
-                <textarea name="motivatie" placeholder="Motivatie..." value={form.motivatie} onChange={handleChange} rows={4} style={{ padding: '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: '1.1rem', fontFamily: 'Montserrat, sans-serif', resize: 'vertical', background: '#fff', color: '#137c3a' }} />
-                <button type="submit" disabled={loading} style={{ background: '#4b8e5b', color: '#fff', fontWeight: 700, fontSize: '1.15rem', border: 'none', borderRadius: 6, padding: '1rem 0', marginTop: '0.5rem', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'CocogooseProTrial', letterSpacing: 1 }}>{loading ? 'Verzenden...' : 'VERZEND'}</button>
+                <input name="mail" type="email" placeholder="Mail" value={form.mail} onChange={handleChange} style={{ padding: isMobile ? '0.5rem' : '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: isMobile ? '0.95rem' : '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a', width: isMobile ? '100%' : undefined, minWidth: isMobile ? 0 : undefined }} />
+                <textarea name="motivatie" placeholder="Motivatie..." value={form.motivatie} onChange={handleChange} rows={4} style={{ padding: isMobile ? '0.5rem' : '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: isMobile ? '0.95rem' : '1.1rem', fontFamily: 'Montserrat, sans-serif', resize: 'vertical', background: '#fff', color: '#137c3a', width: isMobile ? '100%' : undefined, minWidth: isMobile ? 0 : undefined }} />
+                <button type="submit" disabled={loading} style={{ background: '#4b8e5b', color: '#fff', fontWeight: 700, fontSize: isMobile ? '0.95rem' : '1.15rem', border: 'none', borderRadius: 6, padding: isMobile ? '0.7rem 0' : '1rem 0', marginTop: '0.5rem', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'CocogooseProTrial', letterSpacing: 1 }}>{loading ? 'Verzenden...' : 'VERZEND'}</button>
                 {status === 'success' && <div style={{ color: '#26913a', textAlign: 'center', marginTop: 12 }}>Bedankt voor je aanmelding!</div>}
                 {status === 'error' && <div style={{ color: '#e2725b', textAlign: 'center', marginTop: 12 }}>Er is iets misgegaan. Probeer opnieuw.</div>}
             </form>

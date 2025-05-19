@@ -1,5 +1,6 @@
 import React from 'react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import PropTypes from 'prop-types';
 
 const styles = {
     wrapper: {
@@ -44,14 +45,11 @@ const styles = {
         color: '#26913a',
     },
     resultsContainer: {
-        position: 'absolute',
-        top: '100%',
-        left: '1rem',
-        right: '1rem',
+        position: 'relative',
+        marginTop: '0.5rem',
         background: 'white',
         borderRadius: '12px',
         boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-        marginTop: '0.5rem',
         zIndex: 1000,
         maxHeight: '300px',
         overflowY: 'auto',
@@ -108,24 +106,28 @@ const isMobile = typeof window !== 'undefined' && window.innerWidth <= 600;
 
 const wrapperResponsive = {
     ...styles.wrapper,
-    ...(isTablet ? { maxWidth: 400, width: '100%', margin: 0 } : {}),
-    ...(isMobile ? { maxWidth: 425, width: '100%', margin: 0 } : {})
+    ...(isTablet ? { maxWidth: 400, width: '100%', margin: 0 } : {})
 };
 
 const searchTitleResponsive = {
     ...styles.searchTitle,
-    ...(isMobile ? { marginLeft: 20, textAlign: 'left' } : {})
+    ...(isMobile ? { marginLeft: 15, textAlign: 'left' } : {})
 };
 
 const searchContainerResponsive = {
     ...styles.searchContainer,
-    ...(isMobile ? { width: '100%', margin: 0, padding: 0 } : {})
+    ...(isMobile ? { width: '100%', margin: 0, padding: 0, marginLeft: -20, display: 'flex', alignItems: 'center', position: 'relative' } : {})
 };
 
 const inputResponsive = {
     ...styles.input,
     ...(isTablet ? { maxWidth: 320 } : {}),
-    ...(isMobile ? { width: '70%', maxWidth: 260, margin: 0 } : {})
+    ...(isMobile ? { width: '100%', maxWidth: 420, margin: 0, paddingRight: 40, } : {})
+};
+
+const searchIconResponsive = {
+    ...styles.searchIcon,
+    ...(isMobile ? { right: 10 } : {})
 };
 
 export default function StreetSearch({ searchTerm, setSearchTerm, results, loading, error }) {
@@ -143,6 +145,8 @@ export default function StreetSearch({ searchTerm, setSearchTerm, results, loadi
         );
     };
 
+    console.log('results:', results, 'loading:', loading, 'error:', error, 'searchTerm:', searchTerm);
+
     return (
         <div style={wrapperResponsive}>
             <div style={searchTitleResponsive}>Zoek je straat</div>
@@ -152,11 +156,41 @@ export default function StreetSearch({ searchTerm, setSearchTerm, results, loadi
                     placeholder="Typ de naam van je straat..."
                     value={searchTerm}
                     onChange={handleInputChange}
-                    style={inputResponsive}
+                    style={{
+                        ...inputResponsive,
+                        ...(isMobile ? { fontSize: '0.85rem' } : {})
+                    }}
                 />
-                <MagnifyingGlassIcon style={styles.searchIcon} />
+                <MagnifyingGlassIcon style={searchIconResponsive} />
             </div>
-            {/* Zoekresultaten worden nu buiten deze component gerenderd */}
+            {/* Zoekresultaten */}
+            {(loading || error || (results && results.length > 0) || (searchTerm && results && results.length === 0)) && (
+                <div style={styles.resultsContainer}>
+                    {loading && <div style={styles.noResults}>Laden...</div>}
+                    {error && <div style={styles.noResults}>Er is een fout opgetreden.</div>}
+                    {!loading && !error && results && results.length === 0 && searchTerm && (
+                        <div style={styles.noResults}>Geen straten gevonden.</div>
+                    )}
+                    {!loading && !error && results && results.length > 0 && results.map((item, idx) => (
+                        <div key={item.id || idx} style={styles.resultItem}>
+                            <div style={styles.streetName}>{highlightMatch(item.straat, searchTerm)}</div>
+                            {item.contrei && <div style={styles.contreiName}>{item.contrei}</div>}
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
-} 
+}
+
+StreetSearch.propTypes = {
+    searchTerm: PropTypes.string.isRequired,
+    setSearchTerm: PropTypes.func.isRequired,
+    results: PropTypes.arrayOf(PropTypes.shape({
+        straat: PropTypes.string.isRequired,
+        contrei: PropTypes.string,
+        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    })).isRequired,
+    loading: PropTypes.bool,
+    error: PropTypes.any,
+}; 

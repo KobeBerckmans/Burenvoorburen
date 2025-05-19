@@ -117,12 +117,11 @@ const isTablet = typeof window !== 'undefined' && window.innerWidth > 600 && win
 const searchWrapperResponsive = {
     ...styles.searchWrapper,
     ...(isMobile ? {
-        maxWidth: 'none',
-        width: '100%',
-        margin: 0,
+        maxWidth: 200,
+        margin: '0',
+        marginLeft: 0,
         padding: '1.2rem 0',
-        display: 'flex',
-        justifyContent: 'flex-start',
+        display: 'block',
     } : isTablet ? {
         maxWidth: 'none',
         width: '100%',
@@ -142,36 +141,10 @@ const wrapperResponsive = {
 
 export default function BuurtenGroups() {
     const [visibleElements, setVisibleElements] = useState({});
-
-    // Zoeklogica naar deze component
     const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-
-    useEffect(() => {
-        const searchStreets = async () => {
-            if (!searchTerm.trim()) {
-                setResults([]);
-                return;
-            }
-            setLoading(true);
-            try {
-                const response = await fetch(`http://localhost:3001/api/streets/search?q=${encodeURIComponent(searchTerm.trim())}`);
-                if (!response.ok) throw new Error('Zoeken mislukt');
-                const data = await response.json();
-                setResults(data);
-                setError(null);
-            } catch {
-                setError('Er is een fout opgetreden bij het zoeken');
-                setResults([]);
-            } finally {
-                setLoading(false);
-            }
-        };
-        const debounceTimer = setTimeout(searchStreets, 150);
-        return () => clearTimeout(debounceTimer);
-    }, [searchTerm]);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -197,21 +170,35 @@ export default function BuurtenGroups() {
         return () => observer.disconnect();
     }, []);
 
+    useEffect(() => {
+        if (!searchTerm) {
+            setResults([]);
+            setLoading(false);
+            setError(null);
+            return;
+        }
+        setLoading(true);
+        setError(null);
+        fetch(`/api/streets/search?q=${encodeURIComponent(searchTerm)}`)
+            .then(res => res.json())
+            .then(data => {
+                setResults(data.map(item => ({
+                    straat: item.street,
+                    contrei: item.contrei,
+                    id: item._id
+                })));
+                setLoading(false);
+            })
+            .catch(err => {
+                setError(err.message || 'Er is een fout opgetreden');
+                setLoading(false);
+            });
+    }, [searchTerm]);
+
     const getAnimationStyle = (id, baseStyle) => ({
         ...baseStyle,
         ...(visibleElements[id] ? styles.visible : styles.hidden)
     });
-
-    // Helper voor zoekresultaten
-    const highlightMatch = (text, query) => {
-        if (!query) return text;
-        const parts = text.split(new RegExp(`(${query})`, 'gi'));
-        return parts.map((part, i) =>
-            part.toLowerCase() === query.toLowerCase()
-                ? <span key={i} style={{ backgroundColor: '#eaffea', padding: '0 2px', borderRadius: '2px', color: '#26913a' }}>{part}</span>
-                : part
-        );
-    };
 
     return (
         <div style={wrapperResponsive}>
@@ -264,31 +251,6 @@ export default function BuurtenGroups() {
                     error={error}
                 />
             </div>
-            {/* Zoekresultaten boven contreienlijst op mobiel/tablet */}
-            {(isMobile || isTablet) && (searchTerm.trim() || loading) && (
-                <div style={{ width: '100%', maxWidth: isMobile ? 425 : 400, margin: isMobile ? '0 auto 1.2rem auto' : '0 auto 2rem auto', background: '#fff', borderRadius: 12, boxShadow: '0 4px 12px rgba(0,0,0,0.08)', padding: isMobile ? '0.5rem 0.5rem' : '1rem 1.2rem', zIndex: 10 }}>
-                    {loading ? (
-                        <div style={{ padding: '1rem 1.5rem', color: '#666', textAlign: 'center', fontStyle: 'italic' }}>Zoeken...</div>
-                    ) : error ? (
-                        <div style={{ padding: '1rem 1.5rem', color: '#666', textAlign: 'center', fontStyle: 'italic' }}>{error}</div>
-                    ) : results.length === 0 ? (
-                        <div style={{ padding: '1rem 1.5rem', color: '#666', textAlign: 'center', fontStyle: 'italic' }}>
-                            {searchTerm.trim().length > 0 ? 'Geen straten gevonden' : 'Begin met typen...'}
-                        </div>
-                    ) : (
-                        results.map((result) => (
-                            <div key={result._id} style={{ padding: '0.8rem 1.2rem', cursor: 'pointer', borderBottom: '1px solid #f0f0f0' }}>
-                                <div style={{ color: '#222', fontWeight: 600, fontSize: '0.95rem', marginBottom: '0.2rem', fontFamily: 'Montserrat, sans-serif' }}>
-                                    {highlightMatch(result.street, searchTerm)}
-                                </div>
-                                <div style={{ color: '#666', fontSize: '0.85rem', fontFamily: 'Montserrat, sans-serif' }}>
-                                    {result.contrei} ({result.type})
-                                </div>
-                            </div>
-                        ))
-                    )}
-                </div>
-            )}
         </div>
     );
 } 

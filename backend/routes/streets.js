@@ -27,6 +27,9 @@ const client = new MongoClient(uri, {
     }
 });
 
+// Maak de connectie persistent
+let clientPromise = client.connect();
+
 // Search endpoint
 router.get('/search', async (req, res) => {
     const { q } = req.query;
@@ -36,7 +39,7 @@ router.get('/search', async (req, res) => {
     }
 
     try {
-        await client.connect();
+        await clientPromise;
         const database = client.db("burenvoorburen");
         const collection = database.collection("streets");
 
@@ -75,8 +78,6 @@ router.get('/search', async (req, res) => {
     } catch (error) {
         console.error('Search error:', error);
         res.status(500).json({ error: 'Er is een fout opgetreden bij het zoeken' });
-    } finally {
-        await client.close();
     }
 });
 
