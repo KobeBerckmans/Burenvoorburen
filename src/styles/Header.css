@@ -266,7 +266,7 @@
 .mobile-menu {
     position: fixed;
     top: 0;
-    right: -340px;
+    right: -100vw;
     width: 320px;
     height: 100vh;
     background: linear-gradient(120deg, #fff 80%, #fbeeea 100%);
@@ -374,24 +374,4 @@
 
 .mobile-menu .header-help:hover {
     background: #d6654f;
-}
-
-transition: background 0.2s ease;
-margin-top: 0.5rem;
-
-.mobile-menu .header-help {
-    flex-direction: column;
-    gap: 1.2rem;
-}
-
-gap: 1.2rem;
-}
-
-gap: 1.2rem;
-}
-
-gap: 1.2rem;
-}
-
-gap: 1.2rem;
 }
