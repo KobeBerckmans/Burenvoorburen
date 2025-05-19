@@ -208,13 +208,17 @@
 .hamburger-bar {
     width: 28px;
     height: 3.5px;
-    background: #26913a;
+    background: #e2725b;
     margin: 4px 0;
     border-radius: 2px;
     transition: all 0.3s;
 }
 
-@media (max-width: 900px) {
+.hamburger:hover .hamburger-bar {
+    background: #d6654f;
+}
+
+@media (max-width: 1200px) {
 
     .header-nav,
     .header-actions {
@@ -222,7 +226,7 @@
     }
 
     .hamburger {
-        display: flex;
+        display: flex !important;
     }
 }
 
@@ -297,6 +301,31 @@
     font-family: 'Montserrat', sans-serif;
     text-decoration: none;
     font-weight: 600;
+    transition: color 0.2s, background 0.2s;
+    border-radius: 6px;
+    padding: 0.3rem 0.5rem;
+}
+
+.mobile-menu a:hover {
+    color: #e2725b;
+    background: #fbeeea;
+}
+
+.mobile-menu .header-help {
+    background: #e2725b;
+    color: #fff;
+    text-decoration: none;
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background 0.2s ease;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+.mobile-menu .header-help:hover {
+    background: #d6654f;
 }
 
 .mobile-menu details summary {
