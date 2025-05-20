@@ -163,6 +163,16 @@ const mainStyles = {
 };
 
 export default function Concept() {
+    React.useEffect(() => {
+        document.body.dataset.page = 'concept';
+        document.documentElement.style.overflowX = 'hidden';
+        document.body.style.overflowX = 'hidden';
+        return () => {
+            delete document.body.dataset.page;
+            document.documentElement.style.overflowX = '';
+            document.body.style.overflowX = '';
+        };
+    }, []);
     return (
         <div style={{ width: '100%', minHeight: '100vh', background: '#fff' }}>
             <Menu />

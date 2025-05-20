@@ -399,3 +399,12 @@
 .mobile-menu .header-help:hover {
     background: #d6654f;
 }
+
+/* Fix mobile menu for specific pages where it slides out of view */
+body[data-page='concept'] .mobile-menu.open,
+body[data-page='werkingsprincipes'] .mobile-menu.open,
+body[data-page='werkvormen'] .mobile-menu.open,
+body[data-page='links-literatuur'] .mobile-menu.open {
+    right: 0 !important;
+    left: auto !important;
+}
