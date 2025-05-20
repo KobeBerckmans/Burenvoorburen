@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import heroImage from '../assets/images/helping2.png';
 import '../styles/Hero.css';
 
@@ -14,7 +15,7 @@ export default function Hero() {
                     <div className="hero-location-block">
                         <span className="hero-location">Tienen</span>
                     </div>
-                    <button className="hero-help-btn">HULP?</button>
+                    <Link to="/hulp" className="hero-help-btn">HULP?</Link>
                 </div>
             </div>
         </section>

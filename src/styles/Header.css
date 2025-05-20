@@ -89,7 +89,8 @@
 }
 
 .header-help:hover {
-    background: #d6654f;
+    background: #c95c44;
+    color: #fff;
 }
 
 .header-lang {
@@ -206,6 +207,14 @@
     cursor: pointer;
     z-index: 1201;
     padding: 0;
+    outline: none;
+    box-shadow: none;
+}
+
+.hamburger:focus,
+.hamburger:active {
+    outline: none !important;
+    box-shadow: none !important;
 }
 
 .hamburger-bar {
@@ -397,7 +406,8 @@
 }
 
 .mobile-menu .header-help:hover {
-    background: #d6654f;
+    background: #c95c44;
+    color: #fff;
 }
 
 /* Fix mobile menu for specific pages where it slides out of view */

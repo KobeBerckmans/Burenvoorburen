@@ -112,12 +112,12 @@
 }
 
 .hero-help-btn:hover {
-    background: #1e7a2c;
+    background: #c95c44;
+    color: #fff;
     transform: scale(1.08);
-    box-shadow: 0 0 24px 0 #26913a66, 0 2px 8px #1e7a2c33;
+    box-shadow: 0 0 24px 0 #c95c4466, 0 2px 8px #c95c4433;
     animation: pulse 0.6s;
     border: 2px solid #CFF5CD;
-
 }
 
 @keyframes floatShadow {

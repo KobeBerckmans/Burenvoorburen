@@ -207,6 +207,19 @@ function PartnerSlider({ fontSizeFactor }) {
                 )
             )}
             <button onClick={next} style={{ ...sliderStyles.arrow, fontSize: 36 * fontSizeFactor }} aria-label="Volgende partners">&#62;</button>
+            <style>{`
+                button[aria-label="Vorige partners"], button[aria-label="Volgende partners"] {
+                    outline: none !important;
+                    border: none !important;
+                    box-shadow: none !important;
+                }
+                button[aria-label="Vorige partners"]:focus, button[aria-label="Vorige partners"]:active,
+                button[aria-label="Volgende partners"]:focus, button[aria-label="Volgende partners"]:active {
+                    outline: none !important;
+                    border: none !important;
+                    box-shadow: none !important;
+                }
+            `}</style>
         </div>
     );
 }
@@ -240,10 +253,17 @@ function speakPartnersText() {
     } else {
         text = `Onze partners van Buren voor Buren.`;
     }
+    console.log('Voorleestekst:', text);
     if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
         const utterance = new window.SpeechSynthesisUtterance(text);
         utterance.lang = 'nl-BE';
+        // Kies expliciet een Nederlandse stem
+        const voices = window.speechSynthesis.getVoices();
+        const dutchVoice = voices.find(v => v.lang && v.lang.startsWith('nl'));
+        if (dutchVoice) {
+            utterance.voice = dutchVoice;
+        }
         utterance.rate = 0.85;
         window.speechSynthesis.speak(utterance);
     } else {

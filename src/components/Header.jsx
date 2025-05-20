@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import logo from '../assets/images/BVB-Transparant.png';
 import '../styles/Header.css';
 import Werkingsprincipes from './Werkingsprincipes';
@@ -92,6 +92,14 @@ export default function Header({ setFontSizeFactor }) {
     const [showA11yInfo, setShowA11yInfo] = useState(false);
     const dropdownRef = useRef(null);
     const a11yInfoRef = useRef(null);
+    const location = useLocation();
+
+    useEffect(() => {
+        // Stop spraak bij paginawissel
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+        }
+    }, [location.pathname]);
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -114,7 +122,7 @@ export default function Header({ setFontSizeFactor }) {
 
     // Toegankelijkheidsuitleg
     const a11yText =
-        "Toegankelijkheid: Gebruik de tabtoets om door het menu en de pagina te navigeren. Gebruik de 'Lees voor'-knop op pagina's om de inhoud te laten voorlezen. Gebruik de plus- en minknoppen om de tekstgrootte aan te passen. Druk op Escape om dit bericht te sluiten.";
+        "Toegankelijkheid: Gebruik de tabtoets om door het menu en de pagina te navigeren. Gebruik de 'Lees voor'-knop op pagina's of druk op de letter p om de inhoud te laten voorlezen. Gebruik de plus- en minknoppen om de tekstgrootte aan te passen. Druk op Escape om dit bericht te sluiten.";
 
     // Voorleesfunctie voor toegankelijkheidsuitleg
     useEffect(() => {
@@ -123,6 +131,7 @@ export default function Header({ setFontSizeFactor }) {
                 window.speechSynthesis.cancel();
                 const utterance = new window.SpeechSynthesisUtterance(a11yText);
                 utterance.lang = 'nl-BE';
+                utterance.rate = 0.85;
                 window.speechSynthesis.speak(utterance);
             }
         } else {
@@ -135,7 +144,9 @@ export default function Header({ setFontSizeFactor }) {
     return (
         <header className="header">
             <div className="header-inner">
-                <img src={logo} alt="Buren voor Buren logo" className="header-logo" />
+                <Link to="/">
+                    <img src={logo} alt="Buren voor Buren logo" className="header-logo" />
+                </Link>
                 {/* Gewone menu, verborgen op mobiel */}
                 <nav className="header-nav">
                     {menuItems.map(item => (
@@ -236,10 +247,24 @@ export default function Header({ setFontSizeFactor }) {
                 </div>
                 {/* Hamburger icon alleen op mobiel, nu helemaal rechts */}
                 <button
-                    className={`hamburger${mobileMenuOpen ? ' open' : ''}`}
-                    aria-label="Menu"
+                    className="hamburger"
                     onClick={() => setMobileMenuOpen(v => !v)}
-                    style={{ position: 'relative', zIndex: 1300, background: 'none', border: 'none', borderRadius: 0, boxShadow: 'none', padding: 0 }}
+                    aria-label="Menu"
+                    style={{
+                        display: 'none',
+                        background: 'none',
+                        border: 'none',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        width: 40,
+                        height: 40,
+                        cursor: 'pointer',
+                        zIndex: 1201,
+                        padding: 0,
+                        outline: 'none',
+                        boxShadow: 'none',
+                    }}
                 >
                     <span className="hamburger-bar" />
                     <span className="hamburger-bar" />
@@ -332,6 +357,18 @@ export default function Header({ setFontSizeFactor }) {
                     </div>
                 </div>
             </nav>
+            <style>{`
+                .hamburger {
+                    outline: none !important;
+                    border: none !important;
+                    box-shadow: none !important;
+                }
+                .hamburger:focus, .hamburger:active {
+                    outline: none !important;
+                    border: none !important;
+                    box-shadow: none !important;
+                }
+            `}</style>
         </header>
     );
 }

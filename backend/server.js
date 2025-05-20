@@ -18,6 +18,14 @@ const port = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
+// Middleware om hoofdlettergevoelige charset te fixen
+app.use((req, res, next) => {
+  if (req.headers['content-type'] && req.headers['content-type'].includes('charset=UTF-8')) {
+    req.headers['content-type'] = req.headers['content-type'].replace('charset=UTF-8', 'charset=utf-8');
+  }
+  next();
+});
+
 // Get the absolute path to the images directory
 const imagesPath = '/Users/kobeberckmans/Desktop/BVB/Burenvoorburen/src/assets/images';
 console.log('Images directory path:', imagesPath);

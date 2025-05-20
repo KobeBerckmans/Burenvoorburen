@@ -243,10 +243,17 @@ function speakDoeJeMeeText() {
     } else {
         text = `Word vrijwilliger bij Buren voor Buren.`;
     }
+    console.log('Voorleestekst:', text);
     if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
         const utterance = new window.SpeechSynthesisUtterance(text);
         utterance.lang = 'nl-BE';
+        // Kies expliciet een Nederlandse stem
+        const voices = window.speechSynthesis.getVoices();
+        const dutchVoice = voices.find(v => v.lang && v.lang.startsWith('nl'));
+        if (dutchVoice) {
+            utterance.voice = dutchVoice;
+        }
         utterance.rate = 0.85;
         window.speechSynthesis.speak(utterance);
     } else {
@@ -327,6 +334,17 @@ export default function DoeJeMee({ fontSizeFactor }) {
                 input::placeholder, textarea::placeholder {
                     color: #000;
                     opacity: 1;
+                }
+                button[aria-label="Vorige"], button[aria-label="Volgende"] {
+                    outline: none !important;
+                    border: none !important;
+                    box-shadow: none !important;
+                }
+                button[aria-label="Vorige"]:focus, button[aria-label="Vorige"]:active,
+                button[aria-label="Volgende"]:focus, button[aria-label="Volgende"]:active {
+                    outline: none !important;
+                    border: none !important;
+                    box-shadow: none !important;
                 }
             `}</style>
         </div>

@@ -94,34 +94,42 @@ function HomeSlider({ fontSizeFactor }) {
     };
     const visiblePoints = getVisiblePoints();
     return (
-        <div style={{
-            width: isMobile ? '95vw' : '100%',
-            maxWidth: isMobile ? 320 : '100%',
-            margin: '2.5rem auto 0 auto',
-            background: 'rgba(234,255,234,0.15)',
-            borderRadius: 18,
-            boxShadow: '0 4px 18px 0 rgba(44,62,80,0.10)',
-            padding: isMobile ? '1.2rem 0.5rem' : '2.5rem 1.5rem',
-            display: 'flex',
-            alignItems: 'center',
-            position: 'relative',
-            minHeight: isMobile ? 220 : 340,
-            justifyContent: 'center',
-        }}>
-            <button onClick={prev} style={{
-                position: 'static',
-                marginRight: isMobile ? 8 : 0,
-                background: 'none',
-                border: 'none',
-                width: 38,
-                height: 38,
-                padding: 0,
+        <div
+            style={{
+                width: isMobile ? '95vw' : '100%',
+                maxWidth: isMobile ? 320 : '100%',
+                margin: '2.5rem auto 0 auto',
+                background: 'rgba(234,255,234,0.15)',
+                borderRadius: 18,
+                boxShadow: '0 4px 18px 0 rgba(44,62,80,0.10)',
+                padding: isMobile ? '1.2rem 0.5rem' : '2.5rem 1.5rem',
                 display: 'flex',
                 alignItems: 'center',
+                position: isTablet || (!isMobile && !isTablet) ? 'relative' : 'static',
+                minHeight: isMobile ? 220 : 340,
                 justifyContent: 'center',
-                cursor: 'pointer',
-                zIndex: 2,
-            }}>
+            }}
+        >
+            <button
+                onClick={prev}
+                style={{
+                    position: isTablet || !isMobile && !isTablet ? 'absolute' : 'static',
+                    left: isTablet ? 40 : !isMobile && !isTablet ? 40 : undefined,
+                    top: isTablet || (!isMobile && !isTablet) ? '50%' : undefined,
+                    transform: isTablet || (!isMobile && !isTablet) ? 'translateY(-50%)' : undefined,
+                    marginRight: isMobile ? 8 : 0,
+                    background: 'none',
+                    border: 'none',
+                    width: 38,
+                    height: 38,
+                    padding: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    zIndex: 2,
+                }}
+            >
                 <svg width="38" height="38" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" stroke="#e2725b" strokeWidth="3.5" fill="none" strokeLinecap="round" /></svg>
             </button>
             <div style={{ display: 'flex', flex: 1, justifyContent: 'center', gap: isMobile ? 0 : isTablet ? 12 : 32 }}>
@@ -133,20 +141,26 @@ function HomeSlider({ fontSizeFactor }) {
                     </div>
                 ))}
             </div>
-            <button onClick={next} style={{
-                position: 'static',
-                marginLeft: isMobile ? 8 : isTablet ? 2 : 0,
-                background: 'none',
-                border: 'none',
-                width: 38,
-                height: 38,
-                padding: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                zIndex: 2,
-            }}>
+            <button
+                onClick={next}
+                style={{
+                    position: isTablet || !isMobile && !isTablet ? 'absolute' : 'static',
+                    right: isTablet ? 80 : !isMobile && !isTablet ? 80 : undefined,
+                    top: isTablet || (!isMobile && !isTablet) ? '50%' : undefined,
+                    transform: isTablet || (!isMobile && !isTablet) ? 'translateY(-50%)' : undefined,
+                    marginLeft: isMobile ? 8 : 0,
+                    background: 'none',
+                    border: 'none',
+                    width: 38,
+                    height: 38,
+                    padding: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    zIndex: 2,
+                }}
+            >
                 <svg width="38" height="38" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="#e2725b" strokeWidth="3.5" fill="none" strokeLinecap="round" /></svg>
             </button>
         </div>
@@ -238,10 +252,17 @@ function speakHomePageText() {
     } else {
         text = `Welkom op Buren voor Buren. Buren voor Buren is een zorgnetwerk voor iedereen die ondersteuning nodig heeft. Gebruik de plus en min knoppen bovenaan om de tekst te vergroten of te verkleinen. Lees verder op deze pagina voor meer informatie over onze missie, diensten en hoe je kunt deelnemen.`;
     }
+    console.log('Voorleestekst:', text);
     if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel(); // Stop eventuele vorige spraak
         const utterance = new window.SpeechSynthesisUtterance(text);
         utterance.lang = 'nl-BE';
+        // Kies expliciet een Nederlandse stem
+        const voices = window.speechSynthesis.getVoices();
+        const dutchVoice = voices.find(v => v.lang && v.lang.startsWith('nl'));
+        if (dutchVoice) {
+            utterance.voice = dutchVoice;
+        }
         utterance.rate = 0.85;
         window.speechSynthesis.speak(utterance);
     } else {
@@ -285,7 +306,15 @@ function HomeSection({ fontSizeFactor }) {
     return (
         <div id="home-main-content" style={{ maxWidth: 1440, margin: '0 auto', position: 'relative', overflowX: 'hidden', width: '100%' }}>
             {/* Screenreader knop */}
-            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', margin: '1.2rem 1.5rem 0 0' }}>
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: window.innerWidth <= 1024 ? 'center' : 'flex-end',
+                    alignItems: 'center',
+                    margin: window.innerWidth <= 1024 ? '1.2rem auto 0 auto' : '1.2rem 1.5rem 0 0',
+                    width: window.innerWidth <= 1024 ? '100%' : undefined,
+                }}
+            >
                 <button
                     onClick={speakHomePageText}
                     style={{

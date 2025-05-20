@@ -176,10 +176,17 @@ function speakContactText() {
     } else {
         text = `Contacteer Buren voor Buren.`;
     }
+    console.log('Voorleestekst:', text);
     if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
         const utterance = new window.SpeechSynthesisUtterance(text);
         utterance.lang = 'nl-BE';
+        // Kies expliciet een Nederlandse stem
+        const voices = window.speechSynthesis.getVoices();
+        const dutchVoice = voices.find(v => v.lang && v.lang.startsWith('nl'));
+        if (dutchVoice) {
+            utterance.voice = dutchVoice;
+        }
         utterance.rate = 0.85;
         window.speechSynthesis.speak(utterance);
     } else {
