@@ -2,7 +2,6 @@ import React from 'react';
 import Footer from './Footer';
 import heroImg from '../assets/images/3mensen.jpg';
 import logo from '../assets/images/BVB-Transparant.png';
-import Menu from './Menu';
 
 const heroStyles = {
     hero: {
@@ -145,25 +144,46 @@ const cardStyles = {
     }
 };
 
+const getDevice = () => {
+    if (typeof window !== 'undefined') {
+        if (window.innerWidth <= 600) return 'mobile';
+        if (window.innerWidth > 600 && window.innerWidth <= 1024) return 'tablet';
+    }
+    return 'desktop';
+};
+
 export default function LinksLiteratuur() {
+    const [device, setDevice] = React.useState(getDevice());
     React.useEffect(() => {
         document.body.dataset.page = 'links-literatuur';
         document.documentElement.style.overflowX = 'hidden';
         document.body.style.overflowX = 'hidden';
+        const handleResize = () => setDevice(getDevice());
+        window.addEventListener('resize', handleResize);
         return () => {
             delete document.body.dataset.page;
             document.documentElement.style.overflowX = '';
             document.body.style.overflowX = '';
+            window.removeEventListener('resize', handleResize);
         };
     }, []);
+    const isMobile = device === 'mobile';
+    const isTablet = device === 'tablet';
+    const heroResponsive = {
+        ...heroStyles.hero,
+        height: isMobile ? 180 : isTablet ? 260 : 'min(50vh, 400px)',
+        minHeight: isMobile ? 120 : isTablet ? 180 : 320,
+        marginTop: isMobile ? 64 : isTablet ? 56 : 0,
+    };
+    const titleFontSize = isMobile || isTablet ? 'clamp(2rem, 6vw, 2.5rem)' : 'clamp(2.5rem, 5vw, 3.5rem)';
+    const subtitleFontSize = isMobile || isTablet ? 'clamp(1rem, 3vw, 1.1rem)' : 'clamp(1.1rem, 2vw, 1.3rem)';
     return (
         <div style={{ width: '100%', minHeight: '100vh', background: '#fff' }}>
-            <Menu />
-            <div style={heroStyles.hero}>
+            <div style={heroResponsive}>
                 <div style={heroStyles.overlay} />
                 <div style={heroStyles.content}>
-                    <h1 style={heroStyles.title}>LINKS &amp; LITERATUUR</h1>
-                    <div style={heroStyles.subtitle}>Enkele zeer toegankelijke bronnen</div>
+                    <h1 style={{ ...heroStyles.title, fontSize: titleFontSize }}>LINKS &amp; LITERATUUR</h1>
+                    <div style={{ ...heroStyles.subtitle, fontSize: subtitleFontSize }}>Enkele zeer toegankelijke bronnen</div>
                 </div>
             </div>
             <div style={mainStyles.wrapper}>

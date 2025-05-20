@@ -3,7 +3,6 @@ import Footer from './Footer';
 import heroImg from '../assets/images/3mensen.jpg';
 import logo from '../assets/images/BVB-Transparant.png';
 import Accordion from './Accordion';
-import Menu from './Menu';
 
 const heroStyles = {
     hero: {
@@ -132,24 +131,44 @@ const mainStyles = {
     },
 };
 
+const getDevice = () => {
+    if (typeof window !== 'undefined') {
+        if (window.innerWidth <= 600) return 'mobile';
+        if (window.innerWidth > 600 && window.innerWidth <= 1024) return 'tablet';
+    }
+    return 'desktop';
+};
+
 export default function Werkingsprincipes() {
+    const [device, setDevice] = React.useState(getDevice());
     React.useEffect(() => {
         document.body.dataset.page = 'werkingsprincipes';
         document.documentElement.style.overflowX = 'hidden';
         document.body.style.overflowX = 'hidden';
+        const handleResize = () => setDevice(getDevice());
+        window.addEventListener('resize', handleResize);
         return () => {
             delete document.body.dataset.page;
             document.documentElement.style.overflowX = '';
             document.body.style.overflowX = '';
+            window.removeEventListener('resize', handleResize);
         };
     }, []);
+    const isMobile = device === 'mobile';
+    const isTablet = device === 'tablet';
+    const heroResponsive = {
+        ...heroStyles.hero,
+        height: isMobile ? 180 : isTablet ? 260 : 'min(50vh, 400px)',
+        minHeight: isMobile ? 120 : isTablet ? 180 : 320,
+        marginTop: isMobile ? 64 : isTablet ? 56 : 0,
+    };
+    const titleFontSize = isMobile || isTablet ? 'clamp(2rem, 6vw, 2.5rem)' : 'clamp(2.5rem, 5vw, 3.5rem)';
     return (
         <div style={{ width: '100%', minHeight: '100vh', background: '#fff' }}>
-            <Menu />
-            <div style={heroStyles.hero}>
+            <div style={heroResponsive}>
                 <div style={heroStyles.overlay} />
                 <div style={heroStyles.content}>
-                    <h1 style={heroStyles.title}>WERKINGSPRINCIPES</h1>
+                    <h1 style={{ ...heroStyles.title, fontSize: titleFontSize }}>WERKINGSPRINCIPES</h1>
                 </div>
             </div>
             <div style={mainStyles.wrapper}>
