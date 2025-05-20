@@ -5,8 +5,6 @@ import heroImg from '../assets/images/3mensen.jpg';
 const heroStyles = {
     hero: {
         width: '100%',
-        height: 'min(50vh, 400px)',
-        minHeight: 320,
         background: `url(${heroImg}) center/cover no-repeat`,
         display: 'flex',
         alignItems: 'center',
@@ -29,17 +27,30 @@ const heroStyles = {
         textAlign: 'center',
         padding: '0 1.5rem',
         maxWidth: 800,
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     title: {
         color: '#fff',
-        fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
         fontWeight: 700,
         fontFamily: 'CocogooseProTrial',
         letterSpacing: 2,
         textShadow: '0 4px 24px rgba(0,0,0,0.3)',
         margin: 0,
         lineHeight: 1.2,
+        textAlign: 'center',
     }
+};
+
+const getDevice = () => {
+    if (typeof window !== 'undefined') {
+        if (window.innerWidth <= 600) return 'mobile';
+        if (window.innerWidth > 600 && window.innerWidth <= 1024) return 'tablet';
+    }
+    return 'desktop';
 };
 
 const formStyles = {
@@ -129,6 +140,63 @@ export default function Help() {
     const [form, setForm] = useState({ naam: '', soort: '', bericht: '', datum: '', adres: '', uur: '' });
     const [status, setStatus] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [device, setDevice] = React.useState(getDevice());
+    React.useEffect(() => {
+        const handleResize = () => setDevice(getDevice());
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+    const isMobile = device === 'mobile';
+    const isTablet = device === 'tablet';
+    const heroResponsive = {
+        ...heroStyles.hero,
+        height: isMobile ? 180 : isTablet ? 260 : 'min(50vh, 400px)',
+        minHeight: isMobile ? 120 : isTablet ? 180 : 320,
+        marginTop: isMobile ? 64 : isTablet ? 56 : 0,
+    };
+    const titleFontSize = isMobile || isTablet ? 'clamp(2rem, 6vw, 2.5rem)' : 'clamp(2.5rem, 5vw, 3.5rem)';
+    const formWrapperResponsive = {
+        ...formStyles.wrapper,
+        padding: isMobile ? '1.2rem 0.7rem' : isTablet ? '2rem 1.2rem' : '2.5rem 2rem',
+        marginTop: isMobile ? '1.2rem' : isTablet ? '2rem' : '2.5rem',
+        marginBottom: isMobile ? '1.2rem' : isTablet ? '2rem' : '2.5rem',
+        maxWidth: isMobile ? 380 : isTablet ? 500 : 600,
+    };
+    const formTitleResponsive = {
+        ...formStyles.title,
+        fontSize: isMobile ? '1.3rem' : isTablet ? '1.7rem' : '2rem',
+    };
+    const formSubtitleResponsive = {
+        ...formStyles.subtitle,
+        fontSize: isMobile ? '1.05rem' : isTablet ? '1.15rem' : '1.3rem',
+        marginBottom: isMobile ? '1.2rem' : isTablet ? '1.7rem' : '2.2rem',
+    };
+    const inputResponsive = {
+        ...formStyles.input,
+        fontSize: isMobile ? '1rem' : isTablet ? '1.05rem' : '1.1rem',
+        padding: isMobile ? '0.7rem' : '0.9rem',
+    };
+    const textareaResponsive = {
+        ...formStyles.textarea,
+        fontSize: isMobile ? '1rem' : isTablet ? '1.05rem' : '1.1rem',
+        padding: isMobile ? '0.7rem' : '0.9rem',
+        minHeight: isMobile ? 70 : isTablet ? 90 : 100,
+    };
+    const selectResponsive = {
+        ...formStyles.select,
+        fontSize: isMobile ? '1rem' : isTablet ? '1.05rem' : '1.1rem',
+        padding: isMobile ? '0.7rem' : '0.9rem',
+    };
+    const buttonResponsive = {
+        ...formStyles.button,
+        fontSize: isMobile ? '1rem' : isTablet ? '1.08rem' : '1.15rem',
+        padding: isMobile ? '0.8rem 0' : '1rem 0',
+    };
+    const rowResponsive = {
+        ...formStyles.row,
+        flexDirection: isMobile ? 'column' : 'row',
+        gap: isMobile ? '0.7rem' : '1.2rem',
+    };
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -159,19 +227,19 @@ export default function Help() {
 
     return (
         <div style={{ width: '100%', minHeight: '100vh', background: '#fff' }}>
-            <div style={heroStyles.hero}>
+            <div style={heroResponsive}>
                 <div style={heroStyles.overlay} />
                 <div style={heroStyles.content}>
-                    <h1 style={heroStyles.title}>HULP NODIG?</h1>
+                    <h1 style={{ ...heroStyles.title, fontSize: titleFontSize }}>HULP NODIG?</h1>
                 </div>
             </div>
-            <div style={formStyles.wrapper}>
-                <div style={formStyles.title}>BUREN VOOR BUREN</div>
-                <div style={formStyles.subtitle}>Plaats je aanvraag</div>
+            <div style={formWrapperResponsive}>
+                <div style={formTitleResponsive}>BUREN VOOR BUREN</div>
+                <div style={formSubtitleResponsive}>Plaats je aanvraag</div>
                 <form onSubmit={handleSubmit} style={formStyles.form}>
-                    <div style={formStyles.row}>
-                        <input name="naam" type="text" placeholder="Naam" value={form.naam} onChange={handleChange} style={formStyles.input} required />
-                        <select name="soort" value={form.soort} onChange={handleChange} style={formStyles.select} required>
+                    <div style={rowResponsive}>
+                        <input name="naam" type="text" placeholder="Naam" value={form.naam} onChange={handleChange} style={inputResponsive} required />
+                        <select name="soort" value={form.soort} onChange={handleChange} style={selectResponsive} required>
                             <option value="">Soort Hulp</option>
                             <option value="boodschappen">Boodschappen</option>
                             <option value="vervoer">Vervoer</option>
@@ -180,15 +248,15 @@ export default function Help() {
                             <option value="anders">Anders</option>
                         </select>
                     </div>
-                    <textarea name="bericht" placeholder="Write Your Message Here..." value={form.bericht} onChange={handleChange} style={formStyles.textarea} required />
-                    <div style={formStyles.row}>
-                        <input name="datum" type="date" placeholder="Datum" value={form.datum} onChange={handleChange} style={formStyles.input} required />
-                        <input name="adres" type="text" placeholder="Adres" value={form.adres} onChange={handleChange} style={formStyles.input} required />
+                    <textarea name="bericht" placeholder="Write Your Message Here..." value={form.bericht} onChange={handleChange} style={textareaResponsive} required />
+                    <div style={rowResponsive}>
+                        <input name="datum" type="date" placeholder="Datum" value={form.datum} onChange={handleChange} style={inputResponsive} required />
+                        <input name="adres" type="text" placeholder="Adres" value={form.adres} onChange={handleChange} style={inputResponsive} required />
                     </div>
-                    <div style={formStyles.row}>
-                        <input name="uur" type="time" placeholder="Uur" value={form.uur} onChange={handleChange} style={formStyles.input} required />
+                    <div style={rowResponsive}>
+                        <input name="uur" type="time" placeholder="Uur" value={form.uur} onChange={handleChange} style={inputResponsive} required />
                     </div>
-                    <button type="submit" disabled={loading} style={formStyles.button}>{loading ? 'Verzenden...' : 'SUBMIT'}</button>
+                    <button type="submit" disabled={loading} style={buttonResponsive}>{loading ? 'Verzenden...' : 'SUBMIT'}</button>
                     {status === 'success' && <div style={{ color: '#26913a', textAlign: 'center', marginTop: 12 }}>Je aanvraag is verstuurd!</div>}
                     {status === 'error' && <div style={{ color: '#e2725b', textAlign: 'center', marginTop: 12 }}>Er is iets misgegaan. Probeer opnieuw.</div>}
                 </form>
