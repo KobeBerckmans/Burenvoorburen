@@ -135,9 +135,30 @@ const sliderStyles = {
 };
 
 function PartnerSlider() {
+    const getVisibleCount = () => {
+        if (typeof window !== 'undefined') {
+            if (window.innerWidth <= 600) return 1;
+            if (window.innerWidth > 600 && window.innerWidth <= 1024) return 2;
+        }
+        return 3;
+    };
     const [index, setIndex] = useState(0);
-    const visible = 3;
+    const [visible, setVisible] = useState(getVisibleCount());
     const max = partners.length;
+
+    React.useEffect(() => {
+        const handleResize = () => {
+            setVisible(getVisibleCount());
+            // Zorg dat index niet buiten bereik valt
+            setIndex(i => {
+                if (i > max - getVisibleCount()) return 0;
+                return i;
+            });
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [max]);
+
     const prev = () => setIndex(i => (i === 0 ? max - visible : i - 1));
     const next = () => setIndex(i => (i === max - visible ? 0 : i + 1));
     const getVisible = () => {
@@ -148,8 +169,21 @@ function PartnerSlider() {
         return arr;
     };
     const visiblePartners = getVisible();
+    // Responsive wrapper style
+    const isMobile = visible === 1;
+    const isTablet = visible === 2;
+    const wrapperStyle = {
+        ...sliderStyles.wrapper,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: isMobile ? 8 : isTablet ? 18 : 24,
+        minHeight: isMobile ? 160 : isTablet ? 160 : 180,
+        maxWidth: isMobile ? 320 : isTablet ? 540 : 900,
+        margin: isMobile ? '1.2rem auto' : isTablet ? '2rem auto' : '2.5rem auto',
+    };
     return (
-        <div style={sliderStyles.wrapper}>
+        <div style={wrapperStyle}>
             <button onClick={prev} style={sliderStyles.arrow} aria-label="Vorige partners">&#60;</button>
             {visiblePartners.map((p) =>
                 p.logo ? (
