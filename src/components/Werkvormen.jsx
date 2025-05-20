@@ -159,31 +159,6 @@ const getDevice = () => {
     return 'desktop';
 };
 
-// Web Speech API helper voor Werkvormen
-function speakWerkvormenText() {
-    if ('speechSynthesis' in window) {
-        if (window.speechSynthesis.speaking) {
-            window.speechSynthesis.cancel();
-            return;
-        }
-    }
-    const mainContent = document.getElementById('werkvormen-main-content');
-    let text = '';
-    if (mainContent) {
-        text = mainContent.innerText;
-    } else {
-        text = `De werkvormen van Buren voor Buren.`;
-    }
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new window.SpeechSynthesisUtterance(text);
-        utterance.lang = 'nl-BE';
-        window.speechSynthesis.speak(utterance);
-    } else {
-        alert('Deze browser ondersteunt geen voorleesfunctie.');
-    }
-}
-
 function Werkvormen({ fontSizeFactor }) {
     const [device, setDevice] = React.useState(getDevice());
     React.useEffect(() => {
@@ -231,46 +206,6 @@ function Werkvormen({ fontSizeFactor }) {
                 <div style={heroStyles.content}>
                     <h1 style={{ ...heroStyles.title, fontSize: titleFontSize }}>WERKVORMEN</h1>
                 </div>
-            </div>
-            {/* Screenreader knop */}
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '1.2rem 0 0 0', width: '100%' }}>
-                <button
-                    onClick={speakWerkvormenText}
-                    style={{
-                        fontSize: 18 * fontSizeFactor,
-                        padding: '0.7em 2em',
-                        borderRadius: 10,
-                        border: '2.5px solid #26913a',
-                        background: '#eaffea',
-                        color: '#137c3a',
-                        fontWeight: 900,
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 12,
-                        boxShadow: '0 0 0 4px #e2725b33',
-                        outline: 'none',
-                        position: 'relative',
-                        zIndex: 100,
-                        animation: 'bvb-blink 1.2s linear infinite',
-                        textTransform: 'uppercase',
-                        letterSpacing: 1.5,
-                        transition: 'box-shadow 0.2s, border 0.2s',
-                    }}
-                    aria-label="Lees de Werkvormen pagina voor"
-                >
-                    <span role="img" aria-label="speaker" style={{ fontSize: 24 * fontSizeFactor }}>🔊</span>
-                    <span style={{ fontSize: 18 * fontSizeFactor, fontFamily: 'CocogooseProTrial', fontWeight: 900 }}>Lees voor</span>
-                </button>
-                <style>{`
-                    @keyframes bvb-blink {
-                        0%, 100% { box-shadow: 0 0 0 4px #e2725b33, 0 0 16px 4px #e2725b44; border-color: #26913a; }
-                        50% { box-shadow: 0 0 0 8px #e2725b77, 0 0 32px 8px #e2725b99; border-color: #e2725b; }
-                    }
-                    button[aria-label] {
-                        outline: 3px solid #e2725b55;
-                    }
-                `}</style>
             </div>
             <div style={mainWrapperResponsive}>
                 {/* SVG-krul bovenaan */}
