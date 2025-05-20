@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Footer from './Footer';
 import heroImg from '../assets/images/3mensen.jpg';
 import logo from '../assets/images/BVB-Transparant.png';
@@ -152,7 +153,7 @@ const getDevice = () => {
     return 'desktop';
 };
 
-export default function LinksLiteratuur() {
+function LinksLiteratuur({ fontSizeFactor }) {
     const [device, setDevice] = React.useState(getDevice());
     React.useEffect(() => {
         document.body.dataset.page = 'links-literatuur';
@@ -175,8 +176,32 @@ export default function LinksLiteratuur() {
         minHeight: isMobile ? 120 : isTablet ? 180 : 320,
         marginTop: isMobile ? 64 : isTablet ? 56 : 0,
     };
-    const titleFontSize = isMobile || isTablet ? 'clamp(2rem, 6vw, 2.5rem)' : 'clamp(2.5rem, 5vw, 3.5rem)';
-    const subtitleFontSize = isMobile || isTablet ? 'clamp(1rem, 3vw, 1.1rem)' : 'clamp(1.1rem, 2vw, 1.3rem)';
+    const titleFontSize = ((isMobile ? 2.5 : 3.5) * fontSizeFactor) + 'rem';
+    const subtitleFontSize = ((isMobile ? 1.1 : 1.3) * fontSizeFactor) + 'rem';
+    const mainWrapperResponsive = {
+        ...mainStyles.wrapper,
+        fontSize: (1.08 * fontSizeFactor) + 'rem',
+    };
+    const headingResponsive = {
+        ...mainStyles.heading,
+        fontSize: (1.2 * fontSizeFactor) + 'rem',
+    };
+    const listResponsive = {
+        ...mainStyles.list,
+        fontSize: (1.05 * fontSizeFactor) + 'rem',
+    };
+    const cardTitleResponsive = {
+        ...cardStyles.cardTitle,
+        fontSize: (1.08 * fontSizeFactor) + 'rem',
+    };
+    const cardDescResponsive = {
+        ...cardStyles.cardDesc,
+        fontSize: (1.01 * fontSizeFactor) + 'rem',
+    };
+    const cardLinkResponsive = {
+        ...cardStyles.cardLink,
+        fontSize: (1.01 * fontSizeFactor) + 'rem',
+    };
     return (
         <div style={{ width: '100%', minHeight: '100vh', background: '#fff' }}>
             <div style={heroResponsive}>
@@ -186,25 +211,25 @@ export default function LinksLiteratuur() {
                     <div style={{ ...heroStyles.subtitle, fontSize: subtitleFontSize }}>Enkele zeer toegankelijke bronnen</div>
                 </div>
             </div>
-            <div style={mainStyles.wrapper}>
+            <div style={mainWrapperResponsive}>
                 <div style={mainStyles.logoOverlay}>
                     <img src={logo} alt="Buren voor Buren logo" style={mainStyles.logo} />
                 </div>
                 <div style={mainStyles.section}>
-                    <h2 style={mainStyles.heading}>Boeken &amp; Artikels</h2>
+                    <h2 style={headingResponsive}>Boeken &amp; Artikels</h2>
                     <div style={cardStyles.card}>
-                        <div style={cardStyles.cardTitle}>Bekaert, A. e.a. (2016)</div>
-                        <div style={cardStyles.cardDesc}>Buurtgerichte Zorg. De actief zorgzame buurt als toekomstmodel voor Vlaanderen en Brussel.<br />VVDC &amp; Kenniscentrum Woonzorg, Brussel.</div>
-                        <a href="https://www.kenniscentrumwwz.be/sites/default/files/atoms/files/Visietekst%20Buurtgerichte%20Zorg.pdf" style={cardStyles.cardLink} target="_blank" rel="noopener noreferrer">Visietekst Buurtgerichte Zorg (kenniscentrumwwz.be)</a>
+                        <div style={cardTitleResponsive}>Bekaert, A. e.a. (2016)</div>
+                        <div style={cardDescResponsive}>Buurtgerichte Zorg. De actief zorgzame buurt als toekomstmodel voor Vlaanderen en Brussel.<br />VVDC &amp; Kenniscentrum Woonzorg, Brussel.</div>
+                        <a href="https://www.kenniscentrumwwz.be/sites/default/files/atoms/files/Visietekst%20Buurtgerichte%20Zorg.pdf" style={cardLinkResponsive} target="_blank" rel="noopener noreferrer">Visietekst Buurtgerichte Zorg (kenniscentrumwwz.be)</a>
                     </div>
                     <div style={cardStyles.card}>
-                        <div style={cardStyles.cardTitle}>Bloemen, R., K. Caymax, L. Vande Woestyne &amp; R. Derutter (2022)</div>
-                        <div style={cardStyles.cardDesc}>Minder mazen, meer net. Aan de slag met zorgzame buurten. SAAMO.</div>
-                        <a href="https://www.saamo.be/wp-content/uploads/2022/06/2022_SALI001_e-pub_zorgzame-buurt.pdf" style={cardStyles.cardLink} target="_blank" rel="noopener noreferrer">2022_SALI001_e-pub_zorgzame-buurten.pdf (saamo.be)</a>
+                        <div style={cardTitleResponsive}>Bloemen, R., K. Caymax, L. Vande Woestyne &amp; R. Derutter (2022)</div>
+                        <div style={cardDescResponsive}>Minder mazen, meer net. Aan de slag met zorgzame buurten. SAAMO.</div>
+                        <a href="https://www.saamo.be/wp-content/uploads/2022/06/2022_SALI001_e-pub_zorgzame-buurt.pdf" style={cardLinkResponsive} target="_blank" rel="noopener noreferrer">2022_SALI001_e-pub_zorgzame-buurten.pdf (saamo.be)</a>
                     </div>
                     <div style={cardStyles.card}>
-                        <div style={cardStyles.cardTitle}>Decorte A. e.a. (2017)</div>
-                        <div style={cardStyles.cardDesc}>Sociaal vernieuwen met burenhulp. Zesdelige reeks van VIEWZ. Vandenbroele, Brugge.
+                        <div style={cardTitleResponsive}>Decorte A. e.a. (2017)</div>
+                        <div style={cardDescResponsive}>Sociaal vernieuwen met burenhulp. Zesdelige reeks van VIEWZ. Vandenbroele, Brugge.
                             <ul style={{ margin: '0.5rem 0 0.5rem 1.5rem', color: '#26913a', fontWeight: 500, fontSize: '1.01rem' }}>
                                 <li>Burenhulp als sociale interventie. Burenhulp draait in essentie om menselijke interactie.</li>
                                 <li>Visie en strategie. Ken je eigen visie n strategie en houd die altijd voor ogen.</li>
@@ -216,46 +241,52 @@ export default function LinksLiteratuur() {
                         </div>
                     </div>
                     <div style={cardStyles.card}>
-                        <div style={cardStyles.cardTitle}>De Donder, L. e.a. (2021)</div>
-                        <div style={cardStyles.cardDesc}>Lokaal samenwerken in zorgzame buurten. Fonds Dr. Daniël De Coninck, Brussel.</div>
-                        <a href="https://www.kbs-frb.be/nl/Activities/Publications/2021/20210413PP" style={cardStyles.cardLink} target="_blank" rel="noopener noreferrer">kbs-frb.be</a>
+                        <div style={cardTitleResponsive}>De Donder, L. e.a. (2021)</div>
+                        <div style={cardDescResponsive}>Lokaal samenwerken in zorgzame buurten. Fonds Dr. Daniël De Coninck, Brussel.</div>
+                        <a href="https://www.kbs-frb.be/nl/Activities/Publications/2021/20210413PP" style={cardLinkResponsive} target="_blank" rel="noopener noreferrer">kbs-frb.be</a>
                     </div>
                     <div style={cardStyles.card}>
-                        <div style={cardStyles.cardTitle}>Dewulf, D. &amp; E. Verlinden (2019)</div>
-                        <div style={cardStyles.cardDesc}>Aan de slag met buurtgerichte zorg. VVSG/Politeia, Brussel.</div>
+                        <div style={cardTitleResponsive}>Dewulf, D. &amp; E. Verlinden (2019)</div>
+                        <div style={cardDescResponsive}>Aan de slag met buurtgerichte zorg. VVSG/Politeia, Brussel.</div>
                     </div>
                     <div style={cardStyles.card}>
-                        <div style={cardStyles.cardTitle}>Dierinck, P. (2020)</div>
-                        <div style={cardStyles.cardDesc}>Handboek kwartiermaken. De vermaatschappelijking van de geestelijke gezondheidszorg. Witsand Uitgevers.</div>
+                        <div style={cardTitleResponsive}>Dierinck, P. (2020)</div>
+                        <div style={cardDescResponsive}>Handboek kwartiermaken. De vermaatschappelijking van de geestelijke gezondheidszorg. Witsand Uitgevers.</div>
                     </div>
                     <div style={cardStyles.card}>
-                        <div style={cardStyles.cardTitle}>Heylen, L, W. Van Damme &amp; J. Coussement (2021)</div>
-                        <div style={cardStyles.cardDesc}>Ondersteuningspakket zorgzame buurtanalyse.</div>
-                        <a href="https://www.thomasmore.be/ondersteuningspakket-zorgzame-buurtanalyse" style={cardStyles.cardLink} target="_blank" rel="noopener noreferrer">thomasmore.be</a>
+                        <div style={cardTitleResponsive}>Heylen, L, W. Van Damme &amp; J. Coussement (2021)</div>
+                        <div style={cardDescResponsive}>Ondersteuningspakket zorgzame buurtanalyse.</div>
+                        <a href="https://www.thomasmore.be/ondersteuningspakket-zorgzame-buurtanalyse" style={cardLinkResponsive} target="_blank" rel="noopener noreferrer">thomasmore.be</a>
                     </div>
                     <div style={cardStyles.card}>
-                        <div style={cardStyles.cardTitle}>Pareit, L. (2015)</div>
-                        <div style={cardStyles.cardDesc}>Draaiboek zorgnetwerken. Samenlevingsopbouw West-Vlaanderen vzw, Brugge.</div>
-                        <a href="https://www.ontknoop.be/" style={cardStyles.cardLink} target="_blank" rel="noopener noreferrer">ontknoop.be</a>
+                        <div style={cardTitleResponsive}>Pareit, L. (2015)</div>
+                        <div style={cardDescResponsive}>Draaiboek zorgnetwerken. Samenlevingsopbouw West-Vlaanderen vzw, Brugge.</div>
+                        <a href="https://www.ontknoop.be/" style={cardLinkResponsive} target="_blank" rel="noopener noreferrer">ontknoop.be</a>
                     </div>
                     <div style={cardStyles.card}>
-                        <div style={cardStyles.cardTitle}>Plovie, E. &amp; L. Heylen (2020)</div>
-                        <div style={cardStyles.cardDesc}>&quot;Buurtzorg in crisistijd: Wie al heeft, zal nog meer krijgen&quot;, in Sociaal.net 9 juli 2020.</div>
+                        <div style={cardTitleResponsive}>Plovie, E. &amp; L. Heylen (2020)</div>
+                        <div style={cardDescResponsive}>&quot;Buurtzorg in crisistijd: Wie al heeft, zal nog meer krijgen&quot;, in Sociaal.net 9 juli 2020.</div>
                     </div>
                     <div style={cardStyles.card}>
-                        <div style={cardStyles.cardTitle}>Pless, S. (2023)</div>
-                        <div style={cardStyles.cardDesc}>Samenwerken rond zorgzame buurten. UCLL, Leuven.</div>
+                        <div style={cardTitleResponsive}>Pless, S. (2023)</div>
+                        <div style={cardDescResponsive}>Samenwerken rond zorgzame buurten. UCLL, Leuven.</div>
                     </div>
 
-                    <h2 style={mainStyles.heading}>Websites</h2>
+                    <h2 style={headingResponsive}>Websites</h2>
                     <div style={cardStyles.card}>
-                        <div style={cardStyles.cardTitle}>Burennetwerk Amsterdam</div>
-                        <div style={cardStyles.cardDesc}>Inspirerend voorbeeld uit Nederland. Het Amsterdamse netwerk pakt de zaken zeer professioneel aan.</div>
-                        <a href="https://www.burennetwerk.nl/" style={cardStyles.cardLink} target="_blank" rel="noopener noreferrer">burennetwerk.nl</a>
+                        <div style={cardTitleResponsive}>Burennetwerk Amsterdam</div>
+                        <div style={cardDescResponsive}>Inspirerend voorbeeld uit Nederland. Het Amsterdamse netwerk pakt de zaken zeer professioneel aan.</div>
+                        <a href="https://www.burennetwerk.nl/" style={cardLinkResponsive} target="_blank" rel="noopener noreferrer">burennetwerk.nl</a>
                     </div>
                 </div>
             </div>
             <Footer />
         </div>
     );
-} 
+}
+
+LinksLiteratuur.propTypes = {
+    fontSizeFactor: PropTypes.number.isRequired,
+};
+
+export default LinksLiteratuur; 
