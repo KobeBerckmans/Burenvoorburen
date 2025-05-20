@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import Footer from './Footer';
 import heroImg from '../assets/images/3mensen.jpg';
 
@@ -136,7 +137,7 @@ const formStyles = {
     }
 };
 
-export default function Help() {
+function Help({ fontSizeFactor }) {
     const [form, setForm] = useState({ naam: '', soort: '', bericht: '', datum: '', adres: '', uur: '' });
     const [status, setStatus] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -154,7 +155,7 @@ export default function Help() {
         minHeight: isMobile ? 120 : isTablet ? 180 : 320,
         marginTop: isMobile ? 64 : isTablet ? 56 : 0,
     };
-    const titleFontSize = isMobile || isTablet ? 'clamp(2rem, 6vw, 2.5rem)' : 'clamp(2.5rem, 5vw, 3.5rem)';
+    const titleFontSize = ((isMobile ? 2.5 : 3.5) * fontSizeFactor) + 'rem';
     const formWrapperResponsive = {
         ...formStyles.wrapper,
         padding: isMobile ? '1.2rem 0.7rem' : isTablet ? '2rem 1.2rem' : '2.5rem 2rem',
@@ -164,32 +165,32 @@ export default function Help() {
     };
     const formTitleResponsive = {
         ...formStyles.title,
-        fontSize: isMobile ? '1.3rem' : isTablet ? '1.7rem' : '2rem',
+        fontSize: ((isMobile ? 1.3 : isTablet ? 1.7 : 2) * fontSizeFactor) + 'rem',
     };
     const formSubtitleResponsive = {
         ...formStyles.subtitle,
-        fontSize: isMobile ? '1.05rem' : isTablet ? '1.15rem' : '1.3rem',
+        fontSize: ((isMobile ? 1.05 : isTablet ? 1.15 : 1.3) * fontSizeFactor) + 'rem',
         marginBottom: isMobile ? '1.2rem' : isTablet ? '1.7rem' : '2.2rem',
     };
     const inputResponsive = {
         ...formStyles.input,
-        fontSize: isMobile ? '1rem' : isTablet ? '1.05rem' : '1.1rem',
+        fontSize: ((isMobile ? 1 : isTablet ? 1.05 : 1.1) * fontSizeFactor) + 'rem',
         padding: isMobile ? '0.7rem' : '0.9rem',
     };
     const textareaResponsive = {
         ...formStyles.textarea,
-        fontSize: isMobile ? '1rem' : isTablet ? '1.05rem' : '1.1rem',
+        fontSize: ((isMobile ? 1 : isTablet ? 1.05 : 1.1) * fontSizeFactor) + 'rem',
         padding: isMobile ? '0.7rem' : '0.9rem',
         minHeight: isMobile ? 70 : isTablet ? 90 : 100,
     };
     const selectResponsive = {
         ...formStyles.select,
-        fontSize: isMobile ? '1rem' : isTablet ? '1.05rem' : '1.1rem',
+        fontSize: ((isMobile ? 1 : isTablet ? 1.05 : 1.1) * fontSizeFactor) + 'rem',
         padding: isMobile ? '0.7rem' : '0.9rem',
     };
     const buttonResponsive = {
         ...formStyles.button,
-        fontSize: isMobile ? '1rem' : isTablet ? '1.08rem' : '1.15rem',
+        fontSize: ((isMobile ? 1 : isTablet ? 1.08 : 1.15) * fontSizeFactor) + 'rem',
         padding: isMobile ? '0.8rem 0' : '1rem 0',
     };
     const rowResponsive = {
@@ -257,11 +258,17 @@ export default function Help() {
                         <input name="uur" type="time" placeholder="Uur" value={form.uur} onChange={handleChange} style={inputResponsive} required />
                     </div>
                     <button type="submit" disabled={loading} style={buttonResponsive}>{loading ? 'Verzenden...' : 'SUBMIT'}</button>
-                    {status === 'success' && <div style={{ color: '#26913a', textAlign: 'center', marginTop: 12 }}>Je aanvraag is verstuurd!</div>}
-                    {status === 'error' && <div style={{ color: '#e2725b', textAlign: 'center', marginTop: 12 }}>Er is iets misgegaan. Probeer opnieuw.</div>}
+                    {status === 'success' && <div style={{ color: '#26913a', textAlign: 'center', marginTop: 12, fontSize: (1 * fontSizeFactor) + 'rem' }}>Je aanvraag is verstuurd!</div>}
+                    {status === 'error' && <div style={{ color: '#e2725b', textAlign: 'center', marginTop: 12, fontSize: (1 * fontSizeFactor) + 'rem' }}>Er is iets misgegaan. Probeer opnieuw.</div>}
                 </form>
             </div>
             <Footer />
         </div>
     );
-} 
+}
+
+Help.propTypes = {
+    fontSizeFactor: PropTypes.number.isRequired,
+};
+
+export default Help; 
