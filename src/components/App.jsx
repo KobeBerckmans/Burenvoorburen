@@ -29,7 +29,7 @@ function App() {
         <Route path="/doe-je-mee" element={<DoeJeMee fontSizeFactor={fontSizeFactor} />} />
         <Route path="/hulp" element={<Help />} />
         <Route path="/partners" element={<Partners fontSizeFactor={fontSizeFactor} />} />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/contact" element={<Contact fontSizeFactor={fontSizeFactor} />} />
         <Route path="/concept" element={<Concept />} />
         <Route path="/werkvormen" element={<Werkvormen />} />
         <Route path="/werkingsprincipes" element={<Werkingsprincipes />} />

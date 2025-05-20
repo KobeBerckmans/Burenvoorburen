@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import Footer from './Footer';
 import heroImg from '../assets/images/3mensen.jpg';
 import logo from '../assets/images/BVB-Transparant.png';
@@ -158,7 +159,7 @@ const getDevice = () => {
     return 'desktop';
 };
 
-export default function Contact() {
+function Contact({ fontSizeFactor }) {
     const [form, setForm] = useState({ email: '', subject: '', message: '' });
     const [status, setStatus] = useState(null);
     const [device, setDevice] = useState(getDevice());
@@ -193,16 +194,16 @@ export default function Contact() {
         maxWidth: isMobile ? '100%' : isTablet ? 300 : 400,
         padding: isMobile ? 16 : isTablet ? 24 : 32,
         margin: isMobile ? '0 auto' : undefined,
-        fontSize: isMobile ? '0.98rem' : isTablet ? '1.01rem' : '1.05rem',
+        fontSize: ((isMobile ? 0.98 : isTablet ? 1.01 : 1.05) * fontSizeFactor) + 'rem',
     };
     const inputResponsive = {
         ...mainStyles.input,
-        fontSize: isMobile ? '0.98rem' : '1rem',
+        fontSize: (isMobile ? 0.98 : 1) * fontSizeFactor + 'rem',
         padding: isMobile ? '10px 12px' : '12px 16px',
     };
     const buttonResponsive = {
         ...mainStyles.button,
-        fontSize: isMobile ? '1rem' : '1.1rem',
+        fontSize: (isMobile ? 1 : 1.1) * fontSizeFactor + 'rem',
         padding: isMobile ? '10px 0' : '12px 0',
     };
     const heroResponsive = {
@@ -213,13 +214,21 @@ export default function Contact() {
     };
     const heroTitleResponsive = {
         ...heroStyles.title,
-        fontSize: isMobile ? '2rem' : isTablet ? '2.5rem' : 'clamp(2.5rem, 5vw, 3.5rem)',
+        fontSize: (isMobile ? 2 : isTablet ? 2.5 : 3.5) * fontSizeFactor + 'rem',
     };
     const heroSubtitleResponsive = {
         ...heroStyles.subtitle,
-        fontSize: isMobile ? '1rem' : isTablet ? '1.1rem' : 'clamp(1.1rem, 2vw, 1.3rem)',
+        fontSize: (isMobile ? 1 : isTablet ? 1.1 : 1.3) * fontSizeFactor + 'rem',
         marginTop: isMobile ? '0.5rem' : '1rem',
         padding: isMobile ? '0 0.2rem' : 0,
+    };
+    const mainWrapperResponsive = {
+        ...mainStyles.wrapper,
+        fontSize: (1.1 * fontSizeFactor) + 'rem',
+    };
+    const leftTitleResponsive = {
+        ...mainStyles.title,
+        fontSize: (2 * fontSizeFactor) + 'rem',
     };
 
     const handleChange = e => {
@@ -258,22 +267,22 @@ export default function Contact() {
                     <p style={heroSubtitleResponsive}>Heb je een vraag of wil je meer weten over Buren voor Buren? Neem gerust contact met ons op!</p>
                 </div>
             </div>
-            <div style={mainStyles.wrapper}>
+            <div style={mainWrapperResponsive}>
                 <div style={flexResponsive}>
                     <div style={leftResponsive}>
                         <img src={logo} alt="Buren voor Buren logo" style={mainStyles.logo} />
-                        <div style={mainStyles.title}>PRAAT MET ONS!</div>
+                        <div style={leftTitleResponsive}>PRAAT MET ONS!</div>
                         <form style={mainStyles.form} onSubmit={handleSubmit}>
                             <input type="email" name="email" placeholder="Email" style={inputResponsive} required value={form.email} onChange={handleChange} />
                             <input type="text" name="subject" placeholder="Subject" style={inputResponsive} required value={form.subject} onChange={handleChange} />
                             <textarea name="message" placeholder="Bericht" style={{ ...inputResponsive, ...mainStyles.textarea }} required value={form.message} onChange={handleChange} />
                             <button type="submit" style={buttonResponsive}>Verstuur</button>
                         </form>
-                        {status === 'success' && <div style={{ color: '#26913a', marginTop: 12 }}>Bedankt voor je bericht!</div>}
-                        {status === 'error' && <div style={{ color: '#e2725b', marginTop: 12 }}>Er ging iets mis. Probeer opnieuw.</div>}
+                        {status === 'success' && <div style={{ color: '#26913a', marginTop: 12, fontSize: (1 * fontSizeFactor) + 'rem' }}>Bedankt voor je bericht!</div>}
+                        {status === 'error' && <div style={{ color: '#e2725b', marginTop: 12, fontSize: (1 * fontSizeFactor) + 'rem' }}>Er ging iets mis. Probeer opnieuw.</div>}
                     </div>
                     <div style={rightResponsive}>
-                        <div style={{ fontWeight: 700, color: '#e2725b', marginBottom: 8 }}>Contactpersonen</div>
+                        <div style={{ fontWeight: 700, color: '#e2725b', marginBottom: 8, fontSize: (1.1 * fontSizeFactor) + 'rem' }}>Contactpersonen</div>
                         {contactpersonen.map((p, i) => (
                             <div key={i} style={{ marginBottom: 10 }}>
                                 {p.regio && <span style={{ color: '#26913a', fontWeight: 600 }}>{p.regio}: </span>}
@@ -283,11 +292,17 @@ export default function Contact() {
                         ))}
                     </div>
                 </div>
-                <div style={{ marginTop: 32, color: '#444', fontSize: '1rem', maxWidth: 700, marginLeft: 'auto', marginRight: 'auto' }}>
+                <div style={{ marginTop: 32, color: '#444', fontSize: (1 * fontSizeFactor) + 'rem', maxWidth: 700, marginLeft: 'auto', marginRight: 'auto' }}>
                     Is er in jouw buurt nu nog geen afdeling van Buren voor Buren en heb je interesse om er een op te starten? Contacteer Samana (02 246 64 64 of info@samana.be). We bekijken graag samen de mogelijkheden.
                 </div>
             </div>
             <Footer />
         </div>
     );
-} 
+}
+
+Contact.propTypes = {
+    fontSizeFactor: PropTypes.number.isRequired,
+};
+
+export default Contact; 
