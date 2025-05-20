@@ -32,7 +32,7 @@ function App() {
         <Route path="/contact" element={<Contact fontSizeFactor={fontSizeFactor} />} />
         <Route path="/concept" element={<Concept fontSizeFactor={fontSizeFactor} />} />
         <Route path="/werkvormen" element={<Werkvormen />} />
-        <Route path="/werkingsprincipes" element={<Werkingsprincipes />} />
+        <Route path="/werkingsprincipes" element={<Werkingsprincipes fontSizeFactor={fontSizeFactor} />} />
         <Route path="/links-literatuur" element={<LinksLiteratuur />} />
       </Routes>
     </Router>

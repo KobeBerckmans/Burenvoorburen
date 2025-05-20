@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Footer from './Footer';
 import heroImg from '../assets/images/3mensen.jpg';
 import logo from '../assets/images/BVB-Transparant.png';
@@ -139,7 +140,7 @@ const getDevice = () => {
     return 'desktop';
 };
 
-export default function Werkingsprincipes() {
+function Werkingsprincipes({ fontSizeFactor }) {
     const [device, setDevice] = React.useState(getDevice());
     React.useEffect(() => {
         document.body.dataset.page = 'werkingsprincipes';
@@ -162,7 +163,36 @@ export default function Werkingsprincipes() {
         minHeight: isMobile ? 120 : isTablet ? 180 : 320,
         marginTop: isMobile ? 64 : isTablet ? 56 : 0,
     };
-    const titleFontSize = isMobile || isTablet ? 'clamp(2rem, 6vw, 2.5rem)' : 'clamp(2.5rem, 5vw, 3.5rem)';
+    const titleFontSize = ((isMobile ? 2.5 : 3.5) * fontSizeFactor) + 'rem';
+    const mainWrapperResponsive = {
+        ...mainStyles.wrapper,
+        fontSize: (1.08 * fontSizeFactor) + 'rem',
+    };
+    const subtitleResponsive = {
+        ...mainStyles.subtitle,
+        fontSize: (1.05 * fontSizeFactor) + 'rem',
+    };
+    const sectionTitleResponsive = {
+        ...mainStyles.sectionTitle,
+        fontSize: (1.15 * fontSizeFactor) + 'rem',
+    };
+    const principleTitleResponsive = {
+        ...mainStyles.principleTitle,
+        fontSize: (1.08 * fontSizeFactor) + 'rem',
+    };
+    const paragraphResponsive = {
+        ...mainStyles.paragraph,
+        fontSize: (1.05 * fontSizeFactor) + 'rem',
+    };
+    const listResponsive = {
+        margin: '1rem 0 1rem 1.5rem',
+        padding: 0,
+        color: '#26913a',
+        fontWeight: 500,
+        fontFamily: 'Montserrat, sans-serif',
+        lineHeight: 1.7,
+        fontSize: (1.05 * fontSizeFactor) + 'rem',
+    };
     return (
         <div style={{ width: '100%', minHeight: '100vh', background: '#fff' }}>
             <div style={heroResponsive}>
@@ -171,7 +201,7 @@ export default function Werkingsprincipes() {
                     <h1 style={{ ...heroStyles.title, fontSize: titleFontSize }}>WERKINGSPRINCIPES</h1>
                 </div>
             </div>
-            <div style={mainStyles.wrapper}>
+            <div style={mainWrapperResponsive}>
                 {/* SVG-krul bovenaan */}
                 <svg style={mainStyles.svgKrul} viewBox="0 0 1600 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M10,110 Q400,10 800,60 T1590,30" stroke="#e2725b" strokeWidth="7" fill="none" />
@@ -179,16 +209,16 @@ export default function Werkingsprincipes() {
                 <div style={mainStyles.logoOverlay}>
                     <img src={logo} alt="Buren voor Buren logo" style={mainStyles.logo} />
                 </div>
-                <div style={mainStyles.subtitle}>
+                <div style={subtitleResponsive}>
                     Buren voor Buren Tienen wil vooral de spontane solidariteit organiseren met het oog op het herstel van een natuurlijk, inclusief sociaal netwerk waarin het lidmaatschap van elk individu gezien wordt als evident en waardevol. Vandaar dat we de volgende klemtonen willen leggen,
                 </div>
-                <div style={{ color: '#26913a', fontWeight: 700, margin: '1.5rem 0 2.5rem 0', fontFamily: 'Montserrat, sans-serif', textTransform: 'uppercase', letterSpacing: 1 }}>
+                <div style={{ color: '#26913a', fontWeight: 700, margin: '1.5rem 0 2.5rem 0', fontFamily: 'Montserrat, sans-serif', textTransform: 'uppercase', letterSpacing: 1, fontSize: (1.08 * fontSizeFactor) + 'rem' }}>
                     Emancipatorisch &nbsp; Proactief &nbsp; Flexibel &nbsp; Gericht op samenwerking
                 </div>
                 <Accordion title="1. Emancipatorisch">
-                    <div style={mainStyles.paragraph}>
+                    <div style={paragraphResponsive}>
                         Iedereen is intrinsiek gelijkwaardig en iedereen zou zichzelf en de ander ook zo moeten zien. Voor veel mensen is dat niet het geval: ze voelen zich niet aanvaard, uitgesloten. Streven naar herstel van een inclusief sociaal netwerk is dan ook een emancipatiestrijd, ervan uitgaande dat emancipatie inhoudt dat men zichzelf waardeert (gelijkwaardig voelt) en dat men zich gewaardeerd voelt. Vandaar:
-                        <ul style={{ margin: '1rem 0 1rem 1.5rem', padding: 0, color: '#26913a', fontWeight: 500, fontFamily: 'Montserrat, sans-serif', lineHeight: 1.7 }}>
+                        <ul style={listResponsive}>
                             <li>We benaderen de doelgroep met het grootste respect.</li>
                             <li>We hoeden ons voor een neerbuigende, paternaliserende houding, die schaamtegevoelens kunnen aanwakkeren.</li>
                             <li>We beschouwen ons &apos;dienstbetoon&apos; als een evidentie, niet als een bijzondere prestatie. In onze &apos;ideale wereld&apos; zorgen buren nu eenmaal voor elkaar.</li>
@@ -198,18 +228,18 @@ export default function Werkingsprincipes() {
                     </div>
                 </Accordion>
                 <Accordion title="2. Proactief">
-                    <div style={mainStyles.paragraph}>
+                    <div style={paragraphResponsive}>
                         We gaan in de mate van het mogelijke op twee manieren proactief te werk.
-                        <ul style={{ margin: '1rem 0 1rem 1.5rem', padding: 0, color: '#26913a', fontWeight: 500, fontFamily: 'Montserrat, sans-serif', lineHeight: 1.7 }}>
+                        <ul style={listResponsive}>
                             <li>Mensen vinden het altijd niet makkelijk om hulp te vragen (vraagverlegenheid). Hoe kwetsbaarder, hoe zwakker het netwerk, hoe groter de terughoudendheid. Om de noden te leren kennen, voor de detectie, moeten we daarom zoveel mogelijk outreachend te werk gaan: we gaan zoveel mogelijk zelf op zoek naar mensen die gebruik zouden kunnen maken van ons aanbod of van dat van het reguliere zorgaanbod.</li>
                             <li>Mensen vinden het niet altijd makkelijk om hulp of informatie erover te zoeken en laten het daarom soms ook na, met &apos;onderbescherming&apos; tot gevolg. In de mate van het mogelijke gaan we zelf op zoek naar informatie waarvan we denken dat die nuttig kan zijn voor de cliënten.</li>
                         </ul>
                     </div>
                 </Accordion>
                 <Accordion title="3. Flexibel">
-                    <div style={mainStyles.paragraph}>
+                    <div style={paragraphResponsive}>
                         We passen ons aan aan de noden van de cliënten, de vrijwilligers en de buurt.
-                        <ul style={{ margin: '1rem 0 1rem 1.5rem', padding: 0, color: '#26913a', fontWeight: 500, fontFamily: 'Montserrat, sans-serif', lineHeight: 1.7 }}>
+                        <ul style={listResponsive}>
                             <li><b>Cliënten:</b> Sommige burenhulpwerkingen zijn organisatorisch heel overzichtelijk. Er wordt gewacht op een hulpvraag en dan wordt een buddy uitgezonden. Als we uitgaan van de belangen van de gebruiker, dan is een grote organisatorische flexibiliteit nodig. Wij beperken ons daarom zeker niet tot één-op-één-relaties cliënt-buddy. We passen ons aan aan wat op een bepaald moment voor een bepaalde persoon of doelgroep nodig is. We kunnen bijvoorbeeld verschillende buddy&apos;s inzetten voor één cliënt.</li>
                             <li><b>Vrijwilligers:</b> Iedereen is anders, iedereen doet wat hij kan en wil. Niet alle vrijwilligers zien het zitten om mensen gezelschap te houden, anderen zijn niet geschikt voor huiswerkbegeleiding of conversatiesessies met anderstaligen. Bij de intake worden de wensen genoteerd. Vrijwilligers kunnen eventueel hulpvragen waaraan ze liever niet tegemoetkomen doorspelen naar collega&apos;s. Ze moeten zich vrij voelen in de organisatie en pauzes kunnen inlassen.</li>
                             <li><b>Buurten:</b> Elke buurt is anders. Daarom moeten de buurten in onderling overleg kunnen beslissen hun werking aan te passen aan de specifieke noden en wensen. Hier kunnen buurtanalyses aan bijdragen.</li>
@@ -217,7 +247,7 @@ export default function Werkingsprincipes() {
                     </div>
                 </Accordion>
                 <Accordion title="4. Gericht op samenwerking">
-                    <div style={mainStyles.paragraph}>
+                    <div style={paragraphResponsive}>
                         Onze doelstellingen vallen in grote mate samen met een aantal &apos;Duurzame Ontwikkelingsdoelstellingen&apos; van de Verenigde Naties: nr. 1 geen armoede, nr. 3 goede gezondheid en welzijn voor iedereen, nr. 10 ongelijkheid verminderen. Ze zouden daarom op alle nationale en regionale beleidsniveaus een prioriteit moeten zijn. Er bestaan dan ook al veel organisaties en initiatieven, die er echter niet altijd in slagen samen te werken. Solidariteit, verbinding moet er niet alleen zijn tussen mensen, maar ook tussen organisaties, zeker organisaties die zich inzetten voor meer solidariteit. Dat is trouwens  de duurzame VN-doelstelling nr. 17: Partnerschap om doelstellingen te bereiken. We zoeken daarom zoveel mogelijk aansluiting bij bestaande organisaties en diensten om elkaar te ondersteunen, met ook hier zoveel mogelijk wederkerigheid.
                         <br /><br />
                         <span style={{ color: '#e2725b', fontWeight: 600 }}>
@@ -237,4 +267,10 @@ export default function Werkingsprincipes() {
             <Footer />
         </div>
     );
-} 
+}
+
+Werkingsprincipes.propTypes = {
+    fontSizeFactor: PropTypes.number.isRequired,
+};
+
+export default Werkingsprincipes; 
