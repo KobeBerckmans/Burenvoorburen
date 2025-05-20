@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Footer from './Footer';
 import heroImg from '../assets/images/3mensen.jpg';
 import diagramImg from '../assets/images/watdoenwe.jpg';
@@ -170,7 +171,7 @@ const getDevice = () => {
     return 'desktop';
 };
 
-export default function Concept() {
+function Concept({ fontSizeFactor }) {
     const [device, setDevice] = React.useState(getDevice());
     React.useEffect(() => {
         document.body.dataset.page = 'concept';
@@ -193,8 +194,28 @@ export default function Concept() {
         minHeight: isMobile ? 120 : isTablet ? 180 : 320,
         marginTop: isMobile ? 64 : isTablet ? 56 : 0,
     };
-    const titleFontSize = isMobile || isTablet ? 'clamp(2rem, 6vw, 2.5rem)' : 'clamp(2.5rem, 5vw, 3.5rem)';
-    const subtitleFontSize = isMobile || isTablet ? 'clamp(1rem, 3vw, 1.1rem)' : 'clamp(1.1rem, 2vw, 1.3rem)';
+    const titleFontSize = ((isMobile ? 2.5 : 3.5) * fontSizeFactor) + 'rem';
+    const subtitleFontSize = ((isMobile ? 1.1 : 1.3) * fontSizeFactor) + 'rem';
+    const mainWrapperResponsive = {
+        ...mainStyles.wrapper,
+        fontSize: (1.08 * fontSizeFactor) + 'rem',
+    };
+    const headingResponsive = {
+        ...mainStyles.heading,
+        fontSize: (1.4 * fontSizeFactor) + 'rem',
+    };
+    const subheadingResponsive = {
+        ...mainStyles.subheading,
+        fontSize: (1.1 * fontSizeFactor) + 'rem',
+    };
+    const paragraphResponsive = {
+        ...mainStyles.paragraph,
+        fontSize: (1.05 * fontSizeFactor) + 'rem',
+    };
+    const listResponsive = {
+        ...mainStyles.list,
+        fontSize: (1.05 * fontSizeFactor) + 'rem',
+    };
     return (
         <div style={{ width: '100%', minHeight: '100vh', background: '#fff' }}>
             <div style={heroResponsive}>
@@ -204,7 +225,7 @@ export default function Concept() {
                     <div style={{ ...heroStyles.subtitle, fontSize: subtitleFontSize }}>Buren voor Buren Tienen is een zorgnetwerk, een instrument voor buurtgerichte zorg.</div>
                 </div>
             </div>
-            <div style={mainStyles.wrapper}>
+            <div style={mainWrapperResponsive}>
                 <svg style={mainStyles.svgKrulWide} viewBox="0 0 1600 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M10,110 Q400,10 800,60 T1590,30" stroke="#e2725b" strokeWidth="7" fill="none" />
                 </svg>
@@ -212,22 +233,22 @@ export default function Concept() {
                 <div style={{ color: '#26913a', fontWeight: 600, marginBottom: 8, position: 'relative', zIndex: 1 }}>Zorgnetwerk - Buurtgerichte zorg - Functies van buurtgerichte zorg</div>
                 <Accordion title="1 Zorgnetwerk">
                     <div style={mainStyles.section}>
-                        <div style={mainStyles.heading}>1 Zorgnetwerk</div>
-                        <p style={mainStyles.paragraph}>We kiezen voor het bredere concept van een zorgnetwerk en sluiten ons aan bij de omschrijving van Samenlevingsopbouw West-Vlaanderen:</p>
-                        <p style={mainStyles.paragraph}><span style={mainStyles.highlight}>&quot;Een zorgnetwerk versterkt mensen in een maatschappelijk kwetsbare positie, stimuleert nieuwe sociale contacten en verbindingen in de lokale gemeenschap en draagt bij tot de toegankelijkheid van dienst- en hulpverlening.&quot;</span></p>
-                        <p style={mainStyles.paragraph}>Een zorgnetwerk is het netwerk dat tot stand komt tussen het lokaal bestuur, vrijwilligers uit de lokale gemeenschap, het dorp, de buurt en verschillende diensten, sleutelfiguren en verenigingen en mensen in een maatschappelijk kwetsbare positie. Met ondersteuning van een zorgnetwerkcoördinator, bij de meeste zorgnetwerken tewerkgesteld door het lokaal bestuur, werken de verschillende partners aan het actief opzoeken en bezoeken van maatschappelijk kwetsbare mensen, het brengen van informatie op maat, het stimuleren van nieuwe sociale contacten en het aanbieden van diverse vormen van burenhulp. De diensten en activiteiten van een zorgnetwerk zijn aanvullend op het bestaande aanbod.</p>
-                        <p style={mainStyles.paragraph}>In de werking is er ook voortdurend aandacht voor het opnemen van een signaalfunctie. Is het aanbod voldoende toegankelijk? Is er effectief wel een aanbod beschikbaar? Zorgnetwerken kaarten signalen uit hun praktijk aan bij beleid en betrokken diensten. Zo werken zorgnetwerken mee aan de toegankelijkheid van dienst- en hulpverlening.” (www.ontknoop.be)</p>
+                        <div style={headingResponsive}>1 Zorgnetwerk</div>
+                        <p style={paragraphResponsive}>We kiezen voor het bredere concept van een zorgnetwerk en sluiten ons aan bij de omschrijving van Samenlevingsopbouw West-Vlaanderen:</p>
+                        <p style={paragraphResponsive}><span style={mainStyles.highlight}>&quot;Een zorgnetwerk versterkt mensen in een maatschappelijk kwetsbare positie, stimuleert nieuwe sociale contacten en verbindingen in de lokale gemeenschap en draagt bij tot de toegankelijkheid van dienst- en hulpverlening.&quot;</span></p>
+                        <p style={paragraphResponsive}>Een zorgnetwerk is het netwerk dat tot stand komt tussen het lokaal bestuur, vrijwilligers uit de lokale gemeenschap, het dorp, de buurt en verschillende diensten, sleutelfiguren en verenigingen en mensen in een maatschappelijk kwetsbare positie. Met ondersteuning van een zorgnetwerkcoördinator, bij de meeste zorgnetwerken tewerkgesteld door het lokaal bestuur, werken de verschillende partners aan het actief opzoeken en bezoeken van maatschappelijk kwetsbare mensen, het brengen van informatie op maat, het stimuleren van nieuwe sociale contacten en het aanbieden van diverse vormen van burenhulp. De diensten en activiteiten van een zorgnetwerk zijn aanvullend op het bestaande aanbod.</p>
+                        <p style={paragraphResponsive}>In de werking is er ook voortdurend aandacht voor het opnemen van een signaalfunctie. Is het aanbod voldoende toegankelijk? Is er effectief wel een aanbod beschikbaar? Zorgnetwerken kaarten signalen uit hun praktijk aan bij beleid en betrokken diensten. Zo werken zorgnetwerken mee aan de toegankelijkheid van dienst- en hulpverlening.” (www.ontknoop.be)</p>
                     </div>
                 </Accordion>
                 <Accordion title="2 Buurtgerichte zorg">
                     <div style={mainStyles.section}>
-                        <div style={mainStyles.heading}>2 Buurtgerichte zorg</div>
-                        <p style={mainStyles.paragraph}>Met buurtgerichte zorg wordt het geheel van inspanningen genoemd om zorgzame buurten te cre&euml;ren: buurten waar de inwoners elkaar ondersteunen en zorg dragen voor elkaar, bijgestaan door professionele zorgverstrekkers en dienstverleners.</p>
-                        <p style={mainStyles.paragraph}>Uit de visietekst Buurtgerichte Zorg van de Vereniging van Vlaamse Dienstencentra en het Kenniscentrum Woonzorg Brussel:</p>
-                        <p style={mainStyles.paragraph}><span style={mainStyles.highlight}>&quot;Het eerste wat telt, is dat mensen zich thuis voelen in de buurt waar ze wonen. In zo&apos;n buurt zijn er ontmoetingsplekken en activiteiten voor iedereen, genoeg hulp- en zorgvoorzieningen, winkels, groen, speelruimte, veilig verkeer ...  alles wat nodig is om er aangenaam te wonen. Het is ook een buurt waar mensen elkaar kennen, waar ze sociale contacten hebben, een beroep op elkaar kunnen doen en ergens terecht kunnen als het nodig is. (...)&quot;</span></p>
-                        <div style={{ margin: '1.2rem 0', color: '#26913a', fontWeight: 500, fontFamily: 'Montserrat, sans-serif' }}>
+                        <div style={headingResponsive}>2 Buurtgerichte zorg</div>
+                        <p style={paragraphResponsive}>Met buurtgerichte zorg wordt het geheel van inspanningen genoemd om zorgzame buurten te cre&euml;ren: buurten waar de inwoners elkaar ondersteunen en zorg dragen voor elkaar, bijgestaan door professionele zorgverstrekkers en dienstverleners.</p>
+                        <p style={paragraphResponsive}>Uit de visietekst Buurtgerichte Zorg van de Vereniging van Vlaamse Dienstencentra en het Kenniscentrum Woonzorg Brussel:</p>
+                        <p style={paragraphResponsive}><span style={mainStyles.highlight}>&quot;Het eerste wat telt, is dat mensen zich thuis voelen in de buurt waar ze wonen. In zo&apos;n buurt zijn er ontmoetingsplekken en activiteiten voor iedereen, genoeg hulp- en zorgvoorzieningen, winkels, groen, speelruimte, veilig verkeer ...  alles wat nodig is om er aangenaam te wonen. Het is ook een buurt waar mensen elkaar kennen, waar ze sociale contacten hebben, een beroep op elkaar kunnen doen en ergens terecht kunnen als het nodig is. (...)&quot;</span></p>
+                        <div style={{ margin: '1.2rem 0', color: '#26913a', fontWeight: 500, fontFamily: 'Montserrat, sans-serif', fontSize: (1.05 * fontSizeFactor) + 'rem' }}>
                             Het is een organisatiemodel
-                            <ul style={mainStyles.list}>
+                            <ul style={listResponsive}>
                                 <li>dat gericht is op het welzijn van alle buurtbewoners,</li>
                                 <li>dat de sociale cohesie versterkt en blijvend ondersteunt,</li>
                                 <li>dat hulp en zorg beschikbaar stelt voor iedereen die het nodig heeft: ouderen, personen met een handicap, mensen met psychische problemen, kwetsbare groepen,</li>

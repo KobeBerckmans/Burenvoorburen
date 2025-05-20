@@ -30,7 +30,7 @@ function App() {
         <Route path="/hulp" element={<Help fontSizeFactor={fontSizeFactor} />} />
         <Route path="/partners" element={<Partners fontSizeFactor={fontSizeFactor} />} />
         <Route path="/contact" element={<Contact fontSizeFactor={fontSizeFactor} />} />
-        <Route path="/concept" element={<Concept />} />
+        <Route path="/concept" element={<Concept fontSizeFactor={fontSizeFactor} />} />
         <Route path="/werkvormen" element={<Werkvormen />} />
         <Route path="/werkingsprincipes" element={<Werkingsprincipes />} />
         <Route path="/links-literatuur" element={<LinksLiteratuur />} />
