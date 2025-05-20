@@ -157,7 +157,7 @@ function Slider({ fontSizeFactor }) {
     );
 }
 
-function VrijwilligersForm() {
+function VrijwilligersForm({ fontSizeFactor }) {
     const isMobile = typeof window !== 'undefined' && window.innerWidth <= 600;
     const isTablet = typeof window !== 'undefined' && window.innerWidth > 600 && window.innerWidth <= 1024;
     const [form, setForm] = useState({ naam: '', voornaam: '', adres: '', tel: '', mail: '', motivatie: '' });
@@ -193,26 +193,30 @@ function VrijwilligersForm() {
 
     return (
         <section style={{ background: '#fff7f4', padding: isMobile ? '1.5rem 0 1.2rem 0' : isTablet ? '2rem 0 1.5rem 0' : '3rem 0 2rem 0', margin: isMobile ? '1.5rem 0 0 0' : isTablet ? '2.5rem 0 0 0' : '3rem 0 0 0', borderRadius: 18, maxWidth: isMobile ? 425 : isTablet ? 768 : 1100, marginLeft: 'auto', marginRight: 'auto', boxShadow: '0 4px 18px 0 rgba(44,62,80,0.10)' }}>
-            <h2 style={{ color: '#e2725b', fontWeight: 800, fontSize: isMobile ? '1.1rem' : isTablet ? '1.7rem' : '2.2rem', textAlign: 'center', fontFamily: 'CocogooseProTrial', marginBottom: '0.5rem', letterSpacing: 1 }}>WORD VRIJWILLIGER</h2>
-            <div style={{ color: '#e2725b', textAlign: 'center', marginBottom: isMobile ? '1.2rem' : '2.5rem', fontSize: isMobile ? '0.92rem' : '1.1rem' }}>Geïnteresseerd? Laat het ons vlug weten:</div>
+            <h2 style={{ color: '#e2725b', fontWeight: 800, fontSize: ((isMobile ? 1.1 : isTablet ? 1.7 : 2.2) * fontSizeFactor) + 'rem', textAlign: 'center', fontFamily: 'CocogooseProTrial', marginBottom: '0.5rem', letterSpacing: 1 }}>WORD VRIJWILLIGER</h2>
+            <div style={{ color: '#e2725b', textAlign: 'center', marginBottom: isMobile ? '1.2rem' : '2.5rem', fontSize: ((isMobile ? 0.92 : 1.1) * fontSizeFactor) + 'rem' }}>Geïnteresseerd? Laat het ons vlug weten:</div>
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? '0.5rem' : '1.2rem', maxWidth: isMobile ? 220 : isTablet ? 420 : 700, margin: '0 auto' }}>
                 <div style={{ display: 'flex', gap: isMobile ? '0.3rem' : '1.2rem', flexDirection: isMobile ? 'column' : 'row' }}>
-                    <input name="naam" type="text" placeholder="Naam" value={form.naam} onChange={handleChange} style={{ flex: 1, padding: isMobile ? '0.5rem' : '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: isMobile ? '0.95rem' : '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a', width: isMobile ? '100%' : undefined, minWidth: isMobile ? 0 : undefined }} />
-                    <input name="voornaam" type="text" placeholder="Voornaam" value={form.voornaam} onChange={handleChange} style={{ flex: 1, padding: isMobile ? '0.5rem' : '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: isMobile ? '0.95rem' : '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a', width: isMobile ? '100%' : undefined, minWidth: isMobile ? 0 : undefined }} />
+                    <input name="naam" type="text" placeholder="Naam" value={form.naam} onChange={handleChange} style={{ flex: 1, padding: isMobile ? '0.5rem' : '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: ((isMobile ? 0.95 : 1.1) * fontSizeFactor) + 'rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a', width: isMobile ? '100%' : undefined, minWidth: isMobile ? 0 : undefined }} />
+                    <input name="voornaam" type="text" placeholder="Voornaam" value={form.voornaam} onChange={handleChange} style={{ flex: 1, padding: isMobile ? '0.5rem' : '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: ((isMobile ? 0.95 : 1.1) * fontSizeFactor) + 'rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a', width: isMobile ? '100%' : undefined, minWidth: isMobile ? 0 : undefined }} />
                 </div>
                 <div style={{ display: 'flex', gap: isMobile ? '0.3rem' : '1.2rem', flexDirection: isMobile ? 'column' : 'row' }}>
-                    <input name="adres" type="text" placeholder="Adres" value={form.adres} onChange={handleChange} style={{ flex: 2, padding: isMobile ? '0.5rem' : '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: isMobile ? '0.95rem' : '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a', width: isMobile ? '100%' : undefined, minWidth: isMobile ? 0 : undefined }} />
-                    <input name="tel" type="text" placeholder="Tel" value={form.tel} onChange={handleChange} style={{ flex: 1, padding: isMobile ? '0.5rem' : '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: isMobile ? '0.95rem' : '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a', width: isMobile ? '100%' : undefined, minWidth: isMobile ? 0 : undefined }} />
+                    <input name="adres" type="text" placeholder="Adres" value={form.adres} onChange={handleChange} style={{ flex: 2, padding: isMobile ? '0.5rem' : '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: ((isMobile ? 0.95 : 1.1) * fontSizeFactor) + 'rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a', width: isMobile ? '100%' : undefined, minWidth: isMobile ? 0 : undefined }} />
+                    <input name="tel" type="text" placeholder="Tel" value={form.tel} onChange={handleChange} style={{ flex: 1, padding: isMobile ? '0.5rem' : '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: ((isMobile ? 0.95 : 1.1) * fontSizeFactor) + 'rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a', width: isMobile ? '100%' : undefined, minWidth: isMobile ? 0 : undefined }} />
                 </div>
-                <input name="mail" type="email" placeholder="Mail" value={form.mail} onChange={handleChange} style={{ padding: isMobile ? '0.5rem' : '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: isMobile ? '0.95rem' : '1.1rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a', width: isMobile ? '100%' : undefined, minWidth: isMobile ? 0 : undefined }} />
-                <textarea name="motivatie" placeholder="Motivatie..." value={form.motivatie} onChange={handleChange} rows={4} style={{ padding: isMobile ? '0.5rem' : '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: isMobile ? '0.95rem' : '1.1rem', fontFamily: 'Montserrat, sans-serif', resize: 'vertical', background: '#fff', color: '#137c3a', width: isMobile ? '100%' : undefined, minWidth: isMobile ? 0 : undefined }} />
-                <button type="submit" disabled={loading} style={{ background: '#4b8e5b', color: '#fff', fontWeight: 700, fontSize: isMobile ? '0.95rem' : '1.15rem', border: 'none', borderRadius: 6, padding: isMobile ? '0.7rem 0' : '1rem 0', marginTop: '0.5rem', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'CocogooseProTrial', letterSpacing: 1 }}>{loading ? 'Verzenden...' : 'VERZEND'}</button>
+                <input name="mail" type="email" placeholder="Mail" value={form.mail} onChange={handleChange} style={{ padding: isMobile ? '0.5rem' : '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: ((isMobile ? 0.95 : 1.1) * fontSizeFactor) + 'rem', fontFamily: 'Montserrat, sans-serif', background: '#fff', color: '#137c3a', width: isMobile ? '100%' : undefined, minWidth: isMobile ? 0 : undefined }} />
+                <textarea name="motivatie" placeholder="Motivatie..." value={form.motivatie} onChange={handleChange} rows={4} style={{ padding: isMobile ? '0.5rem' : '0.9rem', border: '1.5px solid #e2725b', borderRadius: 6, fontSize: ((isMobile ? 0.95 : 1.1) * fontSizeFactor) + 'rem', fontFamily: 'Montserrat, sans-serif', resize: 'vertical', background: '#fff', color: '#137c3a', width: isMobile ? '100%' : undefined, minWidth: isMobile ? 0 : undefined }} />
+                <button type="submit" disabled={loading} style={{ background: '#4b8e5b', color: '#fff', fontWeight: 700, fontSize: ((isMobile ? 0.95 : 1.15) * fontSizeFactor) + 'rem', border: 'none', borderRadius: 6, padding: isMobile ? '0.7rem 0' : '1rem 0', marginTop: '0.5rem', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'CocogooseProTrial', letterSpacing: 1 }}>{loading ? 'Verzenden...' : 'VERZEND'}</button>
                 {status === 'success' && <div style={{ color: '#26913a', textAlign: 'center', marginTop: 12 }}>Bedankt voor je aanmelding!</div>}
                 {status === 'error' && <div style={{ color: '#e2725b', textAlign: 'center', marginTop: 12 }}>Er is iets misgegaan. Probeer opnieuw.</div>}
             </form>
         </section>
     );
 }
+
+VrijwilligersForm.propTypes = {
+    fontSizeFactor: PropTypes.number.isRequired,
+};
 
 const getDevice = () => {
     if (typeof window !== 'undefined') {
@@ -249,7 +253,7 @@ export default function DoeJeMee({ fontSizeFactor }) {
                 </div>
             </div>
             <Slider fontSizeFactor={fontSizeFactor} />
-            <VrijwilligersForm />
+            <VrijwilligersForm fontSizeFactor={fontSizeFactor} />
             <Footer />
             <style>{`
                 input::placeholder, textarea::placeholder {
