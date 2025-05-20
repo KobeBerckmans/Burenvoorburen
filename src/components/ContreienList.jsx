@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const contreien = [
     'Centrum-Noord', 'Centrum-Oost (VeDoVe)', 'Centrum-Zuid (Drakendorp)', 'Galgeveld', 'Watertoren (Park Passionisten)',
@@ -136,18 +137,24 @@ const nameResponsive = {
     } : {})
 };
 
-export default function ContreienList() {
+const ContreienList = ({ fontSizeFactor = 1 }) => {
     return (
         <div style={wrapperResponsive}>
-            <h2 style={styles.title}>CONTREIEN</h2>
+            <div style={{ ...styles.title, fontSize: `calc(2.1rem * ${fontSizeFactor})` }}>CONTREIEN</div>
             <div className="contreien-list" style={listResponsive}>
                 {contreien.map((name, i) => (
-                    <div key={i} style={itemResponsive}>
-                        <div style={numberResponsive}>{i + 1}</div>
-                        <div style={nameResponsive}>{name}</div>
+                    <div key={i} style={{ ...itemResponsive, fontSize: `calc(1.08rem * ${fontSizeFactor})` }}>
+                        <div style={{ ...numberResponsive, fontSize: `calc(1rem * ${fontSizeFactor})` }}>{i + 1}</div>
+                        <div style={{ ...nameResponsive, fontSize: `calc(0.95rem * ${fontSizeFactor})` }}>{name}</div>
                     </div>
                 ))}
             </div>
         </div>
     );
-} 
+};
+
+ContreienList.propTypes = {
+    fontSizeFactor: PropTypes.number,
+};
+
+export default ContreienList; 

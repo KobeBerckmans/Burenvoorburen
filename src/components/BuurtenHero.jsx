@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import heroImg from '../assets/images/3mensen.jpg';
 
 const styles = {
@@ -63,7 +64,7 @@ const getDevice = () => {
     return 'desktop';
 };
 
-export default function BuurtenHero() {
+function BuurtenHero({ fontSizeFactor }) {
     const [device, setDevice] = React.useState(getDevice());
     React.useEffect(() => {
         const handleResize = () => setDevice(getDevice());
@@ -78,8 +79,8 @@ export default function BuurtenHero() {
         minHeight: isMobile ? 120 : isTablet ? 180 : 320,
         marginTop: isMobile ? 64 : isTablet ? 56 : 0,
     };
-    const titleFontSize = isMobile || isTablet ? 'clamp(2rem, 6vw, 2.5rem)' : 'clamp(2.5rem, 5vw, 3.5rem)';
-    const subtitleFontSize = isMobile || isTablet ? 'clamp(1rem, 3vw, 1.1rem)' : 'clamp(1.1rem, 2vw, 1.4rem)';
+    const titleFontSize = (isMobile || isTablet ? 2.5 : 3.5) * fontSizeFactor + 'rem';
+    const subtitleFontSize = (isMobile || isTablet ? 1.1 : 1.4) * fontSizeFactor + 'rem';
     return (
         <div style={heroResponsive}>
             <div style={styles.overlay} />
@@ -89,4 +90,10 @@ export default function BuurtenHero() {
             </div>
         </div>
     );
-} 
+}
+
+BuurtenHero.propTypes = {
+    fontSizeFactor: PropTypes.number.isRequired,
+};
+
+export default BuurtenHero; 

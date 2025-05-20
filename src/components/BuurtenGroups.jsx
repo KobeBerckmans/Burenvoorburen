@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { HomeIcon } from '@heroicons/react/24/outline';
 import StreetSearch from './StreetSearch';
+import PropTypes from 'prop-types';
 
 const groups = [
     {
@@ -139,7 +140,7 @@ const wrapperResponsive = {
     ...(isTablet ? { maxWidth: 768, margin: '0 auto' } : {})
 };
 
-export default function BuurtenGroups() {
+export default function BuurtenGroups({ fontSizeFactor }) {
     const [visibleElements, setVisibleElements] = useState({});
     const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState([]);
@@ -216,7 +217,7 @@ export default function BuurtenGroups() {
                             <HomeIcon style={styles.icon} />
                         </div>
                         <div
-                            style={getAnimationStyle(`title-${groupIndex}`, styles.title)}
+                            style={{ ...getAnimationStyle(`title-${groupIndex}`, styles.title), fontSize: `calc(1.1rem * ${fontSizeFactor})` }}
                             data-id={`title-${groupIndex}`}
                         >
                             {group.title}
@@ -227,6 +228,7 @@ export default function BuurtenGroups() {
                                     key={i}
                                     style={{
                                         ...getAnimationStyle(`item-${groupIndex}-${i}`, item.bold ? { ...styles.item, ...styles.itemBold } : styles.item),
+                                        fontSize: `calc(1rem * ${fontSizeFactor})`,
                                         transitionDelay: `${0.1 * (i + 1)}s`
                                     }}
                                     data-id={`item-${groupIndex}-${i}`}
@@ -253,4 +255,8 @@ export default function BuurtenGroups() {
             </div>
         </div>
     );
-} 
+}
+
+BuurtenGroups.propTypes = {
+    fontSizeFactor: PropTypes.number.isRequired,
+}; 
