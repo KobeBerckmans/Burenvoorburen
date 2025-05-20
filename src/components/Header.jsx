@@ -89,12 +89,17 @@ const styles = {
 export default function Header({ setFontSizeFactor }) {
     const [activeDropdown, setActiveDropdown] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [showA11yInfo, setShowA11yInfo] = useState(false);
     const dropdownRef = useRef(null);
+    const a11yInfoRef = useRef(null);
 
     useEffect(() => {
         function handleClickOutside(event) {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setActiveDropdown(false);
+            }
+            if (a11yInfoRef.current && !a11yInfoRef.current.contains(event.target)) {
+                setShowA11yInfo(false);
             }
         }
         document.addEventListener('mousedown', handleClickOutside);
@@ -106,6 +111,26 @@ export default function Header({ setFontSizeFactor }) {
         setMobileMenuOpen(false);
         setActiveDropdown(false);
     }
+
+    // Toegankelijkheidsuitleg
+    const a11yText =
+        "Toegankelijkheid: Gebruik de tabtoets om door het menu en de pagina te navigeren. Gebruik de 'Lees voor'-knop op pagina's om de inhoud te laten voorlezen. Gebruik de plus- en minknoppen om de tekstgrootte aan te passen. Druk op Escape om dit bericht te sluiten.";
+
+    // Voorleesfunctie voor toegankelijkheidsuitleg
+    useEffect(() => {
+        if (showA11yInfo) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new window.SpeechSynthesisUtterance(a11yText);
+                utterance.lang = 'nl-BE';
+                window.speechSynthesis.speak(utterance);
+            }
+        } else {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+        }
+    }, [showA11yInfo]);
 
     return (
         <header className="header">
@@ -156,9 +181,55 @@ export default function Header({ setFontSizeFactor }) {
                 </nav>
                 <div className="header-actions">
                     <Link to="/hulp" className="header-help">HULP?</Link>
-                    <div className="header-lang">
-                        <span role="img" aria-label="Frans" className="header-flag">🇫🇷</span>
-                        <span role="img" aria-label="Engels" className="header-flag">🇬🇧</span>
+                    {/* Accessibility icon in plaats van vlaggen */}
+                    <div className="header-a11y" style={{ display: 'flex', alignItems: 'center', marginRight: 8 }}>
+                        <button
+                            aria-label="Toegankelijkheidsuitleg weergeven"
+                            onClick={() => setShowA11yInfo(v => !v)}
+                            onKeyDown={e => {
+                                if (e.key === 'Enter' || e.key === ' ') setShowA11yInfo(v => !v);
+                                if (e.key === 'Escape') setShowA11yInfo(false);
+                            }}
+                            style={{
+                                background: 'none',
+                                border: 'none',
+                                cursor: 'pointer',
+                                fontSize: 28,
+                                padding: 0,
+                                margin: 0,
+                                color: '#26913a',
+                                outline: showA11yInfo ? '3px solid #e2725b' : 'none',
+                                borderRadius: 8,
+                                transition: 'outline 0.2s',
+                            }}
+                        >
+                            <span role="img" aria-label="Toegankelijkheid / Accessibility">🔊</span>
+                        </button>
+                        {/* Tooltip/aria-live uitleg */}
+                        {(showA11yInfo) && (
+                            <div
+                                ref={a11yInfoRef}
+                                tabIndex={-1}
+                                style={{
+                                    background: '#fff',
+                                    color: '#222',
+                                    border: '2px solid #26913a',
+                                    borderRadius: 10,
+                                    boxShadow: '0 4px 18px 0 rgba(44,62,80,0.13)',
+                                    padding: '1rem 1.2rem',
+                                    marginLeft: 12,
+                                    fontSize: 16,
+                                    maxWidth: 340,
+                                    zIndex: 2000,
+                                    position: 'absolute',
+                                    top: '110%',
+                                    left: 0,
+                                }}
+                                aria-live="assertive"
+                            >
+                                {a11yText}
+                            </div>
+                        )}
                     </div>
                     <button className="header-plus" onClick={() => setFontSizeFactor(f => Math.min(2, f + 0.1))}>+</button>
                     <button className="header-plus" onClick={() => setFontSizeFactor(f => Math.max(0.7, f - 0.1))}>-</button>
@@ -178,10 +249,57 @@ export default function Header({ setFontSizeFactor }) {
             {/* Mobiel overlay menu */}
             <div className={`mobile-menu-overlay${mobileMenuOpen ? ' open' : ''}`} onClick={() => setMobileMenuOpen(false)} />
             <nav className={`mobile-menu${mobileMenuOpen ? ' open' : ''}`} aria-label="Mobiel menu">
-                {/* Vlaggetjes bovenaan in de mobiele menu */}
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '0.7rem', marginBottom: '1.5rem' }}>
-                    <span role="img" aria-label="Frans" className="header-flag">🇫🇷</span>
-                    <span role="img" aria-label="Engels" className="header-flag">🇬🇧</span>
+                {/* Toegankelijkheidsicoon bovenaan in de mobiele menu */}
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.7rem', marginBottom: '1.5rem', position: 'relative' }}>
+                    <button
+                        aria-label="Toegankelijkheidsuitleg weergeven"
+                        onClick={() => setShowA11yInfo(v => !v)}
+                        onKeyDown={e => {
+                            if (e.key === 'Enter' || e.key === ' ') setShowA11yInfo(v => !v);
+                            if (e.key === 'Escape') setShowA11yInfo(false);
+                        }}
+                        style={{
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            fontSize: 28,
+                            padding: 0,
+                            margin: 0,
+                            color: '#26913a',
+                            outline: showA11yInfo ? '3px solid #e2725b' : 'none',
+                            borderRadius: 8,
+                            transition: 'outline 0.2s',
+                        }}
+                    >
+                        <span role="img" aria-label="Toegankelijkheid / Accessibility">🔊</span>
+                    </button>
+                    {/* Tooltip/aria-live uitleg in mobiele menu */}
+                    {(showA11yInfo) && (
+                        <div
+                            ref={a11yInfoRef}
+                            tabIndex={-1}
+                            style={{
+                                background: '#fff',
+                                color: '#222',
+                                border: '2px solid #26913a',
+                                borderRadius: 10,
+                                boxShadow: '0 4px 18px 0 rgba(44,62,80,0.13)',
+                                padding: '1rem 1.2rem',
+                                marginLeft: 0,
+                                marginTop: 12,
+                                fontSize: 16,
+                                maxWidth: 340,
+                                zIndex: 2000,
+                                position: 'absolute',
+                                top: '110%',
+                                left: '50%',
+                                transform: 'translateX(-50%)',
+                            }}
+                            aria-live="assertive"
+                        >
+                            {a11yText}
+                        </div>
+                    )}
                 </div>
                 <ul>
                     {menuItems.map(item => (
