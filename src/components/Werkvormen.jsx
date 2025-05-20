@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Footer from './Footer';
 import heroImg from '../assets/images/3mensen.jpg';
 import werkvormenImg from '../assets/images/werkvormen.jpg';
@@ -158,7 +159,7 @@ const getDevice = () => {
     return 'desktop';
 };
 
-export default function Werkvormen() {
+function Werkvormen({ fontSizeFactor }) {
     const [device, setDevice] = React.useState(getDevice());
     React.useEffect(() => {
         document.body.dataset.page = 'werkvormen';
@@ -181,7 +182,23 @@ export default function Werkvormen() {
         minHeight: isMobile ? 120 : isTablet ? 180 : 320,
         marginTop: isMobile ? 64 : isTablet ? 56 : 0,
     };
-    const titleFontSize = isMobile || isTablet ? 'clamp(2rem, 6vw, 2.5rem)' : 'clamp(2.5rem, 5vw, 3.5rem)';
+    const titleFontSize = ((isMobile ? 2.5 : 3.5) * fontSizeFactor) + 'rem';
+    const mainWrapperResponsive = {
+        ...mainStyles.wrapper,
+        fontSize: (1.08 * fontSizeFactor) + 'rem',
+    };
+    const explanationResponsive = {
+        ...mainStyles.explanation,
+        fontSize: (1.01 * fontSizeFactor) + 'rem',
+    };
+    const colTitleResponsive = {
+        ...mainStyles.colTitle,
+        fontSize: (1.15 * fontSizeFactor) + 'rem',
+    };
+    const colListResponsive = {
+        ...mainStyles.colList,
+        fontSize: (1.08 * fontSizeFactor) + 'rem',
+    };
     return (
         <div style={{ width: '100%', minHeight: '100vh', background: '#fff' }}>
             <div style={heroResponsive}>
@@ -190,7 +207,7 @@ export default function Werkvormen() {
                     <h1 style={{ ...heroStyles.title, fontSize: titleFontSize }}>WERKVORMEN</h1>
                 </div>
             </div>
-            <div style={mainStyles.wrapper}>
+            <div style={mainWrapperResponsive}>
                 {/* SVG-krul bovenaan */}
                 <svg style={mainStyles.svgKrul} viewBox="0 0 1600 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M10,110 Q400,10 800,60 T1590,30" stroke="#e2725b" strokeWidth="7" fill="none" />
@@ -199,7 +216,7 @@ export default function Werkvormen() {
                     <img src={logo} alt="Buren voor Buren logo" style={mainStyles.logo} />
                 </div>
                 <img src={werkvormenImg} alt="Werkvormen" style={mainStyles.image} />
-                <div style={mainStyles.explanation}>
+                <div style={explanationResponsive}>
                     Het zorgnetwerk kan op allerlei manieren ingezet worden. De methodes of organisatievormen om te komen tot zorgzame buurten, situeren zich tussen twee polen: die van de (individuele) ondersteuning en die van de verbinding. Hieronder een aantal voorbeelden. We gaan ervan uit dat de burenhulp in alle buurten georganiseerd wordt, maar verder kan elke buurt naargelang van eigen mogelijkheden en inzichten een keuze maken.
                 </div>
                 {/* SVG-krul onderaan */}
@@ -210,4 +227,10 @@ export default function Werkvormen() {
             <Footer />
         </div>
     );
-} 
+}
+
+Werkvormen.propTypes = {
+    fontSizeFactor: PropTypes.number.isRequired,
+};
+
+export default Werkvormen; 
