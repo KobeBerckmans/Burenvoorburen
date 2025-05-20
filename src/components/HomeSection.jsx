@@ -96,21 +96,21 @@ function HomeSlider({ fontSizeFactor }) {
     return (
         <div style={{
             width: isMobile ? '95vw' : '100%',
-            maxWidth: isMobile ? 320 : isTablet ? 540 : 1100,
+            maxWidth: isMobile ? 320 : '100%',
             margin: '2.5rem auto 0 auto',
             background: 'rgba(234,255,234,0.15)',
             borderRadius: 18,
             boxShadow: '0 4px 18px 0 rgba(44,62,80,0.10)',
-            padding: isMobile ? '1.2rem 0.5rem' : isTablet ? '1.2rem 0.5rem' : '2.5rem 1.5rem',
+            padding: isMobile ? '1.2rem 0.5rem' : '2.5rem 1.5rem',
             display: 'flex',
             alignItems: 'center',
             position: 'relative',
-            minHeight: isMobile ? 220 : isTablet ? 220 : 340,
+            minHeight: isMobile ? 220 : 340,
             justifyContent: 'center',
         }}>
             <button onClick={prev} style={{
                 position: 'static',
-                marginRight: isMobile ? 8 : isTablet ? 2 : 0,
+                marginRight: isMobile ? 8 : 0,
                 background: 'none',
                 border: 'none',
                 width: 38,
@@ -221,6 +221,31 @@ AnimatedQuote.propTypes = {
     fontSizeFactor: PropTypes.number.isRequired,
 };
 
+// Web Speech API helper
+function speakHomePageText() {
+    if ('speechSynthesis' in window) {
+        if (window.speechSynthesis.speaking) {
+            window.speechSynthesis.cancel();
+            return;
+        }
+    }
+    const mainContent = document.getElementById('home-main-content');
+    let text = '';
+    if (mainContent) {
+        text = mainContent.innerText;
+    } else {
+        text = `Welkom op Buren voor Buren. Buren voor Buren is een zorgnetwerk voor iedereen die ondersteuning nodig heeft. Gebruik de plus en min knoppen bovenaan om de tekst te vergroten of te verkleinen. Lees verder op deze pagina voor meer informatie over onze missie, diensten en hoe je kunt deelnemen.`;
+    }
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel(); // Stop eventuele vorige spraak
+        const utterance = new window.SpeechSynthesisUtterance(text);
+        utterance.lang = 'nl-BE';
+        window.speechSynthesis.speak(utterance);
+    } else {
+        alert('Deze browser ondersteunt geen voorleesfunctie.');
+    }
+}
+
 function HomeSection({ fontSizeFactor }) {
     // Hoogte van het vlak groter maken dan de images
     const greenHeight = 360; // bijvoorbeeld 400px
@@ -255,7 +280,47 @@ function HomeSection({ fontSizeFactor }) {
         responsiveSection.padding = '0 3rem';
     }
     return (
-        <div style={{ maxWidth: 1440, margin: '0 auto', position: 'relative', overflowX: 'hidden', width: '100%' }}>
+        <div id="home-main-content" style={{ maxWidth: 1440, margin: '0 auto', position: 'relative', overflowX: 'hidden', width: '100%' }}>
+            {/* Screenreader knop */}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', margin: '1.2rem 1.5rem 0 0' }}>
+                <button
+                    onClick={speakHomePageText}
+                    style={{
+                        fontSize: 18 * fontSizeFactor,
+                        padding: '0.7em 2em',
+                        borderRadius: 10,
+                        border: '2.5px solid #26913a',
+                        background: '#eaffea',
+                        color: '#137c3a',
+                        fontWeight: 900,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 12,
+                        boxShadow: '0 0 0 4px #e2725b33',
+                        outline: 'none',
+                        position: 'relative',
+                        zIndex: 100,
+                        animation: 'bvb-blink 1.2s linear infinite',
+                        textTransform: 'uppercase',
+                        letterSpacing: 1.5,
+                        transition: 'box-shadow 0.2s, border 0.2s',
+                    }}
+                    aria-label="Lees de belangrijkste informatie van deze pagina voor"
+                >
+                    <span role="img" aria-label="speaker" style={{ fontSize: 24 * fontSizeFactor }}>🔊</span>
+                    <span style={{ fontSize: 18 * fontSizeFactor, fontFamily: 'CocogooseProTrial', fontWeight: 900 }}>Lees voor</span>
+                </button>
+                <style>{`
+                    @keyframes bvb-blink {
+                        0%, 100% { box-shadow: 0 0 0 4px #e2725b33, 0 0 16px 4px #e2725b44; border-color: #26913a; }
+                        50% { box-shadow: 0 0 0 8px #e2725b77, 0 0 32px 8px #e2725b99; border-color: #e2725b; }
+                    }
+                    button[aria-label] {
+                        outline: 3px solid #e2725b55;
+                    }
+                `}</style>
+            </div>
             <FadeInOnScroll delay={0} direction={fadeDirections[0]}>
                 {(window.innerWidth > 1024 || (window.innerWidth > 600 && window.innerWidth <= 1024)) ? (
                     // DESKTOP & TABLET: zelfde layoutstructuur, maar op tablet alles kleiner
