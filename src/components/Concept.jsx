@@ -4,6 +4,7 @@ import heroImg from '../assets/images/3mensen.jpg';
 import diagramImg from '../assets/images/watdoenwe.jpg';
 import logo from '../assets/images/BVB-Transparant.png';
 import zorgImg from '../assets/images/buurtgerichtezorg.jpg';
+import Menu from './Menu';
 
 const heroStyles = {
     hero: {
@@ -164,6 +165,7 @@ const mainStyles = {
 export default function Concept() {
     return (
         <div style={{ width: '100%', minHeight: '100vh', background: '#fff' }}>
+            <Menu />
             <div style={heroStyles.hero}>
                 <div style={heroStyles.overlay} />
                 <div style={heroStyles.content}>

@@ -3,6 +3,7 @@ import Footer from './Footer';
 import heroImg from '../assets/images/3mensen.jpg';
 import werkvormenImg from '../assets/images/werkvormen.jpg';
 import logo from '../assets/images/BVB-Transparant.png';
+import Menu from './Menu';
 
 const heroStyles = {
     hero: {
@@ -153,6 +154,7 @@ const mainStyles = {
 export default function Werkvormen() {
     return (
         <div style={{ width: '100%', minHeight: '100vh', background: '#fff' }}>
+            <Menu />
             <div style={heroStyles.hero}>
                 <div style={heroStyles.overlay} />
                 <div style={heroStyles.content}>
