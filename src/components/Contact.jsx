@@ -150,9 +150,77 @@ const contactpersonen = [
     { regio: '', naam: 'Oplinter: Ilonka Vaes', tel: '0489 901751' },
 ];
 
+const getDevice = () => {
+    if (typeof window !== 'undefined') {
+        if (window.innerWidth <= 600) return 'mobile';
+        if (window.innerWidth > 600 && window.innerWidth <= 1024) return 'tablet';
+    }
+    return 'desktop';
+};
+
 export default function Contact() {
     const [form, setForm] = useState({ email: '', subject: '', message: '' });
     const [status, setStatus] = useState(null);
+    const [device, setDevice] = useState(getDevice());
+
+    React.useEffect(() => {
+        const handleResize = () => setDevice(getDevice());
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const isMobile = device === 'mobile';
+    const isTablet = device === 'tablet';
+
+    const flexResponsive = {
+        ...mainStyles.flex,
+        flexDirection: isMobile ? 'column' : 'row',
+        gap: isMobile ? 16 : isTablet ? 24 : 32,
+        marginTop: isMobile ? 18 : isTablet ? 24 : 32,
+        marginBottom: isMobile ? 18 : isTablet ? 24 : 32,
+        alignItems: isMobile ? 'stretch' : 'center',
+    };
+    const leftResponsive = {
+        ...mainStyles.left,
+        minWidth: isMobile ? 'unset' : isTablet ? 260 : 320,
+        maxWidth: isMobile ? '100%' : isTablet ? 340 : 420,
+        padding: isMobile ? 16 : isTablet ? 24 : 32,
+        margin: isMobile ? '0 auto' : undefined,
+    };
+    const rightResponsive = {
+        ...mainStyles.right,
+        minWidth: isMobile ? 'unset' : isTablet ? 200 : 280,
+        maxWidth: isMobile ? '100%' : isTablet ? 300 : 400,
+        padding: isMobile ? 16 : isTablet ? 24 : 32,
+        margin: isMobile ? '0 auto' : undefined,
+        fontSize: isMobile ? '0.98rem' : isTablet ? '1.01rem' : '1.05rem',
+    };
+    const inputResponsive = {
+        ...mainStyles.input,
+        fontSize: isMobile ? '0.98rem' : '1rem',
+        padding: isMobile ? '10px 12px' : '12px 16px',
+    };
+    const buttonResponsive = {
+        ...mainStyles.button,
+        fontSize: isMobile ? '1rem' : '1.1rem',
+        padding: isMobile ? '10px 0' : '12px 0',
+    };
+    const heroResponsive = {
+        ...heroStyles.hero,
+        height: isMobile ? 180 : isTablet ? 260 : 'min(50vh, 400px)',
+        minHeight: isMobile ? 120 : isTablet ? 180 : 320,
+        marginTop: isMobile ? 64 : isTablet ? 56 : 0,
+    };
+    const heroTitleResponsive = {
+        ...heroStyles.title,
+        fontSize: isMobile ? '2rem' : isTablet ? '2.5rem' : 'clamp(2.5rem, 5vw, 3.5rem)',
+    };
+    const heroSubtitleResponsive = {
+        ...heroStyles.subtitle,
+        fontSize: isMobile ? '1rem' : isTablet ? '1.1rem' : 'clamp(1.1rem, 2vw, 1.3rem)',
+        marginTop: isMobile ? '0.5rem' : '1rem',
+        padding: isMobile ? '0 0.2rem' : 0,
+    };
 
     const handleChange = e => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -183,33 +251,34 @@ export default function Contact() {
 
     return (
         <div style={{ width: '100%', minHeight: '100vh', background: '#fff' }}>
-            <div style={heroStyles.hero}>
+            <div style={heroResponsive}>
                 <div style={heroStyles.overlay} />
                 <div style={heroStyles.content}>
-                    <h1 style={heroStyles.title}>CONTACT</h1>
-                    <p style={heroStyles.subtitle}>Heb je een vraag of wil je meer weten over Buren voor Buren? Neem gerust contact met ons op!</p>
+                    <h1 style={heroTitleResponsive}>CONTACT</h1>
+                    <p style={heroSubtitleResponsive}>Heb je een vraag of wil je meer weten over Buren voor Buren? Neem gerust contact met ons op!</p>
                 </div>
             </div>
             <div style={mainStyles.wrapper}>
-                <div style={mainStyles.flex}>
-                    <div style={mainStyles.left}>
+                <div style={flexResponsive}>
+                    <div style={leftResponsive}>
                         <img src={logo} alt="Buren voor Buren logo" style={mainStyles.logo} />
                         <div style={mainStyles.title}>PRAAT MET ONS!</div>
                         <form style={mainStyles.form} onSubmit={handleSubmit}>
-                            <input type="email" name="email" placeholder="Email" style={mainStyles.input} required value={form.email} onChange={handleChange} />
-                            <input type="text" name="subject" placeholder="Subject" style={mainStyles.input} required value={form.subject} onChange={handleChange} />
-                            <textarea name="message" placeholder="Write Your Message Here..." style={{ ...mainStyles.input, ...mainStyles.textarea }} required value={form.message} onChange={handleChange} />
-                            <button type="submit" style={mainStyles.button}>SEND</button>
-                            {status === 'success' && <div style={{ color: '#26913a', marginTop: 8 }}>Bedankt voor je bericht!</div>}
-                            {status === 'error' && <div style={{ color: '#e2725b', marginTop: 8 }}>Er ging iets mis. Probeer opnieuw.</div>}
+                            <input type="email" name="email" placeholder="Email" style={inputResponsive} required value={form.email} onChange={handleChange} />
+                            <input type="text" name="subject" placeholder="Subject" style={inputResponsive} required value={form.subject} onChange={handleChange} />
+                            <textarea name="message" placeholder="Bericht" style={{ ...inputResponsive, ...mainStyles.textarea }} required value={form.message} onChange={handleChange} />
+                            <button type="submit" style={buttonResponsive}>Verstuur</button>
                         </form>
+                        {status === 'success' && <div style={{ color: '#26913a', marginTop: 12 }}>Bedankt voor je bericht!</div>}
+                        {status === 'error' && <div style={{ color: '#e2725b', marginTop: 12 }}>Er ging iets mis. Probeer opnieuw.</div>}
                     </div>
-                    <div style={mainStyles.right}>
-                        <div style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: 8 }}>OF BEL ONS OP!</div>
+                    <div style={rightResponsive}>
+                        <div style={{ fontWeight: 700, color: '#e2725b', marginBottom: 8 }}>Contactpersonen</div>
                         {contactpersonen.map((p, i) => (
-                            <div key={i} style={{ marginBottom: 6 }}>
-                                {p.regio && <span style={{ fontWeight: 700 }}>{p.regio}: </span>}
-                                {p.naam} {p.tel && <span style={{ color: '#222', fontWeight: 400 }}> - {p.tel}</span>}
+                            <div key={i} style={{ marginBottom: 10 }}>
+                                {p.regio && <span style={{ color: '#26913a', fontWeight: 600 }}>{p.regio}: </span>}
+                                <span>{p.naam}</span><br />
+                                <span style={{ color: '#222', fontWeight: 400 }}>{p.tel}</span>
                             </div>
                         ))}
                     </div>

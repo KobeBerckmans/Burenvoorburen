@@ -210,10 +210,32 @@ function PartnerSlider() {
     );
 }
 
+const getDevice = () => {
+    if (typeof window !== 'undefined') {
+        if (window.innerWidth <= 600) return 'mobile';
+        if (window.innerWidth > 600 && window.innerWidth <= 1024) return 'tablet';
+    }
+    return 'desktop';
+};
+
 export default function Partners() {
+    const [device, setDevice] = React.useState(getDevice());
+    React.useEffect(() => {
+        const handleResize = () => setDevice(getDevice());
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+    const isMobile = device === 'mobile';
+    const isTablet = device === 'tablet';
+    const heroResponsive = {
+        ...heroStyles.hero,
+        height: isMobile ? 180 : isTablet ? 260 : 'min(50vh, 400px)',
+        minHeight: isMobile ? 120 : isTablet ? 180 : 320,
+        marginTop: isMobile ? 64 : isTablet ? 56 : 0,
+    };
     return (
         <div style={{ width: '100%', minHeight: '100vh', background: '#fff' }}>
-            <div style={heroStyles.hero}>
+            <div style={heroResponsive}>
                 <div style={heroStyles.overlay} />
                 <div style={heroStyles.content}>
                     <h1 style={heroStyles.title}>PARTNERS</h1>

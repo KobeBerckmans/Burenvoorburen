@@ -4,8 +4,6 @@ import heroImg from '../assets/images/3mensen.jpg';
 const styles = {
     hero: {
         width: '100%',
-        height: 'min(40vh, 220px)',
-        minHeight: 120,
         background: `url(${heroImg}) center/cover no-repeat`,
         display: 'flex',
         alignItems: 'center',
@@ -57,25 +55,35 @@ const styles = {
     }
 };
 
-// Responsive inline styles voor mobile/tablet
-const isMobile = window.innerWidth <= 600;
-const isTablet = window.innerWidth > 600 && window.innerWidth <= 1024;
-const heroHeight = isMobile ? 260 : isTablet ? 340 : 'min(50vh, 400px)';
-
-// Dynamische fontSize voor title en subtitle
-const titleFontSize = isMobile || isTablet ? 'clamp(2rem, 6vw, 2.5rem)' : 'clamp(2.5rem, 5vw, 3.5rem)';
-const subtitleFontSize = isMobile || isTablet ? 'clamp(1rem, 3vw, 1.1rem)' : 'clamp(1.1rem, 2vw, 1.4rem)';
+const getDevice = () => {
+    if (typeof window !== 'undefined') {
+        if (window.innerWidth <= 600) return 'mobile';
+        if (window.innerWidth > 600 && window.innerWidth <= 1024) return 'tablet';
+    }
+    return 'desktop';
+};
 
 export default function BuurtenHero() {
-    // Extra style voor mobile/tablet: iets meer naar rechts en naar onder
-    const contentOffset = (isMobile || isTablet)
-        ? { marginLeft: '8vw', marginTop: '32px' }
-        : {};
-
+    const [device, setDevice] = React.useState(getDevice());
+    React.useEffect(() => {
+        const handleResize = () => setDevice(getDevice());
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+    const isMobile = device === 'mobile';
+    const isTablet = device === 'tablet';
+    const heroResponsive = {
+        ...styles.hero,
+        height: isMobile ? 180 : isTablet ? 260 : 'min(50vh, 400px)',
+        minHeight: isMobile ? 120 : isTablet ? 180 : 320,
+        marginTop: isMobile ? 64 : isTablet ? 56 : 0,
+    };
+    const titleFontSize = isMobile || isTablet ? 'clamp(2rem, 6vw, 2.5rem)' : 'clamp(2.5rem, 5vw, 3.5rem)';
+    const subtitleFontSize = isMobile || isTablet ? 'clamp(1rem, 3vw, 1.1rem)' : 'clamp(1.1rem, 2vw, 1.4rem)';
     return (
-        <div style={{ ...styles.hero, height: heroHeight }}>
+        <div style={heroResponsive}>
             <div style={styles.overlay} />
-            <div style={{ ...styles.content, ...contentOffset }}>
+            <div style={styles.content}>
                 <h1 style={{ ...styles.title, fontSize: titleFontSize }}>BUURTEN</h1>
                 <p style={{ ...styles.subtitle, fontSize: subtitleFontSize }}>Ontdek de buurten en contreien van Tienen</p>
             </div>

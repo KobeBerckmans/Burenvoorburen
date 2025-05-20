@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Footer from './Footer';
 import heroImg from '../assets/images/3mensen.jpg';
 import { UserGroupIcon, GiftIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
@@ -213,14 +213,38 @@ function VrijwilligersForm() {
     );
 }
 
+const getDevice = () => {
+    if (typeof window !== 'undefined') {
+        if (window.innerWidth <= 600) return 'mobile';
+        if (window.innerWidth > 600 && window.innerWidth <= 1024) return 'tablet';
+    }
+    return 'desktop';
+};
+
 export default function DoeJeMee() {
+    const [device, setDevice] = useState(getDevice());
+    useEffect(() => {
+        const handleResize = () => setDevice(getDevice());
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+    const isMobile = device === 'mobile';
+    const isTablet = device === 'tablet';
+    const heroResponsive = {
+        ...heroStyles.hero,
+        height: isMobile ? 180 : isTablet ? 260 : 'min(50vh, 400px)',
+        minHeight: isMobile ? 120 : isTablet ? 180 : 320,
+        marginTop: isMobile ? 64 : isTablet ? 56 : 0,
+    };
+    const titleFontSize = isMobile || isTablet ? 'clamp(2rem, 6vw, 2.5rem)' : 'clamp(2.5rem, 5vw, 3.5rem)';
+    const subtitleFontSize = isMobile || isTablet ? 'clamp(1rem, 3vw, 1.1rem)' : 'clamp(1.1rem, 2vw, 1.4rem)';
     return (
         <div style={{ width: '100%', minHeight: '100vh', background: '#fff' }}>
-            <div style={heroStyles.hero}>
+            <div style={heroResponsive}>
                 <div style={heroStyles.overlay} />
-                <div style={heroStyles.content}>
-                    <h1 style={heroStyles.title}>DOE JE MEE?</h1>
-                    <p style={heroStyles.subtitle}>Samen maken we het verschil in jouw buurt – word vrijwilliger!</p>
+                <div style={{ ...heroStyles.content, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
+                    <h1 style={{ ...heroStyles.title, fontSize: titleFontSize }}>DOE JE MEE?</h1>
+                    <p style={{ ...heroStyles.subtitle, fontSize: subtitleFontSize }}>Word vrijwilliger bij Buren voor Buren</p>
                 </div>
             </div>
             <Slider />
