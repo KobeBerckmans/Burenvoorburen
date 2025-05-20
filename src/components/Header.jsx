@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import logo from '../assets/images/BVB-Transparant.png';
 import '../styles/Header.css';
 import Werkingsprincipes from './Werkingsprincipes';
+import PropTypes from 'prop-types';
 
 const menuItems = [
     { label: 'Home', to: '/' },
@@ -85,7 +86,7 @@ const styles = {
     },
 };
 
-export default function Header() {
+export default function Header({ setFontSizeFactor }) {
     const [activeDropdown, setActiveDropdown] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const dropdownRef = useRef(null);
@@ -159,7 +160,8 @@ export default function Header() {
                         <span role="img" aria-label="Frans" className="header-flag">🇫🇷</span>
                         <span role="img" aria-label="Engels" className="header-flag">🇬🇧</span>
                     </div>
-                    <button className="header-plus">+</button>
+                    <button className="header-plus" onClick={() => setFontSizeFactor(f => Math.min(2, f + 0.1))}>+</button>
+                    <button className="header-plus" onClick={() => setFontSizeFactor(f => Math.max(0.7, f - 0.1))}>-</button>
                 </div>
                 {/* Hamburger icon alleen op mobiel, nu helemaal rechts */}
                 <button
@@ -176,6 +178,11 @@ export default function Header() {
             {/* Mobiel overlay menu */}
             <div className={`mobile-menu-overlay${mobileMenuOpen ? ' open' : ''}`} onClick={() => setMobileMenuOpen(false)} />
             <nav className={`mobile-menu${mobileMenuOpen ? ' open' : ''}`} aria-label="Mobiel menu">
+                {/* Vlaggetjes bovenaan in de mobiele menu */}
+                <div style={{ display: 'flex', justifyContent: 'center', gap: '0.7rem', marginBottom: '1.5rem' }}>
+                    <span role="img" aria-label="Frans" className="header-flag">🇫🇷</span>
+                    <span role="img" aria-label="Engels" className="header-flag">🇬🇧</span>
+                </div>
                 <ul>
                     {menuItems.map(item => (
                         <li key={item.label}>
@@ -200,8 +207,17 @@ export default function Header() {
                 </ul>
                 <div className="mobile-menu-actions">
                     <Link to="/hulp" className="header-help" onClick={handleNavClick}>HULP?</Link>
+                    {/* Plus en min knoppen onderaan */}
+                    <div style={{ display: 'flex', gap: '1.2rem', justifyContent: 'center', marginTop: '1.2rem' }}>
+                        <button className="header-plus" onClick={() => setFontSizeFactor(f => Math.min(2, f + 0.1))}>+</button>
+                        <button className="header-plus" onClick={() => setFontSizeFactor(f => Math.max(0.7, f - 0.1))}>-</button>
+                    </div>
                 </div>
             </nav>
         </header>
     );
 }
+
+Header.propTypes = {
+    setFontSizeFactor: PropTypes.func.isRequired,
+};

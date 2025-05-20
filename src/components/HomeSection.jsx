@@ -7,8 +7,9 @@ import NewsFeed from './NewsFeed';
 import VideoSection from './VideoSection';
 import Footer from './Footer';
 import FadeInOnScroll from './FadeInOnScroll';
+import PropTypes from 'prop-types';
 
-function HomeSlider() {
+function HomeSlider({ fontSizeFactor }) {
     const points = [
         {
             title: 'Voor wie?',
@@ -127,8 +128,8 @@ function HomeSlider() {
                 {visiblePoints.map((point) => (
                     <div key={point.title} style={{ width: isMobile ? 220 : isTablet ? 220 : 320, minWidth: 0, background: 'none', borderRadius: 14, boxShadow: 'none', padding: isMobile ? '0.7rem 0.5rem' : isTablet ? '0.7rem 0.5rem' : '1.2rem 1rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', height: isMobile ? 160 : isTablet ? 160 : 260, justifyContent: 'flex-start' }}>
                         <div style={{ marginBottom: 12 }}>{point.icon}</div>
-                        <div style={{ color: '#e2725b', fontWeight: 700, fontSize: isMobile ? '1.1rem' : isTablet ? '1rem' : '1.1rem', marginBottom: 8, fontFamily: 'CocogooseProTrial', textAlign: 'center' }}>{point.title}</div>
-                        <div style={{ color: '#222', fontSize: isMobile ? '0.92rem' : isTablet ? '0.82rem' : '0.98rem', whiteSpace: 'pre-line', textAlign: 'center', maxWidth: isMobile ? 180 : isTablet ? 170 : 260, lineHeight: 1.35, height: isMobile ? 80 : isTablet ? 70 : 140, overflow: 'auto', margin: '0 auto', fontFamily: 'Montserrat, sans-serif', fontWeight: 400 }}>{point.text}</div>
+                        <div style={{ color: '#e2725b', fontWeight: 700, fontSize: (isMobile ? 1.1 : isTablet ? 1 : 1.1) * fontSizeFactor + 'rem', marginBottom: 8, fontFamily: 'CocogooseProTrial', textAlign: 'center' }}>{point.title}</div>
+                        <div style={{ color: '#222', fontSize: (isMobile ? 0.92 : isTablet ? 0.82 : 0.98) * fontSizeFactor + 'rem', whiteSpace: 'pre-line', textAlign: 'center', maxWidth: isMobile ? 180 : isTablet ? 170 : 260, lineHeight: 1.35, height: isMobile ? 80 : isTablet ? 70 : 140, overflow: 'auto', margin: '0 auto', fontFamily: 'Montserrat, sans-serif', fontWeight: 400 }}>{point.text}</div>
                     </div>
                 ))}
             </div>
@@ -152,8 +153,12 @@ function HomeSlider() {
     );
 }
 
+HomeSlider.propTypes = {
+    fontSizeFactor: PropTypes.number.isRequired,
+};
+
 // Dynamische quote met animatie bij in beeld komen
-function AnimatedQuote() {
+function AnimatedQuote({ fontSizeFactor }) {
     const [visible, setVisible] = useState(false);
     const ref = useRef();
     useEffect(() => {
@@ -190,11 +195,11 @@ function AnimatedQuote() {
                     overflow: 'hidden',
                 }}
             >
-                <span style={{ color: '#e2725b', fontSize: isMobile ? '1.2rem' : isTablet ? '1.5rem' : '2.2rem', fontWeight: 700, fontFamily: 'CocogooseProTrial', marginRight: isMobile ? 7 : isTablet ? 10 : 14, transform: 'skew(6deg, 0deg)' }}>&ldquo;</span>
-                <span style={{ fontSize: isMobile ? '0.78rem' : isTablet ? '1rem' : '1.65rem', maxWidth: isMobile ? 140 : isTablet ? 180 : undefined, fontStyle: 'italic', color: '#137c3a', fontFamily: 'Poppins, serif', fontWeight: 500, transform: 'skew(6deg, 0deg)', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'normal' }}>
+                <span style={{ color: '#e2725b', fontSize: ((isMobile ? 1.2 : isTablet ? 1.5 : 2.2) * fontSizeFactor) + 'rem', fontWeight: 700, fontFamily: 'CocogooseProTrial', marginRight: isMobile ? 7 : isTablet ? 10 : 14, transform: 'skew(6deg, 0deg)' }}>&ldquo;</span>
+                <span style={{ fontSize: ((isMobile ? 0.78 : isTablet ? 1 : 1.65) * fontSizeFactor) + 'rem', maxWidth: isMobile ? 140 : isTablet ? 180 : undefined, fontStyle: 'italic', color: '#137c3a', fontFamily: 'Poppins, serif', fontWeight: 500, transform: 'skew(6deg, 0deg)', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'normal' }}>
                     Beter een goede buur dan een verre vriend
                 </span>
-                <span style={{ color: '#e2725b', fontSize: isMobile ? '1.2rem' : isTablet ? '1.5rem' : '2.2rem', fontWeight: 700, fontFamily: 'CocogooseProTrial', marginLeft: isMobile ? 7 : isTablet ? 10 : 16, transform: 'skew(6deg, 0deg)' }}>&rdquo;</span>
+                <span style={{ color: '#e2725b', fontSize: ((isMobile ? 1.2 : isTablet ? 1.5 : 2.2) * fontSizeFactor) + 'rem', fontWeight: 700, fontFamily: 'CocogooseProTrial', marginLeft: isMobile ? 7 : isTablet ? 10 : 16, transform: 'skew(6deg, 0deg)' }}>&rdquo;</span>
             </div>
             <style>{`
                 .quote-card {
@@ -212,7 +217,11 @@ function AnimatedQuote() {
     );
 }
 
-export default function HomeSection() {
+AnimatedQuote.propTypes = {
+    fontSizeFactor: PropTypes.number.isRequired,
+};
+
+function HomeSection({ fontSizeFactor }) {
     // Hoogte van het vlak groter maken dan de images
     const greenHeight = 360; // bijvoorbeeld 400px
     // Richtingen voor animatie per onderdeel
@@ -338,14 +347,14 @@ export default function HomeSection() {
                         const h2Style = {
                             color: '#26913a',
                             fontWeight: 700,
-                            fontSize: isTablet ? '1.3rem' : '2.2rem',
+                            fontSize: (isTablet ? 1.3 : 2.2) * fontSizeFactor + 'rem',
                             marginBottom: '0.7rem',
                             marginTop: 0,
                             fontFamily: 'CocogooseProTrial',
                         };
                         const pStyle = {
                             fontFamily: 'Poppins',
-                            fontSize: isTablet ? '10px' : '12px',
+                            fontSize: (isTablet ? 10 : 12) * fontSizeFactor + 'px',
                             lineHeight: 1.6,
                             color: '#222',
                             margin: 0,
@@ -403,11 +412,11 @@ export default function HomeSection() {
                             zIndex: 2,
                             marginLeft: window.innerWidth <= 600 ? '4vw' : undefined,
                         }}>
-                            <h2 style={{ color: '#26913a', fontWeight: 700, fontSize: window.innerWidth <= 600 ? (window.innerWidth <= 350 ? '1.2rem' : '1.4rem') : '2.5rem', marginBottom: '0.7rem', marginTop: window.innerWidth <= 600 ? '1.2rem' : '2.2rem', fontFamily: 'CocogooseProTrial', textAlign: 'center' }}>Wat doen we?</h2>
+                            <h2 style={{ color: '#26913a', fontWeight: 700, fontSize: (window.innerWidth <= 600 ? (window.innerWidth <= 350 ? 1.2 : 1.4) : 2.5) * fontSizeFactor + 'rem', marginBottom: '0.7rem', marginTop: window.innerWidth <= 600 ? '1.2rem' : '2.2rem', fontFamily: 'CocogooseProTrial', textAlign: 'center' }}>Wat doen we?</h2>
                             <div style={{ height: '4px', width: '60px', background: '#26913a', margin: '0 auto 1.2rem auto', borderRadius: '2px' }} />
                             <p style={{
                                 fontFamily: 'Poppins',
-                                fontSize: window.innerWidth <= 600 ? (window.innerWidth <= 350 ? '10px' : '11px') : '13px',
+                                fontSize: (window.innerWidth <= 600 ? (window.innerWidth <= 350 ? 10 : 11) : 13) * fontSizeFactor + 'px',
                                 lineHeight: 1.6,
                                 color: '#222',
                                 margin: 0,
@@ -548,8 +557,8 @@ export default function HomeSection() {
                     </div>
                 </section >
             </FadeInOnScroll>
-            <FadeInOnScroll delay={300} direction={fadeDirections[2]}><HomeSlider /></FadeInOnScroll>
-            <FadeInOnScroll delay={450} direction={fadeDirections[3]}><AnimatedQuote /></FadeInOnScroll>
+            <FadeInOnScroll delay={300} direction={fadeDirections[2]}><HomeSlider fontSizeFactor={fontSizeFactor} /></FadeInOnScroll>
+            <FadeInOnScroll delay={450} direction={fadeDirections[3]}><AnimatedQuote fontSizeFactor={fontSizeFactor} /></FadeInOnScroll>
             <FadeInOnScroll delay={600} direction={fadeDirections[4]}>
                 {/* TODO: Pas NewsFeed aan zodat op tablet (601-1024px) 2 nieuwsitems tegelijk zichtbaar zijn, net als in de slider hierboven. */}
                 <NewsFeed />
@@ -558,4 +567,10 @@ export default function HomeSection() {
             <FadeInOnScroll delay={900} direction={fadeDirections[0]}><Footer /></FadeInOnScroll>
         </div>
     );
-} 
+}
+
+HomeSection.propTypes = {
+    fontSizeFactor: PropTypes.number.isRequired,
+};
+
+export default HomeSection; 

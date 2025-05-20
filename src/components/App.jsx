@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Hero from './Hero';
 import Header from './Header';
@@ -14,17 +14,18 @@ import Werkingsprincipes from './Werkingsprincipes';
 import LinksLiteratuur from './LinksLiteratuur';
 
 function App() {
+  const [fontSizeFactor, setFontSizeFactor] = useState(1);
   return (
     <Router>
-      <Header />
+      <Header fontSizeFactor={fontSizeFactor} setFontSizeFactor={setFontSizeFactor} />
       <Routes>
         <Route path="/" element={
           <>
             <Hero />
-            <HomeSection />
+            <HomeSection fontSizeFactor={fontSizeFactor} />
           </>
         } />
-        <Route path="/buurten" element={<Buurten />} />
+        <Route path="/buurten" element={<Buurten fontSizeFactor={fontSizeFactor} />} />
         <Route path="/doe-je-mee" element={<DoeJeMee />} />
         <Route path="/hulp" element={<Help />} />
         <Route path="/partners" element={<Partners />} />
