@@ -233,6 +233,8 @@ function speakHomePageText() {
     let text = '';
     if (mainContent) {
         text = mainContent.innerText;
+        // Filter 'Lees meer' knoppen en 🔊 emoji uit de tekst
+        text = text.replace(/Lees meer/g, '').replace(/🔊/g, '').replace(/\s{2,}/g, ' ').trim();
     } else {
         text = `Welkom op Buren voor Buren. Buren voor Buren is een zorgnetwerk voor iedereen die ondersteuning nodig heeft. Gebruik de plus en min knoppen bovenaan om de tekst te vergroten of te verkleinen. Lees verder op deze pagina voor meer informatie over onze missie, diensten en hoe je kunt deelnemen.`;
     }
@@ -240,6 +242,7 @@ function speakHomePageText() {
         window.speechSynthesis.cancel(); // Stop eventuele vorige spraak
         const utterance = new window.SpeechSynthesisUtterance(text);
         utterance.lang = 'nl-BE';
+        utterance.rate = 0.85;
         window.speechSynthesis.speak(utterance);
     } else {
         alert('Deze browser ondersteunt geen voorleesfunctie.');

@@ -17,6 +17,8 @@ function speakBuurtenPageText() {
     let text = '';
     if (mainContent) {
         text = mainContent.innerText;
+        // Filter 'Lees meer' knoppen en 🔊 emoji uit de tekst
+        text = text.replace(/Lees meer/g, '').replace(/🔊/g, '').replace(/\s{2,}/g, ' ').trim();
     } else {
         text = `Ontdek de buurten en contreien van Tienen.`;
     }
@@ -24,6 +26,7 @@ function speakBuurtenPageText() {
         window.speechSynthesis.cancel();
         const utterance = new window.SpeechSynthesisUtterance(text);
         utterance.lang = 'nl-BE';
+        utterance.rate = 0.85;
         window.speechSynthesis.speak(utterance);
     } else {
         alert('Deze browser ondersteunt geen voorleesfunctie.');
