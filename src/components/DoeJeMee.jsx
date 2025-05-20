@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import Footer from './Footer';
 import heroImg from '../assets/images/3mensen.jpg';
 import { UserGroupIcon, GiftIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
@@ -76,7 +77,7 @@ const sliderPoints = [
     }
 ];
 
-function Slider() {
+function Slider({ fontSizeFactor }) {
     const isMobile = typeof window !== 'undefined' && window.innerWidth <= 600;
     const isTablet = typeof window !== 'undefined' && window.innerWidth > 600 && window.innerWidth <= 1024;
     const [index, setIndex] = useState(0);
@@ -133,10 +134,10 @@ function Slider() {
                     scrollSnapAlign: isMobile ? 'start' : undefined
                 }}>
                     <div style={{ marginBottom: 12 }}>{point.icon}</div>
-                    <div style={{ color: '#e2725b', fontWeight: 700, fontSize: '1.1rem', marginBottom: 8, fontFamily: 'CocogooseProTrial', textAlign: 'center' }}>{point.title}</div>
+                    <div style={{ color: '#e2725b', fontWeight: 700, fontSize: (isMobile ? 1.1 : isTablet ? 1 : 1.1) * fontSizeFactor + 'rem', marginBottom: 8, fontFamily: 'CocogooseProTrial', textAlign: 'center' }}>{point.title}</div>
                     <div style={{
                         color: '#222',
-                        fontSize: '0.98rem',
+                        fontSize: (isMobile ? 0.98 : isTablet ? 0.92 : 1.08) * fontSizeFactor + 'rem',
                         whiteSpace: 'pre-line',
                         textAlign: 'center',
                         maxWidth: 180,
@@ -221,7 +222,7 @@ const getDevice = () => {
     return 'desktop';
 };
 
-export default function DoeJeMee() {
+export default function DoeJeMee({ fontSizeFactor }) {
     const [device, setDevice] = useState(getDevice());
     useEffect(() => {
         const handleResize = () => setDevice(getDevice());
@@ -236,8 +237,8 @@ export default function DoeJeMee() {
         minHeight: isMobile ? 120 : isTablet ? 180 : 320,
         marginTop: isMobile ? 64 : isTablet ? 56 : 0,
     };
-    const titleFontSize = isMobile || isTablet ? 'clamp(2rem, 6vw, 2.5rem)' : 'clamp(2.5rem, 5vw, 3.5rem)';
-    const subtitleFontSize = isMobile || isTablet ? 'clamp(1rem, 3vw, 1.1rem)' : 'clamp(1.1rem, 2vw, 1.4rem)';
+    const titleFontSize = (isMobile || isTablet ? 2.5 : 3.5) * fontSizeFactor + 'rem';
+    const subtitleFontSize = (isMobile || isTablet ? 1.1 : 1.4) * fontSizeFactor + 'rem';
     return (
         <div style={{ width: '100%', minHeight: '100vh', background: '#fff' }}>
             <div style={heroResponsive}>
@@ -247,7 +248,7 @@ export default function DoeJeMee() {
                     <p style={{ ...heroStyles.subtitle, fontSize: subtitleFontSize }}>Word vrijwilliger bij Buren voor Buren</p>
                 </div>
             </div>
-            <Slider />
+            <Slider fontSizeFactor={fontSizeFactor} />
             <VrijwilligersForm />
             <Footer />
             <style>{`
@@ -258,4 +259,12 @@ export default function DoeJeMee() {
             `}</style>
         </div>
     );
-} 
+}
+
+DoeJeMee.propTypes = {
+    fontSizeFactor: PropTypes.number.isRequired,
+};
+
+Slider.propTypes = {
+    fontSizeFactor: PropTypes.number.isRequired,
+}; 
