@@ -137,6 +137,31 @@ const formStyles = {
     }
 };
 
+// Web Speech API helper voor Help
+function speakHelpText() {
+    if ('speechSynthesis' in window) {
+        if (window.speechSynthesis.speaking) {
+            window.speechSynthesis.cancel();
+            return;
+        }
+    }
+    const mainContent = document.getElementById('help-main-content');
+    let text = '';
+    if (mainContent) {
+        text = mainContent.innerText;
+    } else {
+        text = `Vraag hulp aan Buren voor Buren.`;
+    }
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new window.SpeechSynthesisUtterance(text);
+        utterance.lang = 'nl-BE';
+        window.speechSynthesis.speak(utterance);
+    } else {
+        alert('Deze browser ondersteunt geen voorleesfunctie.');
+    }
+}
+
 function Help({ fontSizeFactor }) {
     const [form, setForm] = useState({ naam: '', soort: '', bericht: '', datum: '', adres: '', uur: '' });
     const [status, setStatus] = useState(null);
@@ -227,12 +252,52 @@ function Help({ fontSizeFactor }) {
     };
 
     return (
-        <div style={{ width: '100%', minHeight: '100vh', background: '#fff' }}>
+        <div id="help-main-content" style={{ width: '100%', minHeight: '100vh', background: '#fff' }}>
             <div style={heroResponsive}>
                 <div style={heroStyles.overlay} />
                 <div style={heroStyles.content}>
-                    <h1 style={{ ...heroStyles.title, fontSize: titleFontSize }}>HULP NODIG?</h1>
+                    <h1 style={{ ...heroStyles.title, fontSize: titleFontSize }}>HULP?</h1>
                 </div>
+            </div>
+            {/* Screenreader knop */}
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '1.2rem 0 0 0', width: '100%' }}>
+                <button
+                    onClick={speakHelpText}
+                    style={{
+                        fontSize: 18 * fontSizeFactor,
+                        padding: '0.7em 2em',
+                        borderRadius: 10,
+                        border: '2.5px solid #26913a',
+                        background: '#eaffea',
+                        color: '#137c3a',
+                        fontWeight: 900,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 12,
+                        boxShadow: '0 0 0 4px #e2725b33',
+                        outline: 'none',
+                        position: 'relative',
+                        zIndex: 100,
+                        animation: 'bvb-blink 1.2s linear infinite',
+                        textTransform: 'uppercase',
+                        letterSpacing: 1.5,
+                        transition: 'box-shadow 0.2s, border 0.2s',
+                    }}
+                    aria-label="Lees de Hulp pagina voor"
+                >
+                    <span role="img" aria-label="speaker" style={{ fontSize: 24 * fontSizeFactor }}>🔊</span>
+                    <span style={{ fontSize: 18 * fontSizeFactor, fontFamily: 'CocogooseProTrial', fontWeight: 900 }}>Lees voor</span>
+                </button>
+                <style>{`
+                    @keyframes bvb-blink {
+                        0%, 100% { box-shadow: 0 0 0 4px #e2725b33, 0 0 16px 4px #e2725b44; border-color: #26913a; }
+                        50% { box-shadow: 0 0 0 8px #e2725b77, 0 0 32px 8px #e2725b99; border-color: #e2725b; }
+                    }
+                    button[aria-label] {
+                        outline: 3px solid #e2725b55;
+                    }
+                `}</style>
             </div>
             <div style={formWrapperResponsive}>
                 <div style={formTitleResponsive}>BUREN VOOR BUREN</div>
