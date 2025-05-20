@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import Footer from './Footer';
 import heroImg from '../assets/images/3mensen.jpg';
 import burgersaanzetLogo from '../assets/images/partners/burgersaanzet.png';
@@ -134,7 +135,7 @@ const sliderStyles = {
     }
 };
 
-function PartnerSlider() {
+function PartnerSlider({ fontSizeFactor }) {
     const getVisibleCount = () => {
         if (typeof window !== 'undefined') {
             if (window.innerWidth <= 600) return 1;
@@ -184,31 +185,35 @@ function PartnerSlider() {
     };
     return (
         <div style={wrapperStyle}>
-            <button onClick={prev} style={sliderStyles.arrow} aria-label="Vorige partners">&#60;</button>
+            <button onClick={prev} style={{ ...sliderStyles.arrow, fontSize: 36 * fontSizeFactor }} aria-label="Vorige partners">&#60;</button>
             {visiblePartners.map((p) =>
                 p.logo ? (
                     p.url ? (
                         <a key={p.name} href={p.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                             <img src={p.logo} alt={p.name} style={sliderStyles.logo} />
-                            <div style={sliderStyles.name}>{p.name}</div>
+                            <div style={{ ...sliderStyles.name, fontSize: (1.08 * fontSizeFactor) + 'rem' }}>{p.name}</div>
                         </a>
                     ) : (
                         <div key={p.name} style={{ textAlign: 'center' }}>
                             <img src={p.logo} alt={p.name} style={sliderStyles.logo} />
-                            <div style={sliderStyles.name}>{p.name}</div>
+                            <div style={{ ...sliderStyles.name, fontSize: (1.08 * fontSizeFactor) + 'rem' }}>{p.name}</div>
                         </div>
                     )
                 ) : (
-                    <div key={p.name} style={{ ...sliderStyles.logo, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#bbb', fontSize: 18, fontStyle: 'italic', flexDirection: 'column' }}>
+                    <div key={p.name} style={{ ...sliderStyles.logo, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#bbb', fontSize: 18 * fontSizeFactor, fontStyle: 'italic', flexDirection: 'column' }}>
                         <span>Geen logo</span>
-                        <div style={sliderStyles.name}>{p.name}</div>
+                        <div style={{ ...sliderStyles.name, fontSize: (1.08 * fontSizeFactor) + 'rem' }}>{p.name}</div>
                     </div>
                 )
             )}
-            <button onClick={next} style={sliderStyles.arrow} aria-label="Volgende partners">&#62;</button>
+            <button onClick={next} style={{ ...sliderStyles.arrow, fontSize: 36 * fontSizeFactor }} aria-label="Volgende partners">&#62;</button>
         </div>
     );
 }
+
+PartnerSlider.propTypes = {
+    fontSizeFactor: PropTypes.number.isRequired,
+};
 
 const getDevice = () => {
     if (typeof window !== 'undefined') {
@@ -218,7 +223,7 @@ const getDevice = () => {
     return 'desktop';
 };
 
-export default function Partners() {
+function Partners({ fontSizeFactor }) {
     const [device, setDevice] = React.useState(getDevice());
     React.useEffect(() => {
         const handleResize = () => setDevice(getDevice());
@@ -238,18 +243,24 @@ export default function Partners() {
             <div style={heroResponsive}>
                 <div style={heroStyles.overlay} />
                 <div style={heroStyles.content}>
-                    <h1 style={heroStyles.title}>PARTNERS</h1>
+                    <h1 style={{ ...heroStyles.title, fontSize: `calc(3.2rem * ${fontSizeFactor})` }}>PARTNERS</h1>
                 </div>
             </div>
-            <div style={textStyles.wrapper}>
+            <div style={{ ...textStyles.wrapper, fontSize: `calc(1.1rem * ${fontSizeFactor})` }}>
                 <div>
-                    Onder <Link to="/buurten" style={{ ...textStyles.strong, textDecoration: 'none' }}>&apos;Buurten&apos;</Link> vind je informatie over de coördinatoren en hun buurten.<br />
+                    Onder <Link to="/buurten" style={{ ...textStyles.strong, textDecoration: 'none', fontSize: `calc(1.1rem * ${fontSizeFactor})` }}>&apos;Buurten&apos;</Link> vind je informatie over de coördinatoren en hun buurten.<br />
                     We vinden dat niet enkel mensen, maar ook organisaties elkaar zoveel mogelijk moeten ondersteunen.<br />
-                    Daarom werken we met zoveel mogelijk verenigingen en organisaties samen. Onze hoofdpartner is <a href="https://samana.be/" target="_blank" rel="noopener noreferrer" style={{ ...textStyles.strong, textDecoration: 'none' }}>Samana</a>, maar we krijgen ook steun van:
+                    Daarom werken we met zoveel mogelijk verenigingen en organisaties samen. Onze hoofdpartner is <a href="https://samana.be/" target="_blank" rel="noopener noreferrer" style={{ ...textStyles.strong, textDecoration: 'none', fontSize: `calc(1.1rem * ${fontSizeFactor})` }}>Samana</a>, maar we krijgen ook steun van:
                 </div>
             </div>
-            <PartnerSlider />
+            <PartnerSlider fontSizeFactor={fontSizeFactor} />
             <Footer />
         </div>
     );
-} 
+}
+
+Partners.propTypes = {
+    fontSizeFactor: PropTypes.number.isRequired,
+};
+
+export default Partners; 

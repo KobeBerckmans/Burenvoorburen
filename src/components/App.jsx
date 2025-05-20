@@ -28,7 +28,7 @@ function App() {
         <Route path="/buurten" element={<Buurten fontSizeFactor={fontSizeFactor} />} />
         <Route path="/doe-je-mee" element={<DoeJeMee fontSizeFactor={fontSizeFactor} />} />
         <Route path="/hulp" element={<Help />} />
-        <Route path="/partners" element={<Partners />} />
+        <Route path="/partners" element={<Partners fontSizeFactor={fontSizeFactor} />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/concept" element={<Concept />} />
         <Route path="/werkvormen" element={<Werkvormen />} />
