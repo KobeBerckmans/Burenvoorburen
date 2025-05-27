@@ -131,6 +131,12 @@ export default function Header({ setFontSizeFactor }) {
                 window.speechSynthesis.cancel();
                 const utterance = new window.SpeechSynthesisUtterance(a11yText);
                 utterance.lang = 'nl-BE';
+                // Kies expliciet een Nederlandse stem
+                const voices = window.speechSynthesis.getVoices();
+                const dutchVoice = voices.find(v => v.lang && v.lang.startsWith('nl'));
+                if (dutchVoice) {
+                    utterance.voice = dutchVoice;
+                }
                 utterance.rate = 0.85;
                 window.speechSynthesis.speak(utterance);
             }

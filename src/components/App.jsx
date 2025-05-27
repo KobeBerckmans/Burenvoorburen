@@ -25,6 +25,12 @@ function App() {
       if (!window.speechSynthesis.speaking) {
         const utterance = new window.SpeechSynthesisUtterance(welcomeText);
         utterance.lang = 'nl-BE';
+        // Kies expliciet een Nederlandse stem
+        const voices = window.speechSynthesis.getVoices();
+        const dutchVoice = voices.find(v => v.lang && v.lang.startsWith('nl'));
+        if (dutchVoice) {
+          utterance.voice = dutchVoice;
+        }
         window.speechSynthesis.speak(utterance);
       }
     }
@@ -48,6 +54,12 @@ function App() {
               window.speechSynthesis.cancel();
               const utterance = new window.SpeechSynthesisUtterance(text);
               utterance.lang = 'nl-BE';
+              // Kies expliciet een Nederlandse stem
+              const voices = window.speechSynthesis.getVoices();
+              const dutchVoice = voices.find(v => v.lang && v.lang.startsWith('nl'));
+              if (dutchVoice) {
+                utterance.voice = dutchVoice;
+              }
               window.speechSynthesis.speak(utterance);
             }
           }
