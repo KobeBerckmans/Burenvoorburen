@@ -173,15 +173,58 @@ function speakHelpText() {
 }
 
 function Help({ fontSizeFactor }) {
-    const [form, setForm] = useState({ naam: '', soort: '', bericht: '', datum: '', adres: '', uur: '' });
+    const [form, setForm] = useState({
+        naam: '',
+        soort: '',
+        bericht: '',
+        datum: '',
+        straat: '',
+        nummer: '',
+        gemeente: '',
+        contrei: '',
+        uur: ''
+    });
     const [status, setStatus] = useState(null);
     const [loading, setLoading] = useState(false);
     const [device, setDevice] = React.useState(getDevice());
+    // Straatzoeker state
+    const [searchTerm, setSearchTerm] = useState('');
+    const [streetResults, setStreetResults] = useState([]);
+    const [streetLoading, setStreetLoading] = useState(false);
+    const [streetError, setStreetError] = useState(null);
+
     React.useEffect(() => {
         const handleResize = () => setDevice(getDevice());
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
+
+    React.useEffect(() => {
+        if (!searchTerm) {
+            setStreetResults([]);
+            setStreetLoading(false);
+            setStreetError(null);
+            return;
+        }
+        setStreetLoading(true);
+        setStreetError(null);
+        fetch(`/api/streets/search?q=${encodeURIComponent(searchTerm)}`)
+            .then(res => res.json())
+            .then(data => {
+                setStreetResults(data.map(item => ({
+                    straat: item.street,
+                    contrei: item.contrei,
+                    id: item._id,
+                    gemeente: item.gemeente || ''
+                })));
+                setStreetLoading(false);
+            })
+            .catch(err => {
+                setStreetError(err.message || 'Er is een fout opgetreden');
+                setStreetLoading(false);
+            });
+    }, [searchTerm]);
+
     const isMobile = device === 'mobile';
     const isTablet = device === 'tablet';
     const heroResponsive = {
@@ -233,9 +276,61 @@ function Help({ fontSizeFactor }) {
         flexDirection: isMobile ? 'column' : 'row',
         gap: isMobile ? '0.7rem' : '1.2rem',
     };
+    // Responsive row style voor adresvelden
+    const addressRowResponsive = {
+        display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
+        gap: isMobile ? '0.7rem' : '1.2rem',
+        flexWrap: isMobile ? 'nowrap' : 'wrap',
+        alignItems: 'stretch',
+        width: '100%',
+    };
+    const streetInputWrapper = {
+        flex: 2,
+        position: 'relative',
+        minWidth: isMobile ? 0 : 180,
+        width: '100%',
+        maxWidth: isMobile ? '100%' : 300,
+        display: 'flex',
+        flexDirection: 'column',
+    };
+    const nummerInputStyle = {
+        ...inputResponsive,
+        maxWidth: isMobile ? '100%' : 80,
+        minWidth: 0,
+        flex: isMobile ? 'unset' : '0 1 80px',
+        width: '100%',
+        padding: inputResponsive.padding,
+        fontSize: inputResponsive.fontSize,
+        height: 'auto',
+        boxSizing: 'border-box',
+    };
+    const gemeenteInputStyle = {
+        ...inputResponsive,
+        maxWidth: isMobile ? '100%' : 160,
+        minWidth: 0,
+        flex: isMobile ? 'unset' : '1 1 120px',
+        width: '100%',
+        padding: inputResponsive.padding,
+        fontSize: inputResponsive.fontSize,
+        height: 'auto',
+        boxSizing: 'border-box',
+    };
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    // Straat selecteren uit suggesties
+    const handleStreetSelect = (item) => {
+        setForm({
+            ...form,
+            straat: item.straat,
+            contrei: item.contrei || '',
+            gemeente: item.gemeente || form.gemeente
+        });
+        setSearchTerm(item.straat);
+        setStreetResults([]);
     };
 
     const handleSubmit = async (e) => {
@@ -250,7 +345,8 @@ function Help({ fontSizeFactor }) {
             });
             if (res.ok) {
                 setStatus('success');
-                setForm({ naam: '', soort: '', bericht: '', datum: '', adres: '', uur: '' });
+                setForm({ naam: '', soort: '', bericht: '', datum: '', straat: '', nummer: '', gemeente: '', contrei: '', uur: '' });
+                setSearchTerm('');
             } else {
                 setStatus('error');
             }
@@ -312,7 +408,7 @@ function Help({ fontSizeFactor }) {
             <div style={formWrapperResponsive}>
                 <div style={formTitleResponsive}>BUREN VOOR BUREN</div>
                 <div style={formSubtitleResponsive}>Plaats je aanvraag</div>
-                <form onSubmit={handleSubmit} style={formStyles.form}>
+                <form onSubmit={handleSubmit} style={formStyles.form} autoComplete="off">
                     <div style={rowResponsive}>
                         <input name="naam" type="text" placeholder="Naam" value={form.naam} onChange={handleChange} style={inputResponsive} required />
                         <select name="soort" value={form.soort} onChange={handleChange} style={selectResponsive} required>
@@ -327,7 +423,69 @@ function Help({ fontSizeFactor }) {
                     <textarea name="bericht" placeholder="Write Your Message Here..." value={form.bericht} onChange={handleChange} style={textareaResponsive} required />
                     <div style={rowResponsive}>
                         <input name="datum" type="date" placeholder="Datum" value={form.datum} onChange={handleChange} style={inputResponsive} required />
-                        <input name="adres" type="text" placeholder="Adres" value={form.adres} onChange={handleChange} style={inputResponsive} required />
+                    </div>
+                    {/* Straatzoeker + huisnummer + gemeente + buurt */}
+                    <div style={addressRowResponsive}>
+                        <div style={streetInputWrapper}>
+                            <input
+                                name="straat"
+                                type="text"
+                                placeholder="Straat"
+                                value={searchTerm || form.straat}
+                                onChange={e => {
+                                    setSearchTerm(e.target.value);
+                                    setForm({ ...form, straat: e.target.value, contrei: '', gemeente: form.gemeente });
+                                }}
+                                style={inputResponsive}
+                                autoComplete="off"
+                                required
+                            />
+                            {/* Suggesties */}
+                            {streetLoading && <div style={{ position: 'absolute', left: 0, top: '100%', background: '#fff', zIndex: 10, padding: 8, color: '#26913a', width: '100%', maxWidth: 300, borderRadius: 6 }}>Laden...</div>}
+                            {streetError && <div style={{ position: 'absolute', left: 0, top: '100%', background: '#fff', zIndex: 10, padding: 8, color: '#e2725b', width: '100%', maxWidth: 300, borderRadius: 6 }}>Fout bij zoeken</div>}
+                            {!streetLoading && !streetError && streetResults.length > 0 && (
+                                <div style={{ position: 'absolute', left: 0, top: '100%', background: '#fff', zIndex: 10, width: '100%', maxWidth: 300, boxShadow: '0 2px 8px #0001', borderRadius: 6 }}>
+                                    {streetResults.map((item, idx) => (
+                                        <div
+                                            key={item.id || idx}
+                                            style={{ padding: '0.6rem 1rem', cursor: 'pointer', borderBottom: idx !== streetResults.length - 1 ? '1px solid #eee' : 'none', color: '#137c3a', background: '#fff' }}
+                                            onClick={() => handleStreetSelect(item)}
+                                        >
+                                            <span style={{ fontWeight: 600 }}>{item.straat}</span>
+                                            {item.contrei && <span style={{ color: '#888', marginLeft: 8 }}>({item.contrei})</span>}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                        <input
+                            name="nummer"
+                            type="text"
+                            placeholder="Nr."
+                            value={form.nummer}
+                            onChange={handleChange}
+                            style={nummerInputStyle}
+                            required
+                        />
+                        <input
+                            name="gemeente"
+                            type="text"
+                            placeholder="Gemeente"
+                            value={form.gemeente}
+                            onChange={handleChange}
+                            style={gemeenteInputStyle}
+                            required
+                        />
+                    </div>
+                    <div style={rowResponsive}>
+                        <input
+                            name="contrei"
+                            type="text"
+                            placeholder="Buurt/Contrei"
+                            value={form.contrei}
+                            readOnly
+                            style={{ ...inputResponsive, background: '#f5f5f5', color: '#888', fontStyle: 'italic' }}
+                        />
                     </div>
                     <div style={rowResponsive}>
                         <input name="uur" type="time" placeholder="Uur" value={form.uur} onChange={handleChange} style={inputResponsive} required />

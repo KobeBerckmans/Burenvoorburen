@@ -27,7 +27,7 @@ app.use((req, res, next) => {
 });
 
 // Get the absolute path to the images directory
-const imagesPath = '/Users/kobeberckmans/Desktop/BVB/Burenvoorburen/src/assets/images';
+const imagesPath = '/Users/kobeberckmans/Desktop/Burenvoorburen/src/assets/images';
 console.log('Images directory path:', imagesPath);
 
 // Serve static files from the images directory
@@ -120,11 +120,22 @@ app.post('/api/help-requests', async (req, res) => {
     try {
         const database = client.db("FinalWork");
         const collection = database.collection("helpRequests");
-        const { naam, soort, bericht, datum, adres, uur } = req.body;
-        if (!naam || !soort || !bericht || !datum || !adres || !uur) {
+        const { naam, soort, bericht, datum, straat, nummer, gemeente, contrei, uur } = req.body;
+        if (!naam || !soort || !bericht || !datum || !straat || !nummer || !gemeente || !contrei || !uur) {
             return res.status(400).json({ error: 'Alle velden zijn verplicht.' });
         }
-        const result = await collection.insertOne({ naam, soort, bericht, datum, adres, uur, createdAt: new Date() });
+        const result = await collection.insertOne({
+            naam,
+            soort,
+            bericht,
+            datum,
+            straat,
+            nummer,
+            gemeente,
+            contrei,
+            uur,
+            createdAt: new Date()
+        });
         res.status(201).json({ success: true, id: result.insertedId });
     } catch (error) {
         console.error("Error saving help request:", error);
