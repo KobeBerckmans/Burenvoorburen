@@ -180,7 +180,7 @@ function Help({ fontSizeFactor }) {
         datum: '',
         straat: '',
         nummer: '',
-        gemeente: '',
+        telefoon: '',
         contrei: '',
         uur: ''
     });
@@ -192,6 +192,11 @@ function Help({ fontSizeFactor }) {
     const [streetResults, setStreetResults] = useState([]);
     const [streetLoading, setStreetLoading] = useState(false);
     const [streetError, setStreetError] = useState(null);
+    const [feedback, setFeedback] = useState([]);
+    const [feedbackLoading, setFeedbackLoading] = useState(true);
+    const [feedbackError, setFeedbackError] = useState(null);
+    // Carousel state
+    const [feedbackIndex, setFeedbackIndex] = useState(0);
 
     React.useEffect(() => {
         const handleResize = () => setDevice(getDevice());
@@ -224,6 +229,24 @@ function Help({ fontSizeFactor }) {
                 setStreetLoading(false);
             });
     }, [searchTerm]);
+
+    React.useEffect(() => {
+        async function fetchFeedback() {
+            setFeedbackLoading(true);
+            setFeedbackError(null);
+            try {
+                const res = await fetch('http://localhost:3001/api/feedback');
+                if (!res.ok) throw new Error('Fout bij ophalen feedback');
+                const data = await res.json();
+                setFeedback(data);
+            } catch (err) {
+                setFeedbackError(err.message);
+            } finally {
+                setFeedbackLoading(false);
+            }
+        }
+        fetchFeedback();
+    }, []);
 
     const isMobile = device === 'mobile';
     const isTablet = device === 'tablet';
@@ -305,7 +328,7 @@ function Help({ fontSizeFactor }) {
         height: 'auto',
         boxSizing: 'border-box',
     };
-    const gemeenteInputStyle = {
+    const telefoonInputStyle = {
         ...inputResponsive,
         maxWidth: isMobile ? '100%' : 160,
         minWidth: 0,
@@ -327,7 +350,7 @@ function Help({ fontSizeFactor }) {
             ...form,
             straat: item.straat,
             contrei: item.contrei || '',
-            gemeente: item.gemeente || form.gemeente
+            telefoon: item.gemeente || form.telefoon
         });
         setSearchTerm(item.straat);
         setStreetResults([]);
@@ -345,7 +368,7 @@ function Help({ fontSizeFactor }) {
             });
             if (res.ok) {
                 setStatus('success');
-                setForm({ naam: '', soort: '', bericht: '', datum: '', straat: '', nummer: '', gemeente: '', contrei: '', uur: '' });
+                setForm({ naam: '', soort: '', bericht: '', datum: '', straat: '', nummer: '', telefoon: '', contrei: '', uur: '' });
                 setSearchTerm('');
             } else {
                 setStatus('error');
@@ -355,6 +378,20 @@ function Help({ fontSizeFactor }) {
         } finally {
             setLoading(false);
         }
+    };
+
+    const feedbackBlockStyle = {
+        maxWidth: isMobile ? '95vw' : 420,
+        margin: isMobile ? '2.5rem 0 4.5rem 0' : '2.5rem auto 4.5rem auto',
+        background: '#fff8f4',
+        borderRadius: 16,
+        boxShadow: '0 2px 12px 0 rgba(226,114,91,0.10)',
+        padding: isMobile ? '1.2rem 2rem' : '2.2rem 1.5rem',
+        border: '1.5px solid #e2725b33',
+        textAlign: 'center',
+        position: 'relative',
+        marginLeft: isMobile ? 12 : 'auto',
+        marginRight: isMobile ? 12 : 'auto',
     };
 
     return (
@@ -424,7 +461,7 @@ function Help({ fontSizeFactor }) {
                     <div style={rowResponsive}>
                         <input name="datum" type="date" placeholder="Datum" value={form.datum} onChange={handleChange} style={inputResponsive} required />
                     </div>
-                    {/* Straatzoeker + huisnummer + gemeente + buurt */}
+                    {/* Straatzoeker + huisnummer + telefoon */}
                     <div style={addressRowResponsive}>
                         <div style={streetInputWrapper}>
                             <input
@@ -434,7 +471,7 @@ function Help({ fontSizeFactor }) {
                                 value={searchTerm || form.straat}
                                 onChange={e => {
                                     setSearchTerm(e.target.value);
-                                    setForm({ ...form, straat: e.target.value, contrei: '', gemeente: form.gemeente });
+                                    setForm({ ...form, straat: e.target.value, contrei: '', telefoon: form.telefoon });
                                 }}
                                 style={inputResponsive}
                                 autoComplete="off"
@@ -468,12 +505,12 @@ function Help({ fontSizeFactor }) {
                             required
                         />
                         <input
-                            name="gemeente"
-                            type="text"
-                            placeholder="Gemeente"
-                            value={form.gemeente}
+                            name="telefoon"
+                            type="tel"
+                            placeholder="Telefoon"
+                            value={form.telefoon}
                             onChange={handleChange}
-                            style={gemeenteInputStyle}
+                            style={telefoonInputStyle}
                             required
                         />
                     </div>
@@ -494,6 +531,77 @@ function Help({ fontSizeFactor }) {
                     {status === 'success' && <div style={{ color: '#26913a', textAlign: 'center', marginTop: 12, fontSize: (1 * fontSizeFactor) + 'rem' }}>Je aanvraag is verstuurd!</div>}
                     {status === 'error' && <div style={{ color: '#e2725b', textAlign: 'center', marginTop: 12, fontSize: (1 * fontSizeFactor) + 'rem' }}>Er is iets misgegaan. Probeer opnieuw.</div>}
                 </form>
+            </div>
+            {/* Feedback lijst */}
+            <div style={feedbackBlockStyle}>
+                <div style={{ color: '#26913a', fontWeight: 700, fontSize: '1.3rem', marginBottom: 16 }}>Feedback van bezoekers</div>
+                {feedbackLoading && <div>Feedback laden...</div>}
+                {feedbackError && <div style={{ color: '#e2725b' }}>Fout: {feedbackError}</div>}
+                {!feedbackLoading && !feedbackError && feedback.length === 0 && <div>Er is nog geen feedback.</div>}
+                {!feedbackLoading && !feedbackError && feedback.length > 0 && (
+                    <div>
+                        <div style={{ minHeight: 90 }}>
+                            <div style={{ fontWeight: 700, color: '#e2725b', fontSize: '1.08rem', marginBottom: 6 }}>{feedback[feedbackIndex].naam}</div>
+                            <div style={{ color: '#222', margin: '4px 0 10px 0', fontSize: '1.08rem', fontStyle: 'italic' }}>&ldquo;{feedback[feedbackIndex].boodschap}&rdquo;</div>
+                            <div style={{ color: '#888', fontSize: '0.95rem' }}>{feedback[feedbackIndex].datum ? new Date(feedback[feedbackIndex].datum).toLocaleDateString('nl-BE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : ''}</div>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 18, marginTop: 18 }}>
+                            <button
+                                onClick={() => setFeedbackIndex(i => (i - 1 + feedback.length) % feedback.length)}
+                                style={{
+                                    background: 'none',
+                                    color: '#e2725b',
+                                    border: 'none',
+                                    borderRadius: 0,
+                                    width: 40,
+                                    height: 40,
+                                    fontSize: 36,
+                                    fontWeight: 900,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                    boxShadow: 'none',
+                                    transition: 'color 0.2s, transform 0.15s',
+                                    outline: 'none',
+                                    padding: 0,
+                                }}
+                                aria-label="Vorige feedback"
+                                onMouseOver={e => e.currentTarget.style.transform = 'scale(1.15)'}
+                                onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
+                            >
+                                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32 }}>&#8592;</span>
+                            </button>
+                            <span style={{ color: '#e2725b', fontWeight: 600, minWidth: 48, textAlign: 'center' }}>{feedbackIndex + 1} / {feedback.length}</span>
+                            <button
+                                onClick={() => setFeedbackIndex(i => (i + 1) % feedback.length)}
+                                style={{
+                                    background: 'none',
+                                    color: '#e2725b',
+                                    border: 'none',
+                                    borderRadius: 0,
+                                    width: 40,
+                                    height: 40,
+                                    fontSize: 36,
+                                    fontWeight: 900,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                    boxShadow: 'none',
+                                    transition: 'color 0.2s, transform 0.15s',
+                                    outline: 'none',
+                                    padding: 0,
+                                }}
+                                aria-label="Volgende feedback"
+                                onMouseOver={e => e.currentTarget.style.transform = 'scale(1.15)'}
+                                onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
+                            >
+                                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32 }}>&#8594;</span>
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
             <Footer />
         </div>

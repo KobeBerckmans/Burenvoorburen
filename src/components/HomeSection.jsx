@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import mensenImg from '../assets/images/3mensen.jpg';
 import puzzelImg from '../assets/images/puzzel.jpg';
-import logoImg from '../assets/images/BVB-Transparant.png';
+import logoImg from '../assets/images/simpel.png';
 import communityImg from '../assets/images/community.jpg';
 import NewsFeed from './NewsFeed';
 import VideoSection from './VideoSection';
@@ -645,8 +645,8 @@ function HomeSection({ fontSizeFactor }) {
                             src={logoImg}
                             alt="Buren voor Buren logo"
                             style={{
-                                maxWidth: isMobile ? 60 : 200,
-                                maxHeight: isMobile ? 60 : 180,
+                                maxWidth: isMobile ? 180 : 320,
+                                maxHeight: isMobile ? 140 : 270,
                                 objectFit: 'contain',
                                 filter: 'drop-shadow(0 2px 8px rgba(44,62,80,0.13))',
                             }}

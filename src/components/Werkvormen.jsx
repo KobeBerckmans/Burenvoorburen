@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Footer from './Footer';
 import heroImg from '../assets/images/3mensen.jpg';
 import werkvormenImg from '../assets/images/werkvormen.jpg';
-import logo from '../assets/images/BVB-Transparant.png';
+import logo from '../assets/images/simpel.png';
 
 const heroStyles = {
     hero: {
@@ -74,7 +74,7 @@ const mainStyles = {
         alignItems: 'center',
     },
     logo: {
-        width: 120,
+        width: 180,
         marginBottom: 8,
     },
     columns: {

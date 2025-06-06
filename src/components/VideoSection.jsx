@@ -47,7 +47,7 @@ function VideoSection() {
                     style={styles.video}
                     controls
                     playsInline
-                    poster="/assets/images/BVB-Transparant.png"
+                    poster="/assets/images/simpel.png"
                 >
                     <source src={videoFile} type="video/mp4" />
                     Je browser ondersteunt geen video afspelen.

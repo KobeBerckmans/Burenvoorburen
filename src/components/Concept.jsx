@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Footer from './Footer';
 import heroImg from '../assets/images/3mensen.jpg';
 import diagramImg from '../assets/images/watdoenwe.jpg';
-import logo from '../assets/images/BVB-Transparant.png';
+import logo from '../assets/images/simpel.png';
 import zorgImg from '../assets/images/buurtgerichtezorg.jpg';
 import Accordion from './Accordion';
 
@@ -229,7 +229,7 @@ function Concept({ fontSizeFactor }) {
                 <svg style={mainStyles.svgKrulWide} viewBox="0 0 1600 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M10,110 Q400,10 800,60 T1590,30" stroke="#e2725b" strokeWidth="7" fill="none" />
                 </svg>
-                <img src={logo} alt="Buren voor Buren logo" style={{ width: 120, margin: '2rem auto 1.5rem auto', display: 'block', position: 'relative', zIndex: 1 }} />
+                <img src={logo} alt="Buren voor Buren logo" style={{ width: 260, margin: '0.5rem auto 1.5rem auto', display: 'block', position: 'relative', zIndex: 1 }} />
                 <div style={{ color: '#26913a', fontWeight: 600, marginBottom: 8, position: 'relative', zIndex: 1 }}>Zorgnetwerk - Buurtgerichte zorg - Functies van buurtgerichte zorg</div>
                 <Accordion title="1 Zorgnetwerk">
                     <div style={mainStyles.section}>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Footer from './Footer';
 import heroImg from '../assets/images/3mensen.jpg';
-import logo from '../assets/images/BVB-Transparant.png';
+import logo from '../assets/images/simpel.png';
 
 const heroStyles = {
     hero: {
@@ -97,7 +97,7 @@ const mainStyles = {
         fontSize: '1.05rem',
     },
     logo: {
-        width: 120,
+        width: 220,
         marginBottom: 16,
     },
     title: {
@@ -198,6 +198,8 @@ function Contact({ fontSizeFactor }) {
     const [form, setForm] = useState({ email: '', subject: '', message: '' });
     const [status, setStatus] = useState(null);
     const [device, setDevice] = useState(getDevice());
+    const [feedbackForm, setFeedbackForm] = useState({ naam: '', boodschap: '' });
+    const [feedbackStatus, setFeedbackStatus] = useState(null);
 
     React.useEffect(() => {
         const handleResize = () => setDevice(getDevice());
@@ -369,6 +371,48 @@ function Contact({ fontSizeFactor }) {
                 </div>
                 <div style={{ marginTop: 32, color: '#444', fontSize: (1 * fontSizeFactor) + 'rem', maxWidth: 700, marginLeft: 'auto', marginRight: 'auto' }}>
                     Is er in jouw buurt nu nog geen afdeling van Buren voor Buren en heb je interesse om er een op te starten? Contacteer Samana (02 246 64 64 of info@samana.be). We bekijken graag samen de mogelijkheden.
+                </div>
+                <div style={{ marginTop: 32 }}>
+                    <div style={{
+                        maxWidth: 370,
+                        margin: '0 auto',
+                        background: '#fff8f4',
+                        borderRadius: 16,
+                        boxShadow: '0 2px 12px 0 rgba(226,114,91,0.10)',
+                        padding: '2rem 1.5rem',
+                        border: '1.5px solid #e2725b33',
+                        textAlign: 'center',
+                    }}>
+                        <div style={{ fontWeight: 700, color: '#e2725b', marginBottom: 8, fontSize: (1.1 * fontSizeFactor) + 'rem' }}>Feedback</div>
+                        <div style={{ color: '#26913a', marginBottom: 18, fontSize: '1.05rem', fontWeight: 500 }}>
+                            Laat ons weten wat je van Buren voor Buren vindt! Jouw feedback helpt ons om te groeien en anderen te inspireren.
+                        </div>
+                        <form style={{ display: 'flex', flexDirection: 'column', gap: 20, marginTop: 8 }} onSubmit={async e => {
+                            e.preventDefault();
+                            setFeedbackStatus(null);
+                            try {
+                                const res = await fetch('http://localhost:3001/api/feedback', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(feedbackForm),
+                                });
+                                if (res.ok) {
+                                    setFeedbackStatus('success');
+                                    setFeedbackForm({ naam: '', boodschap: '' });
+                                } else {
+                                    setFeedbackStatus('error');
+                                }
+                            } catch {
+                                setFeedbackStatus('error');
+                            }
+                        }}>
+                            <input name="naam" type="text" placeholder="Jouw naam" style={{ ...inputResponsive, border: '1.5px solid #e2725b', borderRadius: 8, background: '#fff', fontWeight: 500 }} required value={feedbackForm.naam} onChange={e => setFeedbackForm({ ...feedbackForm, naam: e.target.value })} />
+                            <textarea name="boodschap" placeholder="Jouw feedback..." style={{ ...inputResponsive, ...mainStyles.textarea, border: '1.5px solid #e2725b', borderRadius: 8, background: '#fff', fontWeight: 500, minHeight: 80 }} required value={feedbackForm.boodschap} onChange={e => setFeedbackForm({ ...feedbackForm, boodschap: e.target.value })} />
+                            <button type="submit" style={{ ...buttonResponsive, background: '#e2725b', color: '#fff', borderRadius: 8, fontWeight: 700, letterSpacing: 1 }}>Verstuur feedback</button>
+                        </form>
+                        {feedbackStatus === 'success' && <div style={{ color: '#26913a', marginTop: 12 }}>Bedankt voor je feedback!</div>}
+                        {feedbackStatus === 'error' && <div style={{ color: '#e2725b', marginTop: 12 }}>Er ging iets mis. Probeer opnieuw.</div>}
+                    </div>
                 </div>
             </div>
             <Footer />

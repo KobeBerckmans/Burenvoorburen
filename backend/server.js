@@ -120,8 +120,8 @@ app.post('/api/help-requests', async (req, res) => {
     try {
         const database = client.db("FinalWork");
         const collection = database.collection("helpRequests");
-        const { naam, soort, bericht, datum, straat, nummer, gemeente, contrei, uur } = req.body;
-        if (!naam || !soort || !bericht || !datum || !straat || !nummer || !gemeente || !contrei || !uur) {
+        const { naam, soort, bericht, datum, straat, nummer, telefoon, contrei, uur } = req.body;
+        if (!naam || !soort || !bericht || !datum || !straat || !nummer || !telefoon || !contrei || !uur) {
             return res.status(400).json({ error: 'Alle velden zijn verplicht.' });
         }
         const result = await collection.insertOne({
@@ -131,7 +131,7 @@ app.post('/api/help-requests', async (req, res) => {
             datum,
             straat,
             nummer,
-            gemeente,
+            telefoon,
             contrei,
             uur,
             createdAt: new Date()
@@ -157,6 +157,36 @@ app.post('/api/contact', async (req, res) => {
     } catch (error) {
         console.error("Error saving contact message:", error);
         res.status(500).json({ error: "Failed to save contact message" });
+    }
+});
+
+// Feedback endpoint
+app.post('/api/feedback', async (req, res) => {
+    try {
+        const database = client.db("FinalWork");
+        const collection = database.collection("feedback");
+        const { naam, boodschap } = req.body;
+        if (!naam || !boodschap) {
+            return res.status(400).json({ error: 'Naam en boodschap zijn verplicht.' });
+        }
+        const result = await collection.insertOne({ naam, boodschap, datum: new Date() });
+        res.status(201).json({ success: true, id: result.insertedId });
+    } catch (error) {
+        console.error("Error saving feedback:", error);
+        res.status(500).json({ error: "Failed to save feedback" });
+    }
+});
+
+// Feedback ophalen
+app.get('/api/feedback', async (req, res) => {
+    try {
+        const database = client.db("FinalWork");
+        const collection = database.collection("feedback");
+        const feedback = await collection.find({}).sort({ datum: -1 }).toArray();
+        res.json(feedback);
+    } catch (error) {
+        console.error("Error fetching feedback:", error);
+        res.status(500).json({ error: "Failed to fetch feedback" });
     }
 });
 

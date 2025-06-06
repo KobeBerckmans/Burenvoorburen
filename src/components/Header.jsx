@@ -1,17 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import logo from '../assets/images/BVB-Transparant.png';
+import logo from '../assets/images/logo-zwart.png';
 import '../styles/Header.css';
 import Werkingsprincipes from './Werkingsprincipes';
 import PropTypes from 'prop-types';
+import TextIncreaseIcon from '@mui/icons-material/TextIncrease';
+import TextDecreaseIcon from '@mui/icons-material/TextDecrease';
 
 const menuItems = [
-    { label: 'Home', to: '/' },
+    { label: 'Aanvraag', to: '/hulp', className: 'header-help' },
+    { label: 'Doe mee', to: '/doe-je-mee' },
     { label: 'Buurten', to: '/buurten' },
-    { label: 'Doe je mee?', to: '/doe-je-mee' },
     { label: 'Over ons', to: '/partners' },
     { label: 'Contact', to: '/contact' },
-    { label: 'Meer', to: '#', hasDropdown: true },
+    { label: 'Uitgebreid', to: '#', hasDropdown: true },
 ];
 
 const dropdownItems = [
@@ -191,13 +193,12 @@ export default function Header({ setFontSizeFactor }) {
                             </div>
                         ) : (
                             item.to.startsWith('/') ?
-                                <Link to={item.to} className="header-link" key={item.label}>{item.label}</Link>
-                                : <a href={item.to} className="header-link" key={item.label}>{item.label}</a>
+                                <Link to={item.to} className={`${item.className || 'header-link'}`} key={item.label}>{item.label}</Link>
+                                : <a href={item.to} className={`${item.className || 'header-link'}`} key={item.label}>{item.label}</a>
                         )
                     ))}
                 </nav>
                 <div className="header-actions">
-                    <Link to="/hulp" className="header-help">HULP?</Link>
                     {/* Accessibility icon in plaats van vlaggen */}
                     <div className="header-a11y" style={{ display: 'flex', alignItems: 'center', marginRight: 8 }}>
                         <button
@@ -248,8 +249,15 @@ export default function Header({ setFontSizeFactor }) {
                             </div>
                         )}
                     </div>
-                    <button className="header-plus" onClick={() => setFontSizeFactor(f => Math.min(2, f + 0.1))}>+</button>
-                    <button className="header-plus" onClick={() => setFontSizeFactor(f => Math.max(0.7, f - 0.1))}>-</button>
+                    {/* Tekstgrootte iconen helemaal rechts */}
+                    <div className="header-fontsize-controls" style={{ display: 'flex', gap: '0.3rem', marginLeft: 16 }}>
+                        <button className="header-plus" style={{ border: 'none', background: 'none', boxShadow: 'none', outline: 'none', borderRadius: 0, padding: 0, margin: 0 }} onClick={() => setFontSizeFactor(f => Math.min(2, f + 0.1))} aria-label="Vergroot tekstgrootte">
+                            <TextIncreaseIcon style={{ width: 24, height: 24 }} />
+                        </button>
+                        <button className="header-plus" style={{ border: 'none', background: 'none', boxShadow: 'none', outline: 'none', borderRadius: 0, padding: 0, margin: 0 }} onClick={() => setFontSizeFactor(f => Math.max(0.7, f - 0.1))} aria-label="Verklein tekstgrootte">
+                            <TextDecreaseIcon style={{ width: 24, height: 24 }} />
+                        </button>
+                    </div>
                 </div>
                 {/* Hamburger icon alleen op mobiel, nu helemaal rechts */}
                 <button
@@ -348,18 +356,21 @@ export default function Header({ setFontSizeFactor }) {
                                 </details>
                             ) : (
                                 item.to.startsWith('/') ?
-                                    <Link to={item.to} onClick={handleNavClick}>{item.label}</Link>
-                                    : <a href={item.to} onClick={handleNavClick}>{item.label}</a>
+                                    <Link to={item.to} onClick={handleNavClick} className={item.className || ''}>{item.label}</Link>
+                                    : <a href={item.to} onClick={handleNavClick} className={item.className || ''}>{item.label}</a>
                             )}
                         </li>
                     ))}
                 </ul>
                 <div className="mobile-menu-actions">
-                    <Link to="/hulp" className="header-help" onClick={handleNavClick}>HULP?</Link>
                     {/* Plus en min knoppen onderaan */}
                     <div style={{ display: 'flex', gap: '1.2rem', justifyContent: 'center', marginTop: '1.2rem' }}>
-                        <button className="header-plus" onClick={() => setFontSizeFactor(f => Math.min(2, f + 0.1))}>+</button>
-                        <button className="header-plus" onClick={() => setFontSizeFactor(f => Math.max(0.7, f - 0.1))}>-</button>
+                        <button className="header-plus" onClick={() => setFontSizeFactor(f => Math.min(2, f + 0.1))} aria-label="Vergroot tekstgrootte">
+                            <TextIncreaseIcon style={{ width: 24, height: 24 }} />
+                        </button>
+                        <button className="header-plus" onClick={() => setFontSizeFactor(f => Math.max(0.7, f - 0.1))} aria-label="Verklein tekstgrootte">
+                            <TextDecreaseIcon style={{ width: 24, height: 24 }} />
+                        </button>
                     </div>
                 </div>
             </nav>
