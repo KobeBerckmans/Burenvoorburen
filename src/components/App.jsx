@@ -13,6 +13,10 @@ import Werkvormen from './Werkvormen';
 import Werkingsprincipes from './Werkingsprincipes';
 import LinksLiteratuur from './LinksLiteratuur';
 
+/**
+ * Main App component
+ * Handles routing and global state
+ */
 function App() {
   const [fontSizeFactor, setFontSizeFactor] = useState(1);
 

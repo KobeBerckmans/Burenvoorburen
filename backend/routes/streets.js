@@ -4,20 +4,27 @@ import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
+// streets.js - Express router for street-related endpoints
+// Handles street search and related logic for Buren voor Buren
+//
+// Author: KobeBerckmans
+
 const router = express.Router();
 
-// Load environment variables
+// Load environment variables from .env file for MongoDB credentials
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 dotenv.config({ path: join(__dirname, '../.env') });
 
-// MongoDB connection
+// MongoDB connection setup
+// Uses password from environment variables for security
 const password = process.env.MONGODB_PASSWORD;
 if (!password) {
     console.error('MONGODB_PASSWORD is not set in .env file');
     process.exit(1);
 }
 
+// MongoDB URI for connecting to the cluster
 const uri = `mongodb+srv://kobeberckmans:${password}@cluster1.tpiy3cp.mongodb.net/?retryWrites=true&w=majority&appName=FinalWork`;
 const client = new MongoClient(uri, {
     serverApi: {
@@ -27,10 +34,11 @@ const client = new MongoClient(uri, {
     }
 });
 
-// Maak de connectie persistent
+// Persistent client connection for performance
 let clientPromise = client.connect();
 
-// Search endpoint
+// Search endpoint for streets
+// GET /search?q=... - Returns up to 10 matching streets (case-insensitive, partial match)
 router.get('/search', async (req, res) => {
     const { q } = req.query;
     
@@ -39,14 +47,15 @@ router.get('/search', async (req, res) => {
     }
 
     try {
+        // Wait for MongoDB connection
         await clientPromise;
         const database = client.db("burenvoorburen");
         const collection = database.collection("streets");
 
-        // Search in the streets array and return matching documents
+        // Get all street documents
         const results = await collection.find({}).toArray();
 
-        // Transform the results to include the matching street
+        // Transform and filter results for matching streets
         const transformedResults = results.flatMap(contrei => 
             contrei.streets
                 .filter(street => 
@@ -60,18 +69,15 @@ router.get('/search', async (req, res) => {
                     type: contrei.type
                 }))
         )
-        // Sort results by relevance (exact matches first, then partial matches)
+        // Sort: exact matches first, then partial, then alphabetically
         .sort((a, b) => {
             const aStartsWith = a.street.toLowerCase().startsWith(q.toLowerCase());
             const bStartsWith = b.street.toLowerCase().startsWith(q.toLowerCase());
-            
             if (aStartsWith && !bStartsWith) return -1;
             if (!aStartsWith && bStartsWith) return 1;
-            
-            // If both start with or both don't start with, sort alphabetically
             return a.street.localeCompare(b.street);
         })
-        // Limit results to prevent overwhelming the UI
+        // Limit to 10 results for UI
         .slice(0, 10);
 
         res.json(transformedResults);

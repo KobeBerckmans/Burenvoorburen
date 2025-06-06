@@ -16,6 +16,15 @@ if (!password) {
 
 const uri = `mongodb+srv://kobeberckmans:${password}@cluster1.tpiy3cp.mongodb.net/?retryWrites=true&w=majority&appName=FinalWork`;
 
+// checkDatabase.js - Utility script to check MongoDB connection and print Historiek collection
+// Prints all documents in the Historiek collection for debugging/inspection.
+//
+// Author: KobeBerckmans
+
+/**
+ * Connects to MongoDB and prints all documents in the Historiek collection
+ * Useful for debugging and verifying database contents
+ */
 async function checkDatabase() {
     const client = new MongoClient(uri, {
         serverApi: {
@@ -32,11 +41,9 @@ async function checkDatabase() {
         const database = client.db("FinalWork");
         const collection = database.collection("Historiek");
 
-        // Get all documents
         const documents = await collection.find({}).toArray();
         console.log(`Found ${documents.length} documents in database:`);
         
-        // Print each document's details
         documents.forEach((doc, index) => {
             console.log(`\nDocument ${index + 1}:`);
             console.log(`ID: ${doc._id}`);

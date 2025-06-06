@@ -271,6 +271,10 @@ function speakPartnersText() {
     }
 }
 
+/**
+ * Partners component
+ * Renders a grid of partner logos and info
+ */
 function Partners({ fontSizeFactor }) {
     const [device, setDevice] = React.useState(getDevice());
     React.useEffect(() => {

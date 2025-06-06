@@ -194,6 +194,10 @@ function speakContactText() {
     }
 }
 
+/**
+ * Main Contact component
+ * Renders the contact form, feedback form, and contact persons
+ */
 function Contact({ fontSizeFactor }) {
     const [form, setForm] = useState({ email: '', subject: '', message: '' });
     const [status, setStatus] = useState(null);
@@ -268,10 +272,12 @@ function Contact({ fontSizeFactor }) {
         fontSize: (2 * fontSizeFactor) + 'rem',
     };
 
+    // Handles contact form field changes
     const handleChange = e => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
+    // Handles contact form submission
     const handleSubmit = async e => {
         e.preventDefault();
         setStatus(null);

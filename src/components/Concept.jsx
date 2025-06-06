@@ -171,6 +171,10 @@ const getDevice = () => {
     return 'desktop';
 };
 
+/**
+ * Main Concept component
+ * Renders the concept, vision, and diagrams
+ */
 function Concept({ fontSizeFactor }) {
     const [device, setDevice] = React.useState(getDevice());
     React.useEffect(() => {

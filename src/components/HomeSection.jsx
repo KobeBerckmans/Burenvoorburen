@@ -9,6 +9,11 @@ import Footer from './Footer';
 import FadeInOnScroll from './FadeInOnScroll';
 import PropTypes from 'prop-types';
 
+// HomeSection.jsx - Main home/landing section for Buren voor Buren
+// Shows intro, logo, and main call-to-action.
+//
+// Author: KobeBerckmans
+
 function HomeSlider({ fontSizeFactor }) {
     const points = [
         {
@@ -270,6 +275,10 @@ function speakHomePageText() {
     }
 }
 
+/**
+ * HomeSection component
+ * Renders the main home/landing section
+ */
 function HomeSection({ fontSizeFactor }) {
     // Hoogte van het vlak groter maken dan de images
     const greenHeight = 360; // bijvoorbeeld 400px

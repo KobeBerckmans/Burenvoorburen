@@ -261,6 +261,10 @@ function speakDoeJeMeeText() {
     }
 }
 
+/**
+ * Main DoeJeMee component
+ * Renders volunteer info, slider, and sign-up logic
+ */
 export default function DoeJeMee({ fontSizeFactor }) {
     const [device, setDevice] = useState(getDevice());
     useEffect(() => {

@@ -1,5 +1,10 @@
 import React, { useRef, useEffect, useState } from 'react';
 
+// FadeInOnScroll.jsx - Animation utility for fade-in effects on scroll
+// Wraps children and animates them into view when scrolled into viewport.
+//
+// Author: KobeBerckmans
+
 const FadeInOnScroll = ({ children, delay = 0, direction = 'right' }) => {
     const ref = useRef();
     const [visible, setVisible] = useState(false);
@@ -39,5 +44,10 @@ const FadeInOnScroll = ({ children, delay = 0, direction = 'right' }) => {
         </div>
     );
 };
+
+/**
+ * FadeInOnScroll component
+ * Animates children into view on scroll
+ */
 
 export default FadeInOnScroll; 

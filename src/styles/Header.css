@@ -1,3 +1,10 @@
+/*
+ * Header.css - Styles for the main navigation header of Buren voor Buren
+ * Contains navigation, button, and responsive styles for the header and menu
+ *
+ * Author: KobeBerckmans
+ */
+
 @font-face {
     font-family: 'CocogooseProTrial';
     src: url('../assets/fonts/Cocogoose-Pro-Regular-trial.ttf') format('truetype');

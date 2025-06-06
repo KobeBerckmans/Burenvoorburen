@@ -137,6 +137,10 @@ const nameResponsive = {
     } : {})
 };
 
+/**
+ * ContreienList component
+ * Renders a responsive grid of all areas
+ */
 const ContreienList = ({ fontSizeFactor = 1 }) => {
     return (
         <div style={wrapperResponsive}>

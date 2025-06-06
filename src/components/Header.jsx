@@ -88,6 +88,10 @@ const styles = {
     },
 };
 
+/**
+ * Header component
+ * Renders the main navigation bar and handles menu logic
+ */
 export default function Header({ setFontSizeFactor }) {
     const [activeDropdown, setActiveDropdown] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
+// NewsFeed.jsx - News carousel for Buren voor Buren
+// Fetches and displays news items in a slider format.
+//
+// Author: KobeBerckmans
+
+/**
+ * NewsFeed component
+ * Fetches and displays news in a carousel
+ */
 function NewsFeed() {
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(true);

@@ -172,6 +172,10 @@ function speakHelpText() {
     }
 }
 
+/**
+ * Main Help component
+ * Renders the help request form and feedback carousel
+ */
 function Help({ fontSizeFactor }) {
     const [form, setForm] = useState({
         naam: '',
@@ -340,11 +344,12 @@ function Help({ fontSizeFactor }) {
         boxSizing: 'border-box',
     };
 
+    // Handles form field changes
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    // Straat selecteren uit suggesties
+    // Handles street selection from suggestions
     const handleStreetSelect = (item) => {
         setForm({
             ...form,
@@ -356,6 +361,7 @@ function Help({ fontSizeFactor }) {
         setStreetResults([]);
     };
 
+    // Handles form submission for help requests
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);

@@ -63,6 +63,7 @@ async function connectToMongo() {
 connectToMongo();
 
 // Helper function to get the correct image path
+// Returns a static path for images, or the original URL if already absolute
 function getImagePath(imgName) {
     if (!imgName) return null;
     // If it's already a full URL, return it as is
@@ -75,6 +76,7 @@ function getImagePath(imgName) {
 }
 
 // News endpoint
+// Returns all news items from the Historiek collection
 app.get('/api/news', async (req, res) => {
     try {
         const database = client.db("FinalWork");
@@ -99,6 +101,7 @@ app.get('/api/news', async (req, res) => {
 });
 
 // Volunteers endpoint
+// Registers a new volunteer in the volunteers collection
 app.post('/api/volunteers', async (req, res) => {
     try {
         const database = client.db("FinalWork");
@@ -116,6 +119,7 @@ app.post('/api/volunteers', async (req, res) => {
 });
 
 // Help requests endpoint
+// Submits a new help request to the helpRequests collection
 app.post('/api/help-requests', async (req, res) => {
     try {
         const database = client.db("FinalWork");
@@ -144,6 +148,7 @@ app.post('/api/help-requests', async (req, res) => {
 });
 
 // Contact endpoint
+// Handles contact form submissions
 app.post('/api/contact', async (req, res) => {
     try {
         const database = client.db("FinalWork");
@@ -161,6 +166,8 @@ app.post('/api/contact', async (req, res) => {
 });
 
 // Feedback endpoint
+// POST: Submit feedback (name, message)
+// GET: Retrieve all feedback
 app.post('/api/feedback', async (req, res) => {
     try {
         const database = client.db("FinalWork");
@@ -176,8 +183,6 @@ app.post('/api/feedback', async (req, res) => {
         res.status(500).json({ error: "Failed to save feedback" });
     }
 });
-
-// Feedback ophalen
 app.get('/api/feedback', async (req, res) => {
     try {
         const database = client.db("FinalWork");
