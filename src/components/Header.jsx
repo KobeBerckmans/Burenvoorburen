@@ -6,6 +6,7 @@ import Werkingsprincipes from './Werkingsprincipes';
 import PropTypes from 'prop-types';
 import TextIncreaseIcon from '@mui/icons-material/TextIncrease';
 import TextDecreaseIcon from '@mui/icons-material/TextDecrease';
+import { speakText } from '../speak';
 
 const menuItems = [
     { label: 'Aanvraag', to: '/hulp', className: 'header-help' },
@@ -133,19 +134,7 @@ export default function Header({ setFontSizeFactor }) {
     // Voorleesfunctie voor toegankelijkheidsuitleg
     useEffect(() => {
         if (showA11yInfo) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const utterance = new window.SpeechSynthesisUtterance(a11yText);
-                utterance.lang = 'nl-BE';
-                // Kies expliciet een Nederlandse stem
-                const voices = window.speechSynthesis.getVoices();
-                const dutchVoice = voices.find(v => v.lang && v.lang.startsWith('nl'));
-                if (dutchVoice) {
-                    utterance.voice = dutchVoice;
-                }
-                utterance.rate = 0.85;
-                window.speechSynthesis.speak(utterance);
-            }
+            speakText(a11yText);
         } else {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();

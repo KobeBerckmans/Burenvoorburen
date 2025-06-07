@@ -8,6 +8,7 @@ import VideoSection from './VideoSection';
 import Footer from './Footer';
 import FadeInOnScroll from './FadeInOnScroll';
 import PropTypes from 'prop-types';
+import { speakText } from '../speak';
 
 // HomeSection.jsx - Main home/landing section for Buren voor Buren
 // Shows intro, logo, and main call-to-action.
@@ -242,37 +243,15 @@ AnimatedQuote.propTypes = {
 
 // Web Speech API helper
 function speakHomePageText() {
-    if ('speechSynthesis' in window) {
-        if (window.speechSynthesis.speaking) {
-            window.speechSynthesis.cancel();
-            return;
-        }
-    }
     const mainContent = document.getElementById('home-main-content');
     let text = '';
     if (mainContent) {
         text = mainContent.innerText;
-        // Filter 'Lees meer' knoppen en 🔊 emoji uit de tekst
         text = text.replace(/Lees meer/g, '').replace(/🔊/g, '').replace(/\s{2,}/g, ' ').trim();
     } else {
         text = `Welkom op Buren voor Buren. Buren voor Buren is een zorgnetwerk voor iedereen die ondersteuning nodig heeft. Gebruik de plus en min knoppen bovenaan om de tekst te vergroten of te verkleinen. Lees verder op deze pagina voor meer informatie over onze missie, diensten en hoe je kunt deelnemen.`;
     }
-    console.log('Voorleestekst:', text);
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel(); // Stop eventuele vorige spraak
-        const utterance = new window.SpeechSynthesisUtterance(text);
-        utterance.lang = 'nl-BE';
-        // Kies expliciet een Nederlandse stem
-        const voices = window.speechSynthesis.getVoices();
-        const dutchVoice = voices.find(v => v.lang && v.lang.startsWith('nl'));
-        if (dutchVoice) {
-            utterance.voice = dutchVoice;
-        }
-        utterance.rate = 0.85;
-        window.speechSynthesis.speak(utterance);
-    } else {
-        alert('Deze browser ondersteunt geen voorleesfunctie.');
-    }
+    speakText(text);
 }
 
 /**

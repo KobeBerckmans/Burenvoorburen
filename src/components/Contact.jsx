@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Footer from './Footer';
 import heroImg from '../assets/images/3mensen.jpg';
 import logo from '../assets/images/simpel.png';
+import { speakText } from '../speak';
 
 const heroStyles = {
     hero: {
@@ -161,37 +162,15 @@ const getDevice = () => {
 
 // Web Speech API helper voor Contact
 function speakContactText() {
-    if ('speechSynthesis' in window) {
-        if (window.speechSynthesis.speaking) {
-            window.speechSynthesis.cancel();
-            return;
-        }
-    }
     const mainContent = document.getElementById('contact-main-content');
     let text = '';
     if (mainContent) {
         text = mainContent.innerText;
-        // Filter 'Lees meer' knoppen en 🔊 emoji uit de tekst
         text = text.replace(/Lees meer/g, '').replace(/🔊/g, '').replace(/\s{2,}/g, ' ').trim();
     } else {
         text = `Contacteer Buren voor Buren.`;
     }
-    console.log('Voorleestekst:', text);
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new window.SpeechSynthesisUtterance(text);
-        utterance.lang = 'nl-BE';
-        // Kies expliciet een Nederlandse stem
-        const voices = window.speechSynthesis.getVoices();
-        const dutchVoice = voices.find(v => v.lang && v.lang.startsWith('nl'));
-        if (dutchVoice) {
-            utterance.voice = dutchVoice;
-        }
-        utterance.rate = 0.85;
-        window.speechSynthesis.speak(utterance);
-    } else {
-        alert('Deze browser ondersteunt geen voorleesfunctie.');
-    }
+    speakText(text);
 }
 
 /**

@@ -4,40 +4,19 @@ import BuurtenHero from './BuurtenHero';
 import BuurtenGroups from './BuurtenGroups';
 import ContreienList from './ContreienList';
 import Footer from './Footer';
+import { speakText } from '../speak';
 
 // Screenreader instructie en voorleesfunctie
 function speakBuurtenPageText() {
-    if ('speechSynthesis' in window) {
-        if (window.speechSynthesis.speaking) {
-            window.speechSynthesis.cancel();
-            return;
-        }
-    }
     const mainContent = document.getElementById('buurten-main-content');
     let text = '';
     if (mainContent) {
         text = mainContent.innerText;
-        // Filter 'Lees meer' knoppen en 🔊 emoji uit de tekst
         text = text.replace(/Lees meer/g, '').replace(/🔊/g, '').replace(/\s{2,}/g, ' ').trim();
     } else {
         text = `Ontdek de buurten van Tienen.`;
     }
-    console.log('Voorleestekst:', text);
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new window.SpeechSynthesisUtterance(text);
-        utterance.lang = 'nl-BE';
-        // Kies expliciet een Nederlandse stem
-        const voices = window.speechSynthesis.getVoices();
-        const dutchVoice = voices.find(v => v.lang && v.lang.startsWith('nl'));
-        if (dutchVoice) {
-            utterance.voice = dutchVoice;
-        }
-        utterance.rate = 0.85;
-        window.speechSynthesis.speak(utterance);
-    } else {
-        alert('Deze browser ondersteunt geen voorleesfunctie.');
-    }
+    speakText(text);
 }
 
 function Buurten({ fontSizeFactor }) {
