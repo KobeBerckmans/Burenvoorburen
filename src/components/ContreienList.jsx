@@ -144,8 +144,8 @@ const nameResponsive = {
 const ContreienList = ({ fontSizeFactor = 1 }) => {
     return (
         <div style={wrapperResponsive}>
-            <div style={{ ...styles.title, fontSize: `calc(2.1rem * ${fontSizeFactor})` }}>CONTREIEN</div>
-            <div className="contreien-list" style={listResponsive}>
+            <div style={{ ...styles.title, fontSize: `calc(2.1rem * ${fontSizeFactor})` }}>BUURTEN</div>
+            <div className="buurten-list" style={listResponsive}>
                 {contreien.map((name, i) => (
                     <div key={i} style={{ ...itemResponsive, fontSize: `calc(1.08rem * ${fontSizeFactor})` }}>
                         <div style={{ ...numberResponsive, fontSize: `calc(1rem * ${fontSizeFactor})` }}>{i + 1}</div>

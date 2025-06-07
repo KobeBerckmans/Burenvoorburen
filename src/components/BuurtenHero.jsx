@@ -86,7 +86,7 @@ function BuurtenHero({ fontSizeFactor }) {
             <div style={styles.overlay} />
             <div style={styles.content}>
                 <h1 style={{ ...styles.title, fontSize: titleFontSize }}>BUURTEN</h1>
-                <p style={{ ...styles.subtitle, fontSize: subtitleFontSize }}>Ontdek de buurten en contreien van Tienen</p>
+                <p style={{ ...styles.subtitle, fontSize: subtitleFontSize }}>Ontdek de buurten van Tienen</p>
             </div>
         </div>
     );

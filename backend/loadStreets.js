@@ -238,7 +238,7 @@ async function loadStreets() {
 
         // Insert the street data
         const result = await collection.insertMany(streetData);
-        console.log(`Successfully inserted ${result.insertedCount} contreien with their streets`);
+        console.log(`Successfully inserted ${result.insertedCount} buurten with their streets`);
 
         // Create indexes for faster searching
         await collection.createIndex({ "streets": 1 });

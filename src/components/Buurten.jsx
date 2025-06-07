@@ -20,7 +20,7 @@ function speakBuurtenPageText() {
         // Filter 'Lees meer' knoppen en 🔊 emoji uit de tekst
         text = text.replace(/Lees meer/g, '').replace(/🔊/g, '').replace(/\s{2,}/g, ' ').trim();
     } else {
-        text = `Ontdek de buurten en contreien van Tienen.`;
+        text = `Ontdek de buurten van Tienen.`;
     }
     console.log('Voorleestekst:', text);
     if ('speechSynthesis' in window) {
@@ -45,7 +45,7 @@ function Buurten({ fontSizeFactor }) {
         <div id="buurten-main-content" style={{ width: '100%', background: '#f8f8f8', minHeight: '100vh' }}>
             {/* Screenreader only instructie */}
             <div style={{ position: 'absolute', left: -9999, width: 1, height: 1, overflow: 'hidden' }} aria-live="polite">
-                Gebruik de tab-toets om door de buurten en contreien te navigeren. Druk op de &apos;Lees voor&apos; knop om de pagina te laten voorlezen.
+                Gebruik de tab-toets om door de buurten en buurten te navigeren. Druk op de &apos;Lees voor&apos; knop om de pagina te laten voorlezen.
             </div>
             <BuurtenHero fontSizeFactor={fontSizeFactor} />
             {/* Lees voor button */}
