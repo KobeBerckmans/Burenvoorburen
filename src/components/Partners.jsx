@@ -17,6 +17,7 @@ import vissenakenLogo from '../assets/images/partners/vissenaken.png';
 import tienenLogo from '../assets/images/partners/tienen.png';
 import tienensolidairLogo from '../assets/images/partners/solidairtienen.jpeg';
 import { Link } from 'react-router-dom';
+import { speakText } from '../speak';
 
 const partners = [
     { name: 'BurgersAanZet', logo: burgersaanzetLogo, url: 'https://burgersaanzet.be/' },
@@ -238,37 +239,15 @@ const getDevice = () => {
 
 // Web Speech API helper voor Partners
 function speakPartnersText() {
-    if ('speechSynthesis' in window) {
-        if (window.speechSynthesis.speaking) {
-            window.speechSynthesis.cancel();
-            return;
-        }
-    }
     const mainContent = document.getElementById('partners-main-content');
     let text = '';
     if (mainContent) {
         text = mainContent.innerText;
-        // Filter 'Lees meer' knoppen en 🔊 emoji uit de tekst
         text = text.replace(/Lees meer/g, '').replace(/🔊/g, '').replace(/\s{2,}/g, ' ').trim();
     } else {
         text = `Onze partners van Buren voor Buren.`;
     }
-    console.log('Voorleestekst:', text);
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new window.SpeechSynthesisUtterance(text);
-        utterance.lang = 'nl-BE';
-        // Kies expliciet een Nederlandse stem
-        const voices = window.speechSynthesis.getVoices();
-        const dutchVoice = voices.find(v => v.lang && v.lang.startsWith('nl'));
-        if (dutchVoice) {
-            utterance.voice = dutchVoice;
-        }
-        utterance.rate = 0.85;
-        window.speechSynthesis.speak(utterance);
-    } else {
-        alert('Deze browser ondersteunt geen voorleesfunctie.');
-    }
+    speakText(text);
 }
 
 /**
